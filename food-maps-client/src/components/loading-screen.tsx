@@ -16,20 +16,41 @@ export default function LoadingScreen() {
     return () => clearTimeout(timer);
   }, [loadingProgress]);
 
+  // Define text sequences for the loading counter
+  useEffect(() => {
+    const textSequences = [
+      'Serving in 3, 2, 1...',
+      'Finding food spots...',
+      'Mapping delicious locations...',
+      'Almost ready...',
+    ];
+
+    const textInterval = setInterval(() => {
+      const textIndex = Math.floor(
+        (loadingProgress / 100) * textSequences.length
+      );
+      setLoadingText(
+        textSequences[Math.min(textIndex, textSequences.length - 1)]
+      );
+    }, 1000);
+
+    return () => clearInterval(textInterval);
+  }, [loadingProgress]);
+
   return (
-    <div className="relative flex flex-col items-center justify-center min-h-screen bg-[#FFDA00] overflow-hidden">
-      {/* Background map pattern */}
+    <div className="relative flex flex-col items-center justify-center min-h-screen overflow-hidden">
+      {/* Full background image */}
       <div
-        className="absolute inset-0 opacity-10"
+        className="absolute inset-0 z-0"
         style={{
-          backgroundImage: "url('/map-pattern.svg')",
+          backgroundImage: "url('/images/DGBG.png')",
           backgroundSize: 'cover',
           backgroundPosition: 'center',
         }}
       />
 
       {/* DailyGuardian logo */}
-      <div className="absolute top-[10%] flex justify-center w-full">
+      <div className="absolute top-[10%] flex justify-center w-full z-10">
         <div className="w-36 h-auto">
           <img
             src="/images/DGLogo.png"
@@ -55,7 +76,7 @@ export default function LoadingScreen() {
       </div>
 
       {/* Loading indicator */}
-      <div className="absolute bottom-[15%] flex flex-col items-center">
+      <div className="absolute bottom-[15%] flex flex-col items-center z-10">
         <div className="w-32 h-1 bg-black/20 rounded-full mb-4">
           <div
             className="h-full bg-black rounded-full transition-all duration-300 ease-out"
