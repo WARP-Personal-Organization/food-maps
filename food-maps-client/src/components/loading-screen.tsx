@@ -50,8 +50,8 @@ export default function LoadingScreen() {
       />
 
       {/* DailyGuardian logo */}
-      <div className="absolute top-[10%] flex justify-center w-full z-10">
-        <div className="w-36 h-auto">
+      <div className="absolute top-[7%] flex justify-center w-full z-10">
+        <div className="w-45 h-auto">
           <img
             src="/images/DGLogo.png"
             alt="Daily Guardian Logo"

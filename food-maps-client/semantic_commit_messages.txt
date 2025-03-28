@@ -1,0 +1,12 @@
+# Semantic Commit Messages for DG Logo Position Change
+
+1. `fix(ui): adjust DG Logo position from 10% to 7% from top`
+2. `style(loading-screen): reposition DG Logo higher on screen`
+3. `tweak(layout): fine-tune DG Logo vertical positioning`
+4. `ui(loading): optimize DG Logo placement for better visibility`
+5. `design(loading-screen): adjust logo position for improved visual balance`
+6. `fix(appearance): correct DG Logo vertical alignment`
+7. `style(branding): refine DG Logo position in loading screen`
+8. `adjust(ui): modify DG Logo top margin from 10% to 7%`
+9. `enhance(visual): improve DG Logo positioning in loading screen`
+10. `refactor(layout): update DG Logo position for better spacing` 
