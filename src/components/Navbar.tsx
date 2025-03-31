@@ -1,0 +1,136 @@
+"use client";
+
+import React, { useState } from "react";
+import { LuUtensils } from "react-icons/lu";
+import { FiMenu, FiX } from "react-icons/fi";
+import Image from "next/image";
+
+const dishes = [
+  { name: "Siopao", locations: 5, image: "/assets/filter-dish/siopao.jpg" },
+  { name: "La Paz Batchoy", locations: 3, image: "/assets/filter-dish/batchoy.webp" },
+  { name: "Cansi", locations: 4, image: "/assets/filter-dish/cansi.jpg" },
+  { name: "Inasal", locations: 6, image: "/assets/filter-dish/inasal.jpg" },
+  { name: "KBL", locations: 2, image: "/assets/filter-dish/kbl.jpg" },
+  { name: "Pancit Molo", locations: 3, image: "/assets/filter-dish/pancit_molo.jpg" },
+];
+
+export default function Navbar() {
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isFilterOpen, setIsFilterOpen] = useState(false);
+  const [selectedDishes, setSelectedDishes] = useState<string[]>([]);
+
+  const toggleDishSelection = (dish: string) => {
+    setSelectedDishes((prev) =>
+      prev.includes(dish)
+        ? prev.filter((d) => d !== dish)
+        : [...prev, dish]
+    );
+  };
+
+  return (
+    <div className="flex justify-between items-center bg-none text-white py-4 px-6 relative z-50">
+      {/* Left - Filter Button */}
+      <button
+        className="text-2xl flex items-center gap-2"
+        onClick={() => setIsFilterOpen(!isFilterOpen)}
+        aria-label="Filter Dishes"
+      >
+        <LuUtensils />
+      </button>
+
+      {/* Right - Menu Button */}
+      <button
+        className="text-2xl"
+        onClick={() => setIsMenuOpen(!isMenuOpen)}
+        aria-label="Open Menu"
+      >
+        {isMenuOpen ? <FiX /> : <FiMenu />}
+      </button>
+
+
+      {/* Dish Filter Slide-in Menu (Left to Right) */}
+      <div
+        className={`fixed top-0 left-0 w-5/6 lg:w-1/3 h-full bg-white shadow-lg z-50 transform transition-transform duration-300 ${
+          isFilterOpen ? "translate-x-0" : "-translate-x-full"
+        }`}
+        onClick={(e) => e.stopPropagation()} // Prevent closing when clicking inside
+      >
+        <div className="p-6 h-full flex flex-col">
+          <div className="flex items-start mb-4">
+            <span className="text-black"> <LuUtensils /></span>
+            <h2 className="text-xl font-semibold text-black">Filter Dishes</h2>
+            <button
+              className="text-2xl text-black"
+              onClick={() => setIsFilterOpen(false)}
+            >
+              <FiX />
+            </button>
+          </div>
+
+          {/* Dynamic Image Ratio */}
+          <div className="grid grid-cols-2 lg:grid-cols-2 gap-4 flex-grow overflow-y-auto">
+            {dishes.map((dish) => (
+              <div
+                key={dish.name}
+                className={`relative border rounded-sm cursor-pointer ${
+                  selectedDishes.includes(dish.name)
+                    ? "border-yellow-400"
+                    : "border-gray-300"
+                }`}
+                onClick={() => toggleDishSelection(dish.name)}
+              >
+                <div className="relative w-full h-[80px] lg:h-[100px] aspect-[4/5] lg:aspect-[5/4]">
+                  <Image
+                    src={dish.image}
+                    alt={dish.name}
+                    layout="fill"
+                    objectFit="cover"
+                    className="rounded"
+                  />
+                </div>
+                <p className="font-bold text-black">{dish.name}</p>
+                <p className="text-gray-600">{dish.locations} Locations</p>
+                {selectedDishes.includes(dish.name) && (
+                  <span className="absolute top-1 right-1 bg-yellow-400 text-black px-1">
+                    ✓
+                  </span>
+                )}
+              </div>
+            ))}
+          </div>
+
+          <button
+            className="bg-yellow-400 text-black font-bold mt-4 px-4 py-2 rounded w-full"
+            onClick={() => setIsFilterOpen(false)}
+          >
+            Add to Filter ({selectedDishes.length})
+          </button>
+        </div>
+      </div>
+
+      {/* Menu Slide-in (Right to Left) */}
+      <div
+        className={`fixed top-0 right-0 w-5/6 lg:w-1/3 h-full bg-white shadow-lg z-50 transform transition-transform duration-300 ${
+          isMenuOpen ? "translate-x-0" : "translate-x-full"
+        }`}
+        onClick={(e) => e.stopPropagation()} // Prevent closing when clicking inside
+      >
+        <div className="p-6 h-full flex flex-col">
+          <div className="flex justify-between items-center mb-4">
+            <h2 className="text-xl font-semibold text-black">Menu</h2>
+            <button
+              className="text-2xl text-black"
+              onClick={() => setIsMenuOpen(false)}
+            >
+              <FiX />
+            </button>
+          </div>
+          <ul className="space-y-4 flex-grow">
+            <li className="text-black hover:text-yellow-500 cursor-pointer">Home</li>
+            <li className="text-black hover:text-yellow-500 cursor-pointer">About</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  );
+}
