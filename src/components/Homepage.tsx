@@ -96,7 +96,7 @@ export default function HomePage() {
             alt={dishes[activeIndex].name}
             layout="fill"
             objectFit="cover"
-            className="rounded z-10"
+            className="z-10"
           />
         </div>
 
@@ -110,7 +110,6 @@ export default function HomePage() {
 
           {/* Description */}
           <p className="text-gray-700">{dishes[activeIndex].description}</p>
-
           {/* Swipe Indicator */}
           <div className="border-t pt-4">
             <p className="flex items-center justify-center text-gray-600">
