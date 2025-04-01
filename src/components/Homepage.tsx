@@ -4,6 +4,7 @@ import React, { useState, useRef } from "react";
 import { FaCircleChevronLeft, FaCircleChevronRight } from "react-icons/fa6";
 import { GoArrowRight } from "react-icons/go";
 import Image from "next/image";
+import Link from "next/link"; // Import Link
 import Navbar from "./Navbar";
 
 const dishes = [
@@ -83,7 +84,7 @@ export default function HomePage() {
       {/* MOBILE VIEW */}
       <div className="lg:hidden flex flex-col h-screen">
         <section className="fixed top-0 z-50 w-full">
-            <Navbar/>
+          <Navbar />
         </section>
         {/* Top Image (40% height) */}
         <div
@@ -118,9 +119,11 @@ export default function HomePage() {
           </div>
 
           {/* Button */}
-          <button className="w-[90%] bg-yellow-500 text-black font-bold py-3 rounded mx-auto">
-            Where to Eat
-          </button>
+          <Link href="/food-map">
+            <button className="w-[90%] bg-yellow-500 text-black font-bold py-3 rounded mx-auto">
+              Where to Eat
+            </button>
+          </Link>
         </div>
       </div>
 
@@ -136,9 +139,11 @@ export default function HomePage() {
           <p className="text-gray-700 mt-4">{dishes[activeIndex].description}</p>
 
           {/* Button */}
-          <button className="mt-6 w-[80%] bg-yellow-500 text-black font-bold py-3 rounded">
-            Where to Eat
-          </button>
+          <Link href="/food-map">
+            <button className="mt-6 w-[80%] bg-yellow-500 text-black font-bold py-3 rounded">
+              Where to Eat
+            </button>
+          </Link>
 
           {/* Navigation Slider */}
           <div className="mt-6 flex items-center gap-4">
