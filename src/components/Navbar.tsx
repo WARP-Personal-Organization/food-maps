@@ -6,12 +6,12 @@ import { FiMenu, FiX } from "react-icons/fi";
 import Image from "next/image";
 
 const dishes = [
-  { name: "Siopao", locations: 5, image: "/assets/filter-dish/siopao.jpg" },
-  { name: "La Paz Batchoy", locations: 3, image: "/assets/filter-dish/batchoy.webp" },
-  { name: "Cansi", locations: 4, image: "/assets/filter-dish/cansi.jpg" },
-  { name: "Inasal", locations: 6, image: "/assets/filter-dish/inasal.jpg" },
-  { name: "KBL", locations: 2, image: "/assets/filter-dish/kbl.jpg" },
-  { name: "Pancit Molo", locations: 3, image: "/assets/filter-dish/pancit_molo.jpg" },
+  { name: "Siopao", locations: 5, image: "/images/filter-dish/siopao.jpg" },
+  { name: "La Paz Batchoy", locations: 3, image: "/images/filter-dish/batchoy.webp" },
+  { name: "Cansi", locations: 4, image: "/images/filter-dish/cansi.jpg" },
+  { name: "Inasal", locations: 6, image: "/images/filter-dish/inasal.jpg" },
+  { name: "KBL", locations: 2, image: "/images/filter-dish/kbl.jpg" },
+  { name: "Pancit Molo", locations: 3, image: "/images/filter-dish/pancit_molo.jpg" },
 ];
 
 export default function Navbar() {
