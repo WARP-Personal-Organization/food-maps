@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useEffect, useRef } from "react";
+import { useRouter } from "next/navigation"; // Import Next.js Router
 import { LuUtensils } from "react-icons/lu";
 import { FiMenu, FiX } from "react-icons/fi";
 import Image from "next/image";
@@ -18,9 +19,11 @@ export default function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isFilterOpen, setIsFilterOpen] = useState(false);
   const [selectedDishes, setSelectedDishes] = useState<string[]>([]);
+  const [isAboutModalOpen, setIsAboutModalOpen] = useState(false); // About Modal state
 
   const menuRef = useRef<HTMLDivElement>(null);
   const filterRef = useRef<HTMLDivElement>(null);
+  const router = useRouter(); // Next.js router for navigation
 
   // Close modals when clicking outside
   useEffect(() => {
@@ -50,15 +53,30 @@ export default function Navbar() {
     );
   };
 
+  const handleHomeClick = () => {
+    setIsMenuOpen(false); // Close menu after navigating
+    router.push("/"); // Navigate to the homepage
+  };
+
+  const handleAboutClick = () => {
+    setIsMenuOpen(false); // Close menu before opening About modal
+    setIsAboutModalOpen(true); // Open About modal
+  };
+
+  const closeAboutModal = () => {
+    setIsAboutModalOpen(false); // Close About modal
+  };
+
   return (
     <div className="relative">
       {/* Overlay Background (30% Black with Blur) */}
-      {(isMenuOpen || isFilterOpen) && (
+      {(isMenuOpen || isFilterOpen || isAboutModalOpen) && (
         <div
           className="fixed inset-0 bg-black bg-opacity-30 backdrop-blur-sm z-40 transition-opacity duration-300"
           onClick={() => {
             setIsMenuOpen(false);
             setIsFilterOpen(false);
+            setIsAboutModalOpen(false); // Close About modal if background is clicked
           }}
         />
       )}
@@ -167,11 +185,46 @@ export default function Navbar() {
             </button>
           </div>
           <ul className="space-y-4 flex-grow">
-            <li className="text-black hover:text-yellow-500 cursor-pointer">Home</li>
-            <li className="text-black hover:text-yellow-500 cursor-pointer">About</li>
+            <li
+              className="text-black hover:text-yellow-500 cursor-pointer"
+              onClick={handleHomeClick} // Navigate to homepage
+            >
+              Home
+            </li>
+            <li
+              className="text-black hover:text-yellow-500 cursor-pointer"
+              onClick={handleAboutClick} // Open About modal
+            >
+              About
+            </li>
           </ul>
         </div>
       </div>
+
+      {/* About Modal */}
+      {isAboutModalOpen && (
+        <div
+          className="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm z-50 flex justify-center items-center"
+          onClick={closeAboutModal}
+        >
+          <div
+            className="bg-white p-6 rounded-lg w-1/2"
+            onClick={(e) => e.stopPropagation()} // Prevent closing when clicking inside modal
+          >
+            <h2 className="text-xl font-semibold text-black">About Us</h2>
+            <p className="text-black mt-4">
+              {/* Add content for your About section here */}
+              This is the About Us content.
+            </p>
+            <button
+              className="mt-4 text-red-500"
+              onClick={closeAboutModal}
+            >
+              Close
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
