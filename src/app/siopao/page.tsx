@@ -82,7 +82,7 @@ export default function SiopaoPage() {
 
           {/* Button */}
           <Link href="/food-map">
-            <button className="w-[90%] bg-yellow-500 text-black font-bold py-3 rounded mx-auto">
+          <button className="w-[100%] bg-yellow-300 text-black font-bold py-3 rounded mx-auto">
               Where to Eat
             </button>
           </Link>
