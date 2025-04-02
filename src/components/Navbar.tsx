@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation"; // Import Next.js Router
 import { LuUtensils } from "react-icons/lu";
 import { FiMenu, FiX } from "react-icons/fi";
 import Image from "next/image";
+import About from "./About"; // Import the About component
 
 const dishes = [
   { name: "Siopao", locations: 5, image: "/images/filter-dish/siopao.jpg" },
@@ -202,29 +203,32 @@ export default function Navbar() {
       </div>
 
       {/* About Modal */}
-      {isAboutModalOpen && (
-        <div
-          className="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm z-50 flex justify-center items-center"
+      {/* About Modal */}
+{isAboutModalOpen && (
+  <div
+    className="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm z-50 flex justify-center items-center h-screen w-screen"
+    onClick={closeAboutModal}
+  >
+    <div
+      className="bg-white p-6 w-full h-full max-w-none"
+      onClick={(e) => e.stopPropagation()} // Prevent closing when clicking inside modal
+    >
+      <section className="flex justify-between items-center">
+        <Image src={"/images/DGLogo.png"} alt="DG Logo" width={400} height={20}  className="w-1/3 h-1/3"/>
+        <button
+          className="text-2xl text-black bg-yellow-300 p-2 rounded"
           onClick={closeAboutModal}
         >
-          <div
-            className="bg-white p-6 rounded-lg w-1/2"
-            onClick={(e) => e.stopPropagation()} // Prevent closing when clicking inside modal
-          >
-            <h2 className="text-xl font-semibold text-black">About Us</h2>
-            <p className="text-black mt-4">
-              {/* Add content for your About section here */}
-              This is the About Us content.
-            </p>
-            <button
-              className="mt-4 text-red-500"
-              onClick={closeAboutModal}
-            >
-              Close
-            </button>
-          </div>
-        </div>
-      )}
+          <FiX /> 
+        </button>
+      </section>
+      <section>
+        <About/>
+      </section>
+    
+    </div>
+  </div>
+)}
     </div>
   );
 }
