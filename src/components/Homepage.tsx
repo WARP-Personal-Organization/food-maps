@@ -5,7 +5,7 @@ import { FaCircleChevronLeft, FaCircleChevronRight } from "react-icons/fa6";
 import { GoArrowRight } from "react-icons/go";
 import Image from "next/image";
 import Link from "next/link"; // Import Link
-import Navbar from "./Navbar";
+import FoodPrintsNavbar from "./FoooPrintsNavbar";
 
 const dishes = [
   {
@@ -84,7 +84,7 @@ export default function HomePage() {
       {/* MOBILE VIEW */}
       <div className="lg:hidden flex flex-col h-screen">
         <section className="fixed top-0 z-50 w-full">
-          <Navbar />
+          <FoodPrintsNavbar />
         </section>
         {/* Top Image (40% height) */}
         <div
