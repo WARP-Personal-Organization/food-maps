@@ -10,7 +10,7 @@ import FoodPrintsNavbar from "@/components/FoooPrintsNavbar";
 const dishes = [
   {
     name: "Siopao",
-    image: "/images/filter-dish/siopao.jpg",
+    image: "/images/filter-dish/siopao.png",
     description:
       "Bao Zi (包子), also known as mantou when unfilled, is a staple food among Chinese worldwide. Hence, there are Baozi versions in Singapore, HK, Vietnam, the Philippines, and other countries with strong Chinese influence. The exact origins of siopao in the Philippines are not well-documented, but Chinese vendors likely sold it along with noodles as early as the 1600s.",
     tagline: "Philippine Steamed Bun",
@@ -67,15 +67,14 @@ export default function SiopaoPage() {
         </div>
 
         {/* Bottom Content (60% height) */}
-        <div className="bg-white flex flex-col justify-between p-6 h-[60vh]">
+        <div className="bg-white flex flex-col gap-8 p-6 h-[60vh]">
           {/* Dish Name */}
-          <h1 className="text-2xl font-bold text-center">{dishes[activeIndex].name}</h1>
-
+          <h1 className="text-3xl font-bold">{dishes[activeIndex].name}</h1>
           {/* Tagline */}
-          <h3 className="italic text-gray-600 text-center">{dishes[activeIndex].tagline}</h3>
+          <h3 className="italic text-gray-400">{dishes[activeIndex].tagline}</h3>
 
           {/* Description */}
-          <p className="text-gray-700">{dishes[activeIndex].description}</p>
+          <p className="text-gray-800">{dishes[activeIndex].description}</p>
           {/* Swipe Indicator */}
           <div className="border-t pt-4">
           </div>
