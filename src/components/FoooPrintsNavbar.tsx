@@ -85,7 +85,9 @@ export default function FoodPrintsNavbar() {
 
       <div className="flex justify-between items-center bg-none text-white py-4 px-6 relative z-50">
         {/* Left - Filter Button */}
-        <Link href="/">
+        <Link href="/"  className={`text-2xl flex items-center gap-2 text-blacktransition-all ${
+            isMenuOpen || isFilterOpen ? "blur-sm" : "blur-0"
+          }`}>
             <Image src={"/images/foodprints-logo.png"} alt="Logo" width={100} height={110} />
         </Link>
 
