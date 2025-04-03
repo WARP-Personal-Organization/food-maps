@@ -1,20 +1,20 @@
-"use client";
+'use client';
 
-import React, { useState, useRef } from "react";
-import { FaCircleChevronLeft, FaCircleChevronRight } from "react-icons/fa6";
-import { GoArrowRight } from "react-icons/go";
-import Image from "next/image";
-import Link from "next/link"; // Import Link
-import FoodPrintsNavbar from "@/components/FoooPrintsNavbar";
+import React, { useState, useRef } from 'react';
+import { FaCircleChevronLeft, FaCircleChevronRight } from 'react-icons/fa6';
+import { GoArrowRight } from 'react-icons/go';
+import Image from 'next/image';
+import Link from 'next/link'; // Import Link
+import FoodPrintsNavbar from '@/components/FoooPrintsNavbar';
 
 const dishes = [
   {
-    name: "Siopao",
-    image: "/images/filter-dish/siopao.png",
+    name: 'Siopao',
+    image: '/images/filter-dish/siopao.png',
     description:
-      "Bao Zi (包子), also known as mantou when unfilled, is a staple food among Chinese worldwide. Hence, there are Baozi versions in Singapore, HK, Vietnam, the Philippines, and other countries with strong Chinese influence. The exact origins of siopao in the Philippines are not well-documented, but Chinese vendors likely sold it along with noodles as early as the 1600s.",
-    tagline: "Philippine Steamed Bun",
-  }
+      'Bao Zi (包子), also known as mantou when unfilled, is a staple food among Chinese worldwide. Hence, there are Baozi versions in Singapore, HK, Vietnam, the Philippines, and other countries with strong Chinese influence. The exact origins of siopao in the Philippines are not well-documented, but Chinese vendors likely sold it along with noodles as early as the 1600s.',
+    tagline: 'Philippine Steamed Bun',
+  },
 ];
 
 export default function SiopaoPage() {
@@ -71,17 +71,18 @@ export default function SiopaoPage() {
           {/* Dish Name */}
           <h1 className="text-3xl font-bold">{dishes[activeIndex].name}</h1>
           {/* Tagline */}
-          <h3 className="italic text-gray-400">{dishes[activeIndex].tagline}</h3>
+          <h3 className="italic text-gray-400">
+            {dishes[activeIndex].tagline}
+          </h3>
 
           {/* Description */}
           <p className="text-gray-800">{dishes[activeIndex].description}</p>
           {/* Swipe Indicator */}
-          <div className="border-t pt-4">
-          </div>
+          <div className="border-t pt-4"></div>
 
           {/* Button */}
           <Link href="/food-map">
-          <button className="w-[100%] bg-yellow-300 text-black font-bold py-3 rounded mx-auto">
+            <button className="w-[100%] bg-yellow-300 text-black font-bold py-3 rounded mx-auto">
               Where to Eat
             </button>
           </Link>
@@ -92,12 +93,20 @@ export default function SiopaoPage() {
       <div className="hidden lg:flex h-screen w-full bg-white">
         {/* Left Side - Text Content (30% Width) */}
         <div className="w-[30%] flex flex-col justify-center items-center p-10">
-          <h2 className="italic text-gray-600 text-lg">Ilonggo's Best Dishes</h2>
-          <h1 className="text-4xl font-bold mt-2">{dishes[activeIndex].name}</h1>
-          <h3 className="italic text-gray-500 text-lg">{dishes[activeIndex].tagline}</h3>
+          <h2 className="italic text-gray-600 text-lg">
+            Ilonggo's Best Dishes
+          </h2>
+          <h1 className="text-4xl font-bold mt-2">
+            {dishes[activeIndex].name}
+          </h1>
+          <h3 className="italic text-gray-500 text-lg">
+            {dishes[activeIndex].tagline}
+          </h3>
 
           {/* Description */}
-          <p className="text-gray-700 mt-4">{dishes[activeIndex].description}</p>
+          <p className="text-gray-700 mt-4">
+            {dishes[activeIndex].description}
+          </p>
 
           {/* Button */}
           <Link href="/food-map">
@@ -117,7 +126,7 @@ export default function SiopaoPage() {
                 <span
                   key={index}
                   className={`h-3 w-3 rounded-full ${
-                    activeIndex === index ? "bg-yellow-500" : "bg-gray-300"
+                    activeIndex === index ? 'bg-yellow-500' : 'bg-gray-300'
                   }`}
                 />
               ))}
