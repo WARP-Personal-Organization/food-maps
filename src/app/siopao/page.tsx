@@ -4,6 +4,7 @@ import React, { useState, useEffect } from 'react';
 import { FaCircleChevronLeft, FaCircleChevronRight } from 'react-icons/fa6';
 import FoodPrintsNavbar from '@/components/FoooPrintsNavbar';
 import dynamic from 'next/dynamic';
+import LocationDetailPanel from '@/components/LocationDetailPanel';
 
 // Define the dish data
 const dishes = [
@@ -14,12 +15,21 @@ const dishes = [
     tagline: 'Philippine Steamed Bun',
     locations: [
       {
-        name: "Roberto's",
-        x: 500, // Adjusted for the map image coordinates
-        y: 300, // Adjusted for the map image coordinates
+        name: "Roberto's Siopao",
+        x: 500,
+        y: 300,
         description: 'Famous for their Siopao since 1978',
         iconType: 'restaurant' as const,
         iconUrl: '/siopao-1.png',
+        address: 'Rizal Street, La Paz Public Market, La Paz, Iloilo City',
+        openHours: '10:00 AM - 9:00 PM',
+        priceRange: '₱200-400',
+        photos: [
+          '/location-photos/robertos-1.jpg',
+          '/location-photos/robertos-2.jpg',
+          '/location-photos/robertos-3.jpg',
+          '/location-photos/robertos-4.jpg',
+        ],
       },
       {
         name: "Deco's",
@@ -71,8 +81,25 @@ const ClientOnly = ({ children }: { children: React.ReactNode }) => {
   return <>{children}</>;
 };
 
+// Define Location interface
+interface Location {
+  name: string;
+  x: number;
+  y: number;
+  description: string;
+  iconType?: 'default' | 'restaurant' | 'shop' | 'attraction';
+  iconUrl?: string;
+  address?: string;
+  openHours?: string;
+  priceRange?: string;
+  photos?: string[];
+}
+
 export default function SiopaoPage() {
   const [activeIndex, setActiveIndex] = useState(0);
+  const [selectedLocation, setSelectedLocation] = useState<Location | null>(
+    null
+  );
 
   const nextDish = () => {
     setActiveIndex((prev) => (prev + 1) % dishes.length);
@@ -80,6 +107,14 @@ export default function SiopaoPage() {
 
   const prevDish = () => {
     setActiveIndex((prev) => (prev - 1 + dishes.length) % dishes.length);
+  };
+
+  const handleLocationClick = (location: Location) => {
+    setSelectedLocation(location);
+  };
+
+  const closeLocationDetail = () => {
+    setSelectedLocation(null);
   };
 
   return (
@@ -91,6 +126,14 @@ export default function SiopaoPage() {
         </section>
 
         <div className="h-full w-full pt-16">
+          {selectedLocation ? (
+            <div className="absolute inset-0 z-10 pt-16 p-4">
+              <LocationDetailPanel
+                location={selectedLocation}
+                onClose={closeLocationDetail}
+              />
+            </div>
+          ) : null}
           <div className="relative h-full w-full">
             <ClientOnly>
               <MapComponent
@@ -101,6 +144,7 @@ export default function SiopaoPage() {
                   [1000, 1000],
                 ]}
                 defaultZoom={-0.5}
+                onLocationClick={handleLocationClick}
               />
             </ClientOnly>
           </div>
@@ -111,42 +155,51 @@ export default function SiopaoPage() {
       <div className="hidden lg:flex h-screen w-full bg-white">
         {/* Left Side - Text Content (30% Width) */}
         <div className="w-[30%] flex flex-col justify-center items-center p-10">
-          <h2 className="italic text-gray-600 text-lg">
-            Ilonggo&apos;s Best Dishes
-          </h2>
-          <h1 className="text-4xl font-bold mt-2">
-            {dishes[activeIndex].name}
-          </h1>
-          <h3 className="italic text-gray-500 text-lg">
-            {dishes[activeIndex].tagline}
-          </h3>
-
-          {/* Description */}
-          <p className="text-gray-700 mt-4">
-            {dishes[activeIndex].description}
-          </p>
-
-          {/* Navigation Slider */}
-          <div className="mt-6 flex items-center gap-4">
-            <FaCircleChevronLeft
-              className="text-3xl cursor-pointer text-yellow-500"
-              onClick={prevDish}
+          {selectedLocation ? (
+            <LocationDetailPanel
+              location={selectedLocation}
+              onClose={closeLocationDetail}
             />
-            <div className="flex gap-2">
-              {dishes.map((_, index) => (
-                <span
-                  key={index}
-                  className={`h-3 w-3 rounded-full ${
-                    activeIndex === index ? 'bg-yellow-500' : 'bg-gray-300'
-                  }`}
+          ) : (
+            <>
+              <h2 className="italic text-gray-600 text-lg">
+                Ilonggo&apos;s Best Dishes
+              </h2>
+              <h1 className="text-4xl font-bold mt-2">
+                {dishes[activeIndex].name}
+              </h1>
+              <h3 className="italic text-gray-500 text-lg">
+                {dishes[activeIndex].tagline}
+              </h3>
+
+              {/* Description */}
+              <p className="text-gray-700 mt-4">
+                {dishes[activeIndex].description}
+              </p>
+
+              {/* Navigation Slider */}
+              <div className="mt-6 flex items-center gap-4">
+                <FaCircleChevronLeft
+                  className="text-3xl cursor-pointer text-yellow-500"
+                  onClick={prevDish}
                 />
-              ))}
-            </div>
-            <FaCircleChevronRight
-              className="text-3xl cursor-pointer text-yellow-500"
-              onClick={nextDish}
-            />
-          </div>
+                <div className="flex gap-2">
+                  {dishes.map((_, index) => (
+                    <span
+                      key={index}
+                      className={`h-3 w-3 rounded-full ${
+                        activeIndex === index ? 'bg-yellow-500' : 'bg-gray-300'
+                      }`}
+                    />
+                  ))}
+                </div>
+                <FaCircleChevronRight
+                  className="text-3xl cursor-pointer text-yellow-500"
+                  onClick={nextDish}
+                />
+              </div>
+            </>
+          )}
         </div>
 
         {/* Right Side - Map (70% Width) */}
@@ -161,6 +214,7 @@ export default function SiopaoPage() {
                   [1000, 1000],
                 ]}
                 defaultZoom={-0.5}
+                onLocationClick={handleLocationClick}
               />
             </ClientOnly>
           </div>

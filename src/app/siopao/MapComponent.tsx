@@ -18,6 +18,7 @@ interface MapComponentProps {
   mapImageUrl: string; // URL to the map image
   mapBounds: [[number, number], [number, number]]; // Bounds of the map in [y, x] format: [[minY, minX], [maxY, maxX]]
   defaultZoom?: number; // Optional default zoom level
+  onLocationClick?: (location: Location) => void; // Add callback for location click
 }
 
 const MapComponent: React.FC<MapComponentProps> = ({
@@ -28,6 +29,7 @@ const MapComponent: React.FC<MapComponentProps> = ({
     [1000, 1000],
   ], // Default map bounds
   defaultZoom = 0.4, // Default zoom level (0 is a medium zoom)
+  onLocationClick,
 }) => {
   const mapContainerRef = useRef<HTMLDivElement>(null);
   const mapInstanceRef = useRef<Map | null>(null);
@@ -202,6 +204,14 @@ const MapComponent: React.FC<MapComponentProps> = ({
           marker.bindPopup(
             `<b>${location.name}</b><br>${location.description}`
           );
+
+          // Add click handler for markers
+          marker.on('click', () => {
+            if (onLocationClick) {
+              onLocationClick(location);
+            }
+          });
+
           markersRef.current.push(marker);
         });
 
@@ -259,7 +269,7 @@ const MapComponent: React.FC<MapComponentProps> = ({
       }
       markersRef.current = [];
     };
-  }, [locations, mapImageUrl, mapBounds, defaultZoom]); // Re-run when locations, mapImageUrl, mapBounds or defaultZoom change
+  }, [locations, mapImageUrl, mapBounds, defaultZoom, onLocationClick]); // Re-run when locations, mapImageUrl, mapBounds or defaultZoom change
 
   return <div ref={mapContainerRef} className="h-full w-full z-0" />;
 };
