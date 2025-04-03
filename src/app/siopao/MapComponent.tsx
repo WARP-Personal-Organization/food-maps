@@ -9,6 +9,8 @@ interface Location {
   x: number; // Changed from lat
   y: number; // Changed from lng
   description: string;
+  iconType?: 'default' | 'restaurant' | 'shop' | 'attraction'; // Add icon type option
+  iconUrl?: string; // Add custom icon URL option
 }
 
 interface MapComponentProps {
@@ -33,6 +35,16 @@ const MapComponent: React.FC<MapComponentProps> = ({
 
   // Helper function to convert x,y to Leaflet's LatLng (which uses [y, x] format)
   const xy = (x: number, y: number) => {
+    // Add validation to ensure x and y are numbers
+    if (
+      typeof x !== 'number' ||
+      typeof y !== 'number' ||
+      isNaN(x) ||
+      isNaN(y)
+    ) {
+      console.warn(`Invalid coordinates: x=${x}, y=${y}`);
+      return [0, 0] as [number, number]; // Return a default value instead of undefined
+    }
     return [y, x] as [number, number];
   };
 
@@ -80,20 +92,75 @@ const MapComponent: React.FC<MapComponentProps> = ({
         map.setZoom(defaultZoom);
       }
 
-      // Create custom icon for markers
-      const customIcon = L.divIcon({
-        className: 'custom-pin',
-        html: `
-          <div style="width: 24px; height: 24px; transform: translate(-12px, -12px);">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="#FF5733">
-              <circle cx="12" cy="12" r="8" />
-            </svg>
-          </div>
-        `,
-        iconSize: [24, 24],
-        iconAnchor: [12, 12],
-        popupAnchor: [0, -12],
-      });
+      // Define custom marker icons
+      const createCustomIcon = (
+        iconType: 'default' | 'restaurant' | 'shop' | 'attraction',
+        iconUrl?: string
+      ) => {
+        // If a custom icon URL is provided, use that instead
+        if (iconUrl) {
+          return L.icon({
+            iconUrl: iconUrl,
+            iconSize: [40, 52], // Size of the icon
+            iconAnchor: [20, 52], // Point of the icon which corresponds to marker's location
+            popupAnchor: [0, -52], // Point from which the popup should open relative to the iconAnchor
+          });
+        }
+
+        // Otherwise use the default SVG icons
+        let iconHtml = '';
+        const iconColor = '#FF5733';
+
+        switch (iconType) {
+          case 'restaurant':
+            // Restaurant icon (utensils)
+            iconHtml = `
+              <div class="custom-marker restaurant-marker">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
+                  <path fill="#4CAF50" d="M11 9H9V2H7v7H5V2H3v7c0 2.12 1.66 3.84 3.75 3.97V22h2.5v-9.03C11.34 12.84 13 11.12 13 9V2h-2v7zm5-3v8h2.5v8H21V2c-2.76 0-5 2.24-5 4z"/>
+                </svg>
+              </div>
+            `;
+            break;
+          case 'shop':
+            // Shop icon (shopping bag)
+            iconHtml = `
+              <div class="custom-marker shop-marker">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
+                  <path fill="#2196F3" d="M18 6h-2c0-2.21-1.79-4-4-4S8 3.79 8 6H6c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2zm-8 4c0 .55-.45 1-1 1s-1-.45-1-1V8h2v2zm3-4c1.1 0 2 .9 2 2H9c0-1.1.9-2 2-2zm3 4c0 .55-.45 1-1 1s-1-.45-1-1V8h2v2z"/>
+                </svg>
+              </div>
+            `;
+            break;
+          case 'attraction':
+            // Attraction icon (star)
+            iconHtml = `
+              <div class="custom-marker attraction-marker">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
+                  <path fill="#FFC107" d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/>
+                </svg>
+              </div>
+            `;
+            break;
+          default:
+            // Default circular marker
+            iconHtml = `
+              <div class="custom-marker default-marker">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
+                  <circle cx="12" cy="12" r="8" fill="${iconColor}" />
+                </svg>
+              </div>
+            `;
+        }
+
+        return L.divIcon({
+          className: 'custom-pin',
+          html: iconHtml,
+          iconSize: [24, 24],
+          iconAnchor: [12, 12],
+          popupAnchor: [0, -12],
+        });
+      };
 
       // Save reference to map instance
       mapInstanceRef.current = map;
@@ -108,10 +175,28 @@ const MapComponent: React.FC<MapComponentProps> = ({
 
         // Add new markers
         locations.forEach((location) => {
+          // Validate location coordinates before creating a marker
+          if (
+            typeof location.x !== 'number' ||
+            typeof location.y !== 'number' ||
+            isNaN(location.x) ||
+            isNaN(location.y)
+          ) {
+            console.warn(`Skipping invalid location: ${location.name}`);
+            return; // Skip this location
+          }
+
           // Use the xy helper to convert x,y to LatLng format
           const position = xy(location.x, location.y);
+
+          // Create marker with custom icon based on location type
+          const markerIcon = createCustomIcon(
+            location.iconType || 'default',
+            location.iconUrl
+          );
+
           const marker = L.marker(position, {
-            icon: customIcon,
+            icon: markerIcon,
           }).addTo(map);
 
           marker.bindPopup(
@@ -122,12 +207,43 @@ const MapComponent: React.FC<MapComponentProps> = ({
 
         // Adjust view to show all markers if needed
         if (locations.length > 1) {
-          const points = locations.map((loc) => xy(loc.x, loc.y));
-          const bounds = L.latLngBounds(points);
-          map.fitBounds(bounds, { padding: [50, 50] });
+          // Filter out any invalid locations before creating bounds
+          const validLocations = locations.filter(
+            (loc) =>
+              typeof loc.x === 'number' &&
+              typeof loc.y === 'number' &&
+              !isNaN(loc.x) &&
+              !isNaN(loc.y)
+          );
+
+          if (validLocations.length > 0) {
+            const points = validLocations.map((loc) => xy(loc.x, loc.y));
+            try {
+              const bounds = L.latLngBounds(points);
+              map.fitBounds(bounds, { padding: [50, 50] });
+            } catch (error) {
+              console.error('Error creating bounds:', error);
+              // Fallback to fit the map bounds
+              map.fitBounds(mapBounds);
+            }
+          } else {
+            // If no valid locations, just fit to map bounds
+            map.fitBounds(mapBounds);
+          }
         } else if (locations.length === 1) {
-          const [y, x] = xy(locations[0].x, locations[0].y);
-          map.setView([y, x], 0);
+          const location = locations[0];
+          if (
+            typeof location.x === 'number' &&
+            typeof location.y === 'number' &&
+            !isNaN(location.x) &&
+            !isNaN(location.y)
+          ) {
+            const [y, x] = xy(location.x, location.y);
+            map.setView([y, x], 0);
+          } else {
+            // Fallback to map bounds if the single location is invalid
+            map.fitBounds(mapBounds);
+          }
         }
       }
     };

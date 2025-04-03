@@ -15,21 +15,27 @@ const dishes = [
     locations: [
       {
         name: "Roberto's",
-        lat: 10.720321,
-        lng: 122.562019,
+        x: 500, // Adjusted for the map image coordinates
+        y: 300, // Adjusted for the map image coordinates
         description: 'Famous for their Siopao since 1978',
+        iconType: 'restaurant' as const,
+        iconUrl: '/siopao-1.png',
       },
       {
         name: "Deco's",
-        lat: 10.710519,
-        lng: 122.56781,
+        x: 700, // Adjusted for the map image coordinates
+        y: 400, // Adjusted for the map image coordinates
         description: 'Home of the King-sized Siopao',
+        iconType: 'restaurant' as const,
+        iconUrl: '/siopao-2.png',
       },
       {
         name: 'Kusina ni Mama',
-        lat: 10.703215,
-        lng: 122.553621,
+        x: 500, // Adjusted for the map image coordinates
+        y: 600, // Adjusted for the map image coordinates
         description: 'Traditional homemade Siopao',
+        iconType: 'restaurant' as const,
+        iconUrl: '/siopao-3.png',
       },
     ],
   },
@@ -87,7 +93,15 @@ export default function SiopaoPage() {
         <div className="h-full w-full pt-16">
           <div className="relative h-full w-full">
             <ClientOnly>
-              <MapComponent locations={dishes[activeIndex].locations} />
+              <MapComponent
+                locations={dishes[activeIndex].locations}
+                mapImageUrl="/Map.svg"
+                mapBounds={[
+                  [0, 0],
+                  [1000, 1000],
+                ]}
+                defaultZoom={-0.5}
+              />
             </ClientOnly>
           </div>
         </div>
@@ -139,7 +153,15 @@ export default function SiopaoPage() {
         <div className="w-[70%] relative h-full">
           <div className="relative h-full w-full">
             <ClientOnly>
-              <MapComponent locations={dishes[activeIndex].locations} />
+              <MapComponent
+                locations={dishes[activeIndex].locations}
+                mapImageUrl="/Map.svg"
+                mapBounds={[
+                  [0, 0],
+                  [1000, 1000],
+                ]}
+                defaultZoom={-0.5}
+              />
             </ClientOnly>
           </div>
         </div>
