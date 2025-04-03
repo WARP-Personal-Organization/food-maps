@@ -59,7 +59,15 @@ const MapComponent: React.FC<MapComponentProps> = ({
         crs: L.CRS.Simple,
         minZoom: -3, // Allow zooming out further to see the entire map
         maxZoom: 3, // Limit how far users can zoom in
+        zoomControl: false, // Disable default zoom control to position it manually
       });
+
+      // Add custom zoom control to the lower right corner
+      L.control
+        .zoom({
+          position: 'bottomright',
+        })
+        .addTo(map);
 
       // Add the image overlay with the map bounds
       L.imageOverlay(mapImageUrl, mapBounds).addTo(map);
