@@ -1,26 +1,72 @@
 'use client';
 
-import React, { useState, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import { FaCircleChevronLeft, FaCircleChevronRight } from 'react-icons/fa6';
-import { GoArrowRight } from 'react-icons/go';
-import Image from 'next/image';
-import Link from 'next/link'; // Import Link
 import FoodPrintsNavbar from '@/components/FoooPrintsNavbar';
+import dynamic from 'next/dynamic';
 
+// Define the dish data
 const dishes = [
   {
     name: 'Siopao',
-    image: '/images/filter-dish/siopao.png',
     description:
       'Bao Zi (包子), also known as mantou when unfilled, is a staple food among Chinese worldwide. Hence, there are Baozi versions in Singapore, HK, Vietnam, the Philippines, and other countries with strong Chinese influence. The exact origins of siopao in the Philippines are not well-documented, but Chinese vendors likely sold it along with noodles as early as the 1600s.',
     tagline: 'Philippine Steamed Bun',
+    locations: [
+      {
+        name: "Roberto's",
+        lat: 10.720321,
+        lng: 122.562019,
+        description: 'Famous for their Siopao since 1978',
+      },
+      {
+        name: "Deco's",
+        lat: 10.710519,
+        lng: 122.56781,
+        description: 'Home of the King-sized Siopao',
+      },
+      {
+        name: 'Kusina ni Mama',
+        lat: 10.703215,
+        lng: 122.553621,
+        description: 'Traditional homemade Siopao',
+      },
+    ],
   },
 ];
 
+// Dynamically import the Map component to avoid SSR issues with Leaflet
+// No SSR rendering at all - completely client-side only
+const MapComponent = dynamic(() => import('./MapComponent'), {
+  ssr: false,
+  loading: () => (
+    <div className="h-full w-full flex items-center justify-center bg-gray-100">
+      <p>Loading map...</p>
+    </div>
+  ),
+});
+
+// Client Component wrapper for map
+const ClientOnly = ({ children }: { children: React.ReactNode }) => {
+  const [hasMounted, setHasMounted] = useState(false);
+
+  useEffect(() => {
+    setHasMounted(true);
+  }, []);
+
+  if (!hasMounted) {
+    return (
+      <div className="h-full w-full flex items-center justify-center bg-gray-100">
+        <p>Loading map...</p>
+      </div>
+    );
+  }
+
+  return <>{children}</>;
+};
+
 export default function SiopaoPage() {
   const [activeIndex, setActiveIndex] = useState(0);
-  const touchStartX = useRef(0);
-  const touchEndX = useRef(0);
 
   const nextDish = () => {
     setActiveIndex((prev) => (prev + 1) % dishes.length);
@@ -30,20 +76,6 @@ export default function SiopaoPage() {
     setActiveIndex((prev) => (prev - 1 + dishes.length) % dishes.length);
   };
 
-  const handleTouchStart = (e: React.TouchEvent) => {
-    touchStartX.current = e.touches[0].clientX;
-  };
-
-  const handleTouchEnd = (e: React.TouchEvent) => {
-    touchEndX.current = e.changedTouches[0].clientX;
-
-    if (touchStartX.current - touchEndX.current > 50) {
-      nextDish(); // Swipe left
-    } else if (touchStartX.current - touchEndX.current < -50) {
-      prevDish(); // Swipe right
-    }
-  };
-
   return (
     <div className="h-screen w-full">
       {/* MOBILE VIEW */}
@@ -51,41 +83,13 @@ export default function SiopaoPage() {
         <section className="fixed top-0 z-50 w-full">
           <FoodPrintsNavbar />
         </section>
-        {/* Top Image (40% height) */}
-        <div
-          className="relative h-[40vh] w-full"
-          onTouchStart={handleTouchStart}
-          onTouchEnd={handleTouchEnd}
-        >
-          <Image
-            src={dishes[activeIndex].image}
-            alt={dishes[activeIndex].name}
-            layout="fill"
-            objectFit="cover"
-            className="z-10"
-          />
-        </div>
 
-        {/* Bottom Content (60% height) */}
-        <div className="bg-white flex flex-col gap-8 p-6 h-[60vh]">
-          {/* Dish Name */}
-          <h1 className="text-3xl font-bold">{dishes[activeIndex].name}</h1>
-          {/* Tagline */}
-          <h3 className="italic text-gray-400">
-            {dishes[activeIndex].tagline}
-          </h3>
-
-          {/* Description */}
-          <p className="text-gray-800">{dishes[activeIndex].description}</p>
-          {/* Swipe Indicator */}
-          <div className="border-t pt-4"></div>
-
-          {/* Button */}
-          <Link href="/food-map">
-            <button className="w-[100%] bg-yellow-300 text-black font-bold py-3 rounded mx-auto">
-              Where to Eat
-            </button>
-          </Link>
+        <div className="h-full w-full pt-16">
+          <div className="relative h-full w-full">
+            <ClientOnly>
+              <MapComponent locations={dishes[activeIndex].locations} />
+            </ClientOnly>
+          </div>
         </div>
       </div>
 
@@ -94,7 +98,7 @@ export default function SiopaoPage() {
         {/* Left Side - Text Content (30% Width) */}
         <div className="w-[30%] flex flex-col justify-center items-center p-10">
           <h2 className="italic text-gray-600 text-lg">
-            Ilonggo's Best Dishes
+            Ilonggo&apos;s Best Dishes
           </h2>
           <h1 className="text-4xl font-bold mt-2">
             {dishes[activeIndex].name}
@@ -107,13 +111,6 @@ export default function SiopaoPage() {
           <p className="text-gray-700 mt-4">
             {dishes[activeIndex].description}
           </p>
-
-          {/* Button */}
-          <Link href="/food-map">
-            <button className="mt-6 w-[80%] bg-yellow-500 text-black font-bold py-3 rounded">
-              Where to Eat
-            </button>
-          </Link>
 
           {/* Navigation Slider */}
           <div className="mt-6 flex items-center gap-4">
@@ -138,14 +135,13 @@ export default function SiopaoPage() {
           </div>
         </div>
 
-        {/* Right Side - Full Image (70% Width) */}
+        {/* Right Side - Map (70% Width) */}
         <div className="w-[70%] relative h-full">
-          <Image
-            src={dishes[activeIndex].image}
-            alt={dishes[activeIndex].name}
-            layout="fill"
-            objectFit="cover"
-          />
+          <div className="relative h-full w-full">
+            <ClientOnly>
+              <MapComponent locations={dishes[activeIndex].locations} />
+            </ClientOnly>
+          </div>
         </div>
       </div>
     </div>
