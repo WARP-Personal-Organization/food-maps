@@ -21,8 +21,11 @@ const DishContent: React.FC<DishContentProps> = ({
   buttonClassName = 'mt-6 w-[345px] bg-[#F9D408] text-black font-bold py-3 rounded inline-block text-center cursor-pointer',
   showButton = true,
   buttonText = 'Where to Eat',
-  buttonHref = '/food-map',
+  buttonHref,
 }) => {
+  // Use provided buttonHref or use the href from the dish data
+  const href = buttonHref || dish.href;
+
   return (
     <>
       <h1 className={headingClassName}>{dish.name}</h1>
@@ -30,7 +33,7 @@ const DishContent: React.FC<DishContentProps> = ({
       <p className={descriptionClassName}>{dish.description}</p>
 
       {showButton && (
-        <Link href={buttonHref} className={buttonClassName}>
+        <Link href={href} className={buttonClassName}>
           {buttonText}
         </Link>
       )}
