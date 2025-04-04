@@ -20,6 +20,8 @@ export default function HomePage() {
         activeIndex={activeIndex}
         handleTouchStart={handleTouchStart}
         handleTouchEnd={handleTouchEnd}
+        onNext={next}
+        onPrev={prev}
       />
 
       {/* Desktop layout */}
