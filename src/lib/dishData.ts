@@ -1,0 +1,58 @@
+export interface Dish {
+  name: string;
+  image: string;
+  description: string;
+  tagline: string;
+  href: string;
+}
+
+export const ilonggoDishes: Dish[] = [
+  {
+    name: 'Siopao',
+    image: '/images/filter-dish/siopao.png',
+    description:
+      'Bao Zi (包子), also known as mantou when unfilled, is a staple food among Chinese worldwide. Hence, there are Baozi versions in Singapore, HK, Vietnam, the Philippines, and other countries with strong Chinese influence. The exact origins of siopao in the Philippines are not well-documented, but Chinese vendors likely sold it along with noodles as early as the 1600s.',
+    tagline: 'Philippine Steamed Bun',
+    href: '/siopao',
+  },
+  {
+    name: 'La Paz Batchoy',
+    image: '/images/filter-dish/batchoy.webp',
+    description:
+      'A hearty noodle soup with pork, liver, and chicharrón, La Paz Batchoy is a famous Ilonggo delicacy originating from La Paz, Iloilo.',
+    tagline: 'Ilonggo Noodle Soup',
+    href: '/food-map',
+  },
+  {
+    name: 'Cansi',
+    image: '/images/filter-dish/cansi.jpg',
+    description:
+      'Cansi is a famous Ilonggo beef soup known for its rich, sour taste due to the batwan fruit, a local ingredient unique to Western Visayas.',
+    tagline: 'Beef Bone Marrow Soup',
+    href: '/food-map',
+  },
+  {
+    name: 'Inasal',
+    image: '/images/filter-dish/inasal.jpg',
+    description:
+      'Chicken Inasal is a famous Bacolod-style grilled chicken marinated in vinegar, calamansi, and spices, served with annatto oil and garlic rice.',
+    tagline: 'Bacolod Grilled Chicken',
+    href: '/food-map',
+  },
+  {
+    name: 'KBL',
+    image: '/images/filter-dish/kbl.jpg',
+    description:
+      'KBL (Kadyos, Baboy, Langka) is a traditional Ilonggo stew made with pigeon peas, pork, and unripe jackfruit, flavored with batwan fruit.',
+    tagline: 'Pork & Jackfruit Stew',
+    href: '/kbl',
+  },
+  {
+    name: 'Pancit Molo',
+    image: '/images/filter-dish/pancit_molo.jpg',
+    description:
+      'A dumpling soup originating from Molo, Iloilo, Pancit Molo consists of meat-filled wontons in a flavorful chicken broth.',
+    tagline: 'Ilonggo Wonton Soup',
+    href: '/food-map',
+  },
+];
