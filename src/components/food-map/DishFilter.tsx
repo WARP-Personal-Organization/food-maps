@@ -16,8 +16,15 @@ const DishFilter: React.FC<DishFilterProps> = ({
   activeFilters,
   onFilterChange,
 }) => {
+  // State for client-side only functionality
+  const [mounted, setMounted] = useState(false);
   const [isFilterOpen, setIsFilterOpen] = useState(false);
   const filterRef = useRef<HTMLDivElement>(null);
+
+  // Set mounted state once the component is mounted in the client
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   const toggleFilter = () => {
     setIsFilterOpen(!isFilterOpen);
@@ -46,6 +53,30 @@ const DishFilter: React.FC<DishFilterProps> = ({
       document.removeEventListener('mousedown', handleClickOutside);
     };
   }, []);
+
+  // If not mounted yet, render a placeholder with the same structure
+  // to avoid hydration mismatch
+  if (!mounted) {
+    return (
+      <div className="flex flex-wrap gap-2 items-start">
+        <button className="bg-white rounded-md shadow-md px-3 py-2 text-gray-900 font-medium flex items-center gap-2">
+          <div className="w-5 h-5" /> {/* Placeholder for image */}
+          <span className="sm:inline hidden">Filter Dishes</span>
+        </button>
+        <div className="flex flex-wrap gap-2 max-w-[250px] sm:max-w-[500px]">
+          {activeFilters.map((filter) => (
+            <div
+              key={filter}
+              className="bg-yellow-300 rounded-full px-4 py-1.5 text-gray-900 font-medium flex items-center gap-2 shadow-sm text-sm"
+            >
+              <span>{filter}</span>
+              <div className="rounded-full w-5 h-5 flex items-center justify-center" />
+            </div>
+          ))}
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="flex flex-wrap gap-2 items-start" ref={filterRef}>

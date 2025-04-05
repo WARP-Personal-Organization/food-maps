@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import 'leaflet/dist/leaflet.css';
 import type { Map, Marker } from 'leaflet';
 
@@ -38,6 +38,7 @@ const MapComponent: React.FC<MapComponentProps> = ({
   const mapContainerRef = useRef<HTMLDivElement>(null);
   const mapInstanceRef = useRef<Map | null>(null);
   const markersRef = useRef<Marker[]>([]);
+  const [mounted, setMounted] = useState(false);
 
   // Helper function to convert x,y to Leaflet's LatLng (which uses [y, x] format)
   const xy = (x: number, y: number) => {
@@ -54,10 +55,15 @@ const MapComponent: React.FC<MapComponentProps> = ({
     return [y, x] as [number, number];
   };
 
+  // Set mounted state once component is mounted
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
   // Initialize map when component mounts
   useEffect(() => {
-    // Only run on client side
-    if (typeof window === 'undefined') return;
+    // Only run on client side and after component is mounted
+    if (!mounted) return;
 
     // Dynamically import Leaflet only on client side
     const initializeMap = async () => {
@@ -275,7 +281,14 @@ const MapComponent: React.FC<MapComponentProps> = ({
 
     // Initialize the map
     initializeMap();
-  }, [locations, mapImageUrl, mapBounds, defaultZoom, onLocationClick]);
+  }, [
+    locations,
+    mapImageUrl,
+    mapBounds,
+    defaultZoom,
+    onLocationClick,
+    mounted,
+  ]);
 
   return (
     <div

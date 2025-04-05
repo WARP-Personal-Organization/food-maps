@@ -1,13 +1,19 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import FoodMapLayout from '@/components/layout/FoodMapLayout';
 import { ilonggoDishes } from '@/lib/dishData';
 import { dishLocations } from '@/lib/locationData';
 import DishFilter from '@/components/food-map/DishFilter';
 
 export default function FoodMapPage() {
+  const [mounted, setMounted] = useState(false);
   const [activeFilters, setActiveFilters] = useState<string[]>([]);
+
+  // Initialize client-side state
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   // Filter dishes based on active filters
   const filteredDishes =
@@ -24,6 +30,11 @@ export default function FoodMapPage() {
             activeFilters.includes(dishName)
           )
         );
+
+  // If not mounted yet, render a minimal placeholder to avoid hydration mismatch
+  if (!mounted) {
+    return <div className="flex flex-col h-screen overflow-hidden"></div>;
+  }
 
   return (
     <div className="flex flex-col h-screen overflow-hidden">
