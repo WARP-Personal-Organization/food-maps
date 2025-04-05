@@ -1,5 +1,5 @@
-@import "tailwindcss";
-@import "tw-animate-css";
+@import 'tailwindcss';
+@import 'tw-animate-css';
 
 @custom-variant dark (&:is(.dark *));
 
@@ -119,4 +119,35 @@
   body {
     @apply bg-background text-foreground;
   }
+}
+
+/* Leaflet Map Styles */
+.leaflet-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 10;
+}
+
+.leaflet-control-container {
+  z-index: 20;
+}
+
+.leaflet-pane {
+  z-index: 15 !important;
+}
+
+.leaflet-popup-pane {
+  z-index: 30 !important;
+}
+
+/* Custom marker styles */
+.custom-marker {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
 }

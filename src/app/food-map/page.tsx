@@ -1,22 +1,44 @@
-import React from "react";
-import Image from "next/image";
-import Navbar from "@/components/Navbar";
-import { LuUtensils } from "react-icons/lu";
-import { FiMenu, FiX } from "react-icons/fi";
+'use client';
 
-export default function FoodMap() {
+import React, { useState } from 'react';
+import FoodMapLayout from '@/components/layout/FoodMapLayout';
+import { ilonggoDishes } from '@/lib/dishData';
+import { dishLocations } from '@/lib/locationData';
+import DishFilter from '@/components/food-map/DishFilter';
+
+export default function FoodMapPage() {
+  const [activeFilters, setActiveFilters] = useState<string[]>([]);
+
+  // Filter dishes based on active filters
+  const filteredDishes =
+    activeFilters.length === 0
+      ? ilonggoDishes
+      : ilonggoDishes.filter((dish) => activeFilters.includes(dish.name));
+
+  // Filter locations based on active filters
+  const filteredLocations =
+    activeFilters.length === 0
+      ? dishLocations
+      : Object.fromEntries(
+          Object.entries(dishLocations).filter(([dishName]) =>
+            activeFilters.includes(dishName)
+          )
+        );
+
   return (
-    <>
-      <div className="h-screen w-full">
-        
-        {/* MOBILE VIEW */}
-        <div className="lg:hidden flex flex-col h-screen">
-          <section className="fixed top-0 z-50 w-full">
-            <Navbar />
-            MAP SAMPLE
-          </section>
-          </div>
-      </div>
-    </>
-  )
+    <div className="flex flex-col h-screen overflow-hidden">
+      {/* We'll pass the filter UI to FoodMapLayout instead of positioning it here */}
+      <FoodMapLayout
+        dishes={filteredDishes}
+        locationsMap={filteredLocations}
+        filterUI={
+          <DishFilter
+            dishes={ilonggoDishes}
+            activeFilters={activeFilters}
+            onFilterChange={setActiveFilters}
+          />
+        }
+      />
+    </div>
+  );
 }
