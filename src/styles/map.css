@@ -1,0 +1,66 @@
+.mapboxgl-map {
+  height: 100%;
+  width: 100%;
+}
+
+.custom-marker {
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+
+.custom-marker:hover {
+  transform: scale(1.2);
+}
+
+.marker-icon {
+  width: 24px;
+  height: 24px;
+}
+
+.restaurant-marker svg,
+.shop-marker svg,
+.attraction-marker svg,
+.default-marker svg {
+  filter: drop-shadow(0px 3px 3px rgba(0, 0, 0, 0.4));
+  transition: filter 0.2s;
+}
+
+.custom-marker:hover svg {
+  filter: drop-shadow(0px 4px 5px rgba(0, 0, 0, 0.6));
+}
+
+.mapboxgl-popup {
+  max-width: 300px;
+}
+
+.mapboxgl-popup-content {
+  padding: 15px;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.mapboxgl-popup-content b {
+  margin-bottom: 5px;
+  display: block;
+  font-size: 16px;
+}
+
+/* Customize navigation controls */
+.mapboxgl-ctrl-group {
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.mapboxgl-ctrl button {
+  width: 36px;
+  height: 36px;
+}
+
+/* Attribution style */
+.mapboxgl-ctrl-attrib {
+  font-size: 11px;
+  border-radius: 4px;
+  padding: 2px 5px;
+  background-color: rgba(255, 255, 255, 0.8);
+}

@@ -1,0 +1,12 @@
+# Semantic Commit Messages for Custom Map Implementation
+
+1. feat(map): implement custom map rendering with PNG support
+2. fix(mapbox): resolve custom map display and sizing issues
+3. refactor(MapComponent): optimize coordinate mapping for custom images
+4. fix(ui): address map repetition and improve custom map display
+5. perf(map): enhance map rendering and zoom behavior
+6. feat(MapComponent): add support for proper PNG map rendering
+7. fix(layout): correct custom map coordinates and prevent repetition
+8. style(map): improve custom map display and proportions
+9. refactor(FoodMapLayout): update map configuration for better display
+10. fix(mapbox): disable world copies and optimize custom map bounds 

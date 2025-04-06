@@ -16,7 +16,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <head>{/* Leaflet CSS is imported in the component directly */}</head>
+      <head>{/* Mapbox CSS is imported in the component directly */}</head>
       <body className={inter.className}>
         <div>{children}</div>
       </body>

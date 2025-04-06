@@ -158,13 +158,14 @@ const FoodMapLayout: React.FC<FoodMapLayoutProps> = ({
               <ClientOnly>
                 <MapComponent
                   locations={currentLocations}
-                  mapImageUrl="/Map.svg"
+                  mapImageUrl="/map.png"
                   mapBounds={[
                     [0, 0],
                     [1000, 1000],
                   ]}
-                  defaultZoom={-0.5}
+                  defaultZoom={3}
                   onLocationClick={handleLocationClick}
+                  useCustomMap={true}
                 />
               </ClientOnly>
             ) : (
@@ -214,13 +215,14 @@ const FoodMapLayout: React.FC<FoodMapLayoutProps> = ({
               <ClientOnly>
                 <MapComponent
                   locations={currentLocations}
-                  mapImageUrl="/Map.svg"
+                  mapImageUrl="/map.png"
                   mapBounds={[
                     [0, 0],
                     [1000, 1000],
                   ]}
-                  defaultZoom={-0.5}
+                  defaultZoom={3}
                   onLocationClick={handleLocationClick}
+                  useCustomMap={true}
                 />
               </ClientOnly>
             ) : (
