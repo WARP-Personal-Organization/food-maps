@@ -14,8 +14,21 @@
 }
 
 .marker-icon {
-  width: 24px;
-  height: 24px;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.siopao-marker img {
+  filter: drop-shadow(0px 3px 3px rgba(0, 0, 0, 0.4));
+  transition: filter 0.2s, transform 0.2s;
+  transform: translateY(-50%);
+}
+
+.custom-marker:hover .siopao-marker img {
+  filter: drop-shadow(0px 4px 5px rgba(0, 0, 0, 0.6));
 }
 
 .restaurant-marker svg,
@@ -64,4 +77,13 @@
   border-radius: 4px;
   padding: 2px 5px;
   background-color: rgba(255, 255, 255, 0.8);
+}
+
+.custom-icon-marker img {
+  filter: drop-shadow(0px 3px 3px rgba(0, 0, 0, 0.4));
+  transition: filter 0.2s, transform 0.2s;
+}
+
+.custom-marker:hover .custom-icon-marker img {
+  filter: drop-shadow(0px 4px 5px rgba(0, 0, 0, 0.6));
 }

@@ -3,18 +3,7 @@
 import React, { useState } from 'react';
 import { FaTimes } from 'react-icons/fa';
 import Image from 'next/image';
-
-interface Location {
-  name: string;
-  x: number;
-  y: number;
-  description: string;
-  iconType?: 'default' | 'restaurant' | 'shop' | 'attraction';
-  iconUrl?: string;
-  address?: string;
-  openHours?: string;
-  priceRange?: string;
-}
+import { Location } from '@/lib/locationData';
 
 interface LocationDetailPanelProps {
   location: Location | null;

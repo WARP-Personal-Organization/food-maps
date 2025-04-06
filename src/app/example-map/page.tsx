@@ -2,20 +2,7 @@
 
 import React, { useState } from 'react';
 import MapComponent from '../../components/MapComponent';
-
-// Import the Location type from the MapComponent
-interface Location {
-  name: string;
-  x: number;
-  y: number;
-  description: string;
-  iconType?: 'default' | 'restaurant' | 'shop' | 'attraction';
-  iconUrl?: string;
-  address?: string;
-  openHours?: string;
-  priceRange?: string;
-  photos?: string[];
-}
+import { Location } from '@/lib/locationData';
 
 export default function ExampleMapPage() {
   // State to toggle between standard map and custom map
@@ -28,21 +15,24 @@ export default function ExampleMapPage() {
       x: 20,
       y: 30,
       description: 'A delicious restaurant with local cuisine',
-      iconType: 'restaurant',
+      iconType: 'siopao',
+      siopaoVariant: 1,
     },
     {
       name: 'Shop B',
       x: 30,
       y: 40,
       description: 'A popular shopping destination',
-      iconType: 'shop',
+      iconType: 'siopao',
+      siopaoVariant: 2,
     },
     {
       name: 'Attraction C',
       x: 25,
       y: 35,
       description: 'A must-visit tourist attraction',
-      iconType: 'attraction',
+      iconType: 'siopao',
+      siopaoVariant: 3,
     },
   ];
 

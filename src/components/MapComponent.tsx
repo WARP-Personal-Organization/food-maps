@@ -4,20 +4,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import mapboxgl from 'mapbox-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
 import '../styles/map.css';
-
-// Define the Location interface
-interface Location {
-  name: string;
-  x: number; // We'll convert these x,y coordinates to lng,lat for Mapbox
-  y: number;
-  description: string;
-  iconType?: 'default' | 'restaurant' | 'shop' | 'attraction';
-  iconUrl?: string;
-  address?: string;
-  openHours?: string;
-  priceRange?: string;
-  photos?: string[];
-}
+import { Location } from '@/lib/locationData';
 
 interface MapComponentProps {
   locations: Location[];
@@ -131,10 +118,10 @@ const MapComponent: React.FC<MapComponentProps> = ({
     map.on('load', () => {
       // Apply custom background color to the map
       if (map.getStyle().layers) {
-        // @ts-ignore
-        const backgroundLayer = map
-          .getStyle()
-          .layers.find((layer) => layer.id === 'background');
+        const style = map.getStyle() as { layers: Array<{ id: string }> };
+        const backgroundLayer = style.layers.find(
+          (layer) => layer.id === 'background'
+        );
         if (backgroundLayer) {
           map.setPaintProperty('background', 'background-color', '#3b3b3f');
         } else {
@@ -258,12 +245,20 @@ const MapComponent: React.FC<MapComponentProps> = ({
 
         // Add appropriate icon based on location type
         switch (location.iconType) {
-          case 'restaurant':
+          case 'siopao':
+            // Use siopao variant or default to variant 1
+            const siopaoVariant = location.siopaoVariant || 1;
             markerElement.innerHTML = `
-              <div class="marker-icon restaurant-marker">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
-                  <path fill="#4CAF50" d="M11 9H9V2H7v7H5V2H3v7c0 2.12 1.66 3.84 3.75 3.97V22h2.5v-9.03C11.34 12.84 13 11.12 13 9V2h-2v7zm5-3v8h2.5v8H21V2c-2.76 0-5 2.24-5 4z"/>
-                </svg>
+              <div class="marker-icon siopao-marker">
+                <img src="/siopao-${siopaoVariant}.png" alt="Siopao Marker" style="width: 36px; height: auto;" />
+              </div>
+            `;
+            break;
+          case 'restaurant':
+            // Instead of using the restaurant marker, use siopao-1 by default for restaurants
+            markerElement.innerHTML = `
+              <div class="marker-icon siopao-marker">
+                <img src="/siopao-1.png" alt="Siopao Marker" style="width: 36px; height: auto;" />
               </div>
             `;
             break;
@@ -288,13 +283,16 @@ const MapComponent: React.FC<MapComponentProps> = ({
           default:
             // Default marker or custom icon URL
             if (location.iconUrl) {
-              markerElement.innerHTML = `<img src="${location.iconUrl}" alt="${location.name}" style="width: 24px; height: 24px;" />`;
+              markerElement.innerHTML = `
+                <div class="marker-icon custom-icon-marker">
+                  <img src="${location.iconUrl}" alt="${location.name}" style="width: 36px; height: auto; filter: drop-shadow(0px 3px 3px rgba(0, 0, 0, 0.4));" />
+                </div>
+              `;
             } else {
+              // Use siopao-1 as default marker
               markerElement.innerHTML = `
                 <div class="marker-icon default-marker">
-                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
-                    <circle cx="12" cy="12" r="8" fill="#FF5733" />
-                  </svg>
+                  <img src="/siopao-1.png" alt="Siopao Marker" style="width: 36px; height: auto;" />
                 </div>
               `;
             }
@@ -386,10 +384,20 @@ const MapComponent: React.FC<MapComponentProps> = ({
     style.textContent = `
       .custom-marker {
         cursor: pointer;
+        transition: transform 0.2s ease;
+      }
+      .custom-marker:hover {
+        transform: scale(1.2);
       }
       .marker-icon {
-        width: 24px;
-        height: 24px;
+        width: 36px;
+        height: 36px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+      .siopao-marker {
+        transform: translateY(-50%);
       }
     `;
     document.head.appendChild(style);

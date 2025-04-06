@@ -3,23 +3,10 @@
 import React, { useState } from 'react';
 import dynamic from 'next/dynamic';
 import { Dish } from '@/lib/dishData';
+import { Location } from '@/lib/locationData';
 import DishDetailPanel from '@/components/dishes/DishDetailPanel';
 import LocationDetailPanel from '@/components/LocationDetailPanel';
 import FoodPrintsNavbar from '@/components/FoooPrintsNavbar';
-
-// Define Location interface to match with MapComponent
-interface Location {
-  name: string;
-  x: number;
-  y: number;
-  description: string;
-  iconType?: 'default' | 'restaurant' | 'shop' | 'attraction';
-  iconUrl?: string;
-  address?: string;
-  openHours?: string;
-  priceRange?: string;
-  photos?: string[];
-}
 
 // Client Component wrapper for map
 const ClientOnly = ({ children }: { children: React.ReactNode }) => {
