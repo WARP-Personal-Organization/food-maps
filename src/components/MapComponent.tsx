@@ -129,6 +129,28 @@ const MapComponent: React.FC<MapComponentProps> = ({
 
     // Wait for the map to load before adding markers
     map.on('load', () => {
+      // Apply custom background color to the map
+      if (map.getStyle().layers) {
+        // @ts-ignore
+        const backgroundLayer = map
+          .getStyle()
+          .layers.find((layer) => layer.id === 'background');
+        if (backgroundLayer) {
+          map.setPaintProperty('background', 'background-color', '#3b3b3f');
+        } else {
+          map.addLayer(
+            {
+              id: 'background',
+              type: 'background',
+              paint: {
+                'background-color': '#3b3b3f',
+              },
+            },
+            'custom-map-layer'
+          ); // Add before custom map layer if it exists
+        }
+      }
+
       // Convert mapBounds to Mapbox format
       const swCoord = xyToLngLat(mapBounds[0][1], mapBounds[0][0]);
       const neCoord = xyToLngLat(mapBounds[1][1], mapBounds[1][0]);
