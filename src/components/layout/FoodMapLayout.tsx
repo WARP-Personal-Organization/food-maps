@@ -40,7 +40,7 @@ const ClientOnly = ({ children }: { children: React.ReactNode }) => {
   return <>{children}</>;
 };
 
-// Dynamically import the Map component to avoid SSR issues with Leaflet
+// Dynamically import the Map component to avoid SSR issues with Mapbox
 const MapComponent = dynamic(() => import('@/components/MapComponent'), {
   ssr: false,
   loading: () => (
