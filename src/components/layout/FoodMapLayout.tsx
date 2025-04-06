@@ -102,9 +102,8 @@ const FoodMapLayout: React.FC<FoodMapLayoutProps> = ({
     setSelectedLocation(null);
   };
 
-  // Get locations for the current active dish
-  const currentDishName = dishes[activeIndex]?.name || '';
-  const currentLocations = locationsMap[currentDishName] || [];
+  // Combine all locations from all selected dishes
+  const allLocations = Object.values(locationsMap).flat();
 
   // Check if we have any dishes to display
   const hasDishes = dishes.length > 0;
@@ -144,7 +143,7 @@ const FoodMapLayout: React.FC<FoodMapLayoutProps> = ({
             {hasDishes ? (
               <ClientOnly>
                 <MapComponent
-                  locations={currentLocations}
+                  locations={allLocations}
                   mapImageUrl="/map.png"
                   mapBounds={[
                     [0, 0],
@@ -201,7 +200,7 @@ const FoodMapLayout: React.FC<FoodMapLayoutProps> = ({
             {hasDishes ? (
               <ClientOnly>
                 <MapComponent
-                  locations={currentLocations}
+                  locations={allLocations}
                   mapImageUrl="/map.png"
                   mapBounds={[
                     [0, 0],
