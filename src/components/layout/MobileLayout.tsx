@@ -88,7 +88,11 @@ const MobileLayout: React.FC<MobileLayoutProps> = ({
 
         {/* Button */}
         <Link
-          href={activeDish.href}
+          href={
+            activeDish.href === '/food-map'
+              ? `/food-map?dish=${encodeURIComponent(activeDish.name)}`
+              : activeDish.href
+          }
           className="w-full bg-[#F9D408] text-black font-semibold py-4 rounded text-center inline-block cursor-pointer"
         >
           Where to Eat

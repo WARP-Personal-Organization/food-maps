@@ -143,6 +143,11 @@ const DishFilter: React.FC<DishFilterProps> = ({
                 }}
               >
                 {dish.name}
+                {activeFilters.includes(dish.name) && (
+                  <span className="ml-2 text-xs bg-yellow-300 text-gray-800 px-2 py-0.5 rounded-full">
+                    Selected
+                  </span>
+                )}
               </button>
             ))}
           </div>

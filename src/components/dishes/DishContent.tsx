@@ -1,6 +1,7 @@
 import React from 'react';
 import Link from 'next/link';
 import { Dish } from '@/lib/dishData';
+import { useSearchParams } from 'next/navigation';
 
 interface DishContentProps {
   dish: Dish;
@@ -25,6 +26,37 @@ const DishContent: React.FC<DishContentProps> = ({
 }) => {
   // Use provided buttonHref or use the href from the dish data
   const href = buttonHref || dish.href;
+  const searchParams = useSearchParams();
+
+  // Add query parameter for dish name if linking to food-map
+  let linkHref = href;
+
+  if (href === '/food-map') {
+    // If we're linking to the food-map page
+    const currentDishParam = searchParams.get('dish');
+
+    if (currentDishParam && currentDishParam.includes(',')) {
+      // If there are already multiple dishes in the URL
+      const currentDishes = currentDishParam.split(',');
+
+      // Only add this dish if it's not already included
+      if (!currentDishes.includes(dish.name)) {
+        linkHref = `${href}?dish=${currentDishParam},${encodeURIComponent(
+          dish.name
+        )}`;
+      } else {
+        linkHref = `${href}?dish=${currentDishParam}`;
+      }
+    } else if (currentDishParam && currentDishParam !== dish.name) {
+      // If there's one dish that's different from this one, add this dish to it
+      linkHref = `${href}?dish=${currentDishParam},${encodeURIComponent(
+        dish.name
+      )}`;
+    } else {
+      // If there's no current dish or it's the same as this one
+      linkHref = `${href}?dish=${encodeURIComponent(dish.name)}`;
+    }
+  }
 
   return (
     <>
@@ -33,7 +65,7 @@ const DishContent: React.FC<DishContentProps> = ({
       <p className={descriptionClassName}>{dish.description}</p>
 
       {showButton && (
-        <Link href={href} className={buttonClassName}>
+        <Link href={linkHref} className={buttonClassName}>
           {buttonText}
         </Link>
       )}

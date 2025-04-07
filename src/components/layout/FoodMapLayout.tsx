@@ -4,9 +4,8 @@ import React, { useState } from 'react';
 import dynamic from 'next/dynamic';
 import { Dish } from '@/lib/dishData';
 import { Location } from '@/lib/locationData';
-import DishDetailPanel from '@/components/dishes/DishDetailPanel';
-import LocationDetailPanel from '@/components/LocationDetailPanel';
 import FoodPrintsNavbar from '@/components/FoooPrintsNavbar';
+import LeftSidePanel from './LeftSidePanel';
 
 // Client Component wrapper for map
 const ClientOnly = ({ children }: { children: React.ReactNode }) => {
@@ -72,27 +71,22 @@ interface FoodMapLayoutProps {
   };
   // Filter UI element to be displayed on the map
   filterUI?: React.ReactNode;
+  // Active filter for showing single dish detail panel
+  activeFilters?: string[];
+  // Optional callback for filter changes, used in the AllDishesView
+  onFilterChange?: (filters: string[]) => void;
 }
 
 const FoodMapLayout: React.FC<FoodMapLayoutProps> = ({
   dishes,
   locationsMap,
   filterUI,
+  activeFilters = [],
+  onFilterChange,
 }) => {
-  const [activeIndex, setActiveIndex] = useState(0);
   const [selectedLocation, setSelectedLocation] = useState<Location | null>(
     null
   );
-
-  const nextDish = () => {
-    setActiveIndex((prev) => (prev + 1) % dishes.length);
-    setSelectedLocation(null); // Reset selected location when changing dish
-  };
-
-  const prevDish = () => {
-    setActiveIndex((prev) => (prev - 1 + dishes.length) % dishes.length);
-    setSelectedLocation(null); // Reset selected location when changing dish
-  };
 
   const handleLocationClick = (location: Location) => {
     setSelectedLocation(location);
@@ -108,13 +102,6 @@ const FoodMapLayout: React.FC<FoodMapLayoutProps> = ({
   // Check if we have any dishes to display
   const hasDishes = dishes.length > 0;
 
-  // Reset active index if we have dishes but the current index is out of bounds
-  React.useEffect(() => {
-    if (hasDishes && activeIndex >= dishes.length) {
-      setActiveIndex(0);
-    }
-  }, [dishes, hasDishes, activeIndex]);
-
   return (
     <div className="h-screen w-full">
       {/* MOBILE VIEW */}
@@ -124,17 +111,17 @@ const FoodMapLayout: React.FC<FoodMapLayoutProps> = ({
         </section>
 
         <div className="h-full w-full pt-16">
-          {selectedLocation ? (
-            <div className="absolute inset-0 z-40 pt-16 p-4">
-              <LocationDetailPanel
-                location={selectedLocation}
-                onClose={closeLocationDetail}
-              />
-            </div>
-          ) : null}
+          <LeftSidePanel
+            selectedLocation={selectedLocation}
+            closeLocationDetail={closeLocationDetail}
+            activeFilters={activeFilters}
+            onFilterChange={onFilterChange}
+            locationsMap={locationsMap}
+            isMobile={true}
+          />
           <div className="relative h-full w-full">
             {/* Filter UI on mobile - top left of map */}
-            {filterUI && (
+            {filterUI && activeFilters.length > 0 && (
               <div className="absolute top-4 left-4 z-50 max-w-[85%]">
                 {filterUI}
               </div>
@@ -164,36 +151,21 @@ const FoodMapLayout: React.FC<FoodMapLayoutProps> = ({
       {/* DESKTOP VIEW */}
       <div className="hidden lg:flex h-screen w-full bg-white">
         {/* Left Side - Text Content (30% Width) */}
-        <div className="w-[30%] flex flex-col justify-center items-center p-10">
-          {selectedLocation ? (
-            <LocationDetailPanel
-              location={selectedLocation}
-              onClose={closeLocationDetail}
-            />
-          ) : hasDishes ? (
-            <DishDetailPanel
-              dishes={dishes}
-              activeIndex={activeIndex}
-              onPrevDish={prevDish}
-              onNextDish={nextDish}
-            />
-          ) : (
-            <div className="text-center p-6">
-              <h3 className="text-xl font-medium text-gray-700 mb-2">
-                No dishes selected
-              </h3>
-              <p className="text-gray-500">
-                Please select at least one dish from the filter above.
-              </p>
-            </div>
-          )}
+        <div className="w-[30%] h-full overflow-hidden">
+          <LeftSidePanel
+            selectedLocation={selectedLocation}
+            closeLocationDetail={closeLocationDetail}
+            activeFilters={activeFilters}
+            onFilterChange={onFilterChange}
+            locationsMap={locationsMap}
+          />
         </div>
 
         {/* Right Side - Map (70% Width) */}
         <div className="w-[70%] relative h-full">
           <div className="relative h-full w-full">
             {/* Filter UI on desktop - top left of map */}
-            {filterUI && (
+            {filterUI && activeFilters.length > 0 && (
               <div className="absolute top-6 left-6 z-[100]">{filterUI}</div>
             )}
 
