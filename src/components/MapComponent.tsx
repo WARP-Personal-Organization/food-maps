@@ -45,13 +45,6 @@ const MapComponent: React.FC<MapComponentProps> = ({
   // Helper function to convert our x,y coordinates to Mapbox lng,lat
   // Mapbox requires longitude values between -180 and 180, and latitude values between -90 and 90
   const xyToLngLat = (x: number, y: number): [number, number] => {
-    // Convert your x,y coordinate system to valid Mapbox coordinates
-    // This will depend on your specific coordinate system
-    // For a simple approach, we'll scale the values to valid ranges:
-
-    // For longitude (x): scale to range -180 to 180
-    // For latitude (y): scale to range -85 to 85 (slightly less than 90 for safety)
-
     // Get the min/max bounds from the mapBounds
     const minX = mapBounds[0][1];
     const maxX = mapBounds[1][1];
@@ -81,6 +74,39 @@ const MapComponent: React.FC<MapComponentProps> = ({
       }
     };
   }, []);
+
+  // Add resize handler to ensure map fills container
+  useEffect(() => {
+    if (!mapInstanceRef.current) return;
+
+    const handleResize = () => {
+      if (mapInstanceRef.current) {
+        // Resize the map to fit the new container size
+        mapInstanceRef.current.resize();
+
+        // Get the current bounds and maintain them during resize
+        const currentBounds = mapInstanceRef.current.getBounds();
+
+        // Apply the same bounds after resize to maintain the same view
+        mapInstanceRef.current.fitBounds(currentBounds, {
+          padding: 20,
+        });
+      }
+    };
+
+    // Handle resize when container size changes
+    const resizeObserver = new ResizeObserver(handleResize);
+    if (mapContainerRef.current) {
+      resizeObserver.observe(mapContainerRef.current);
+    }
+
+    return () => {
+      if (mapContainerRef.current) {
+        resizeObserver.unobserve(mapContainerRef.current);
+      }
+      resizeObserver.disconnect();
+    };
+  }, [mapInstanceRef.current]);
 
   // Initialize map when component mounts
   useEffect(() => {
@@ -179,7 +205,13 @@ const MapComponent: React.FC<MapComponentProps> = ({
             },
           });
 
-          // Fit map to bounds
+          // Set up event handlers for map movement to keep image coordinates consistent
+          map.on('move', () => {
+            // We can log or handle map movements here if needed
+            // console.log('Map moved');
+          });
+
+          // Fit map to bounds with adjusted padding
           map.fitBounds(convertedBounds, {
             padding: 20,
             maxZoom: Math.max(defaultZoom, 5),
@@ -243,6 +275,12 @@ const MapComponent: React.FC<MapComponentProps> = ({
         const markerElement = document.createElement('div');
         markerElement.className = 'custom-marker';
 
+        // Remove the fixed positioning offset
+        // markerElement.style.marginTop = '-18px';
+
+        // Calculate specific marker offsets based on location type
+        // let markerOffset = 0;
+
         // Add appropriate icon based on location type
         switch (location.iconType) {
           case 'siopao':
@@ -253,6 +291,7 @@ const MapComponent: React.FC<MapComponentProps> = ({
                 <img src="/siopao-${siopaoVariant}.png" alt="Siopao Marker" style="width: 36px; height: auto;" />
               </div>
             `;
+            // markerOffset = 0; // Specific offset for siopao markers
             break;
           case 'restaurant':
             // Instead of using the restaurant marker, use siopao-1 by default for restaurants
@@ -261,6 +300,7 @@ const MapComponent: React.FC<MapComponentProps> = ({
                 <img src="/siopao-1.png" alt="Siopao Marker" style="width: 36px; height: auto;" />
               </div>
             `;
+            // markerOffset = 0; // Specific offset for restaurant markers
             break;
           case 'shop':
             markerElement.innerHTML = `
@@ -270,6 +310,7 @@ const MapComponent: React.FC<MapComponentProps> = ({
                 </svg>
               </div>
             `;
+            // markerOffset = 5; // Adjust offset for shop markers
             break;
           case 'attraction':
             markerElement.innerHTML = `
@@ -279,6 +320,7 @@ const MapComponent: React.FC<MapComponentProps> = ({
                 </svg>
               </div>
             `;
+            // markerOffset = 5; // Adjust offset for attraction markers
             break;
           default:
             // Default marker or custom icon URL
@@ -288,6 +330,7 @@ const MapComponent: React.FC<MapComponentProps> = ({
                   <img src="${location.iconUrl}" alt="${location.name}" style="width: 36px; height: auto; filter: drop-shadow(0px 3px 3px rgba(0, 0, 0, 0.4));" />
                 </div>
               `;
+              // markerOffset = 0; // Default offset for custom icon markers
             } else {
               // Use siopao-1 as default marker
               markerElement.innerHTML = `
@@ -295,13 +338,20 @@ const MapComponent: React.FC<MapComponentProps> = ({
                   <img src="/siopao-1.png" alt="Siopao Marker" style="width: 36px; height: auto;" />
                 </div>
               `;
+              // markerOffset = 0; // Default offset for default markers
             }
         }
+
+        // Apply specific marker offset if needed
+        // if (markerOffset !== 0) {
+        //  markerElement.style.marginTop = `${-18 + markerOffset}px`;
+        // }
 
         // Convert x,y to lng,lat for Mapbox
         const [lng, lat] = xyToLngLat(location.x, location.y);
 
         // Create the marker and add it to the map
+        // Using original marker creation without extra options
         const marker = new mapboxgl.Marker(markerElement)
           .setLngLat([lng, lat])
           .addTo(map);
@@ -426,7 +476,14 @@ const MapComponent: React.FC<MapComponentProps> = ({
     <div
       ref={mapContainerRef}
       className="h-full w-full z-10"
-      style={{ position: 'relative' }}
+      style={{
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        right: 0,
+        bottom: 0,
+        overflow: 'hidden', // Prevent any potential scrollbars
+      }}
     />
   );
 };

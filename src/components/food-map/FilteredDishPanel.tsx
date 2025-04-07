@@ -13,6 +13,7 @@ interface FilteredDishPanelProps {
 const FilteredDishPanel: React.FC<FilteredDishPanelProps> = ({
   dishes,
   activeFilter,
+  onClose,
 }) => {
   const [activeIndex, setActiveIndex] = useState(0);
 
@@ -40,12 +41,27 @@ const FilteredDishPanel: React.FC<FilteredDishPanelProps> = ({
     });
   };
 
+  const handleClose = () => {
+    if (onClose) {
+      onClose();
+    }
+  };
+
   if (!activeFilter) return null;
 
   const currentDish = dishes[activeIndex];
 
   return (
-    <div className="h-full w-full">
+    <div className="h-full w-full relative">
+      {/* Close button */}
+      <button
+        onClick={handleClose}
+        className="absolute top-4 right-4 z-10 p-2 bg-white rounded-full shadow-md text-gray-500 hover:text-gray-700"
+        aria-label="Close panel"
+      >
+        ×
+      </button>
+
       <DishDetailsView
         dish={currentDish}
         onPrevDish={handlePrevDish}

@@ -1,67 +1,12 @@
 'use client';
 
 import React, { useState } from 'react';
-import dynamic from 'next/dynamic';
 import { Dish } from '@/lib/dishData';
 import { Location } from '@/lib/locationData';
 import FoodPrintsNavbar from '@/components/FoooPrintsNavbar';
 import LeftSidePanel from './LeftSidePanel';
-
-// Client Component wrapper for map
-const ClientOnly = ({ children }: { children: React.ReactNode }) => {
-  const [hasMounted, setHasMounted] = useState(false);
-
-  React.useEffect(() => {
-    setHasMounted(true);
-  }, []);
-
-  if (!hasMounted) {
-    return (
-      <div className="h-full w-full flex items-center justify-center bg-gray-100">
-        <p>Loading map...</p>
-      </div>
-    );
-  }
-
-  return <>{children}</>;
-};
-
-// Dynamically import the Map component to avoid SSR issues with Mapbox
-const MapComponent = dynamic(() => import('@/components/MapComponent'), {
-  ssr: false,
-  loading: () => (
-    <div className="h-full w-full flex items-center justify-center bg-gray-100">
-      <p>Loading map...</p>
-    </div>
-  ),
-});
-
-// Empty state component to show when no dishes are selected
-const EmptyState = () => (
-  <div className="h-full w-full flex flex-col items-center justify-center bg-gray-100">
-    <svg
-      className="w-16 h-16 text-gray-400 mb-4"
-      fill="none"
-      stroke="currentColor"
-      viewBox="0 0 24 24"
-      xmlns="http://www.w3.org/2000/svg"
-    >
-      <path
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        strokeWidth={1.5}
-        d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"
-      />
-    </svg>
-    <h3 className="text-xl font-medium text-gray-700 mb-2">
-      No dishes selected
-    </h3>
-    <p className="text-gray-500 text-center max-w-xs">
-      Please select at least one dish from the filter above to view locations on
-      the map.
-    </p>
-  </div>
-);
+import RightSideMapPanel from './RightSideMapPanel';
+import MobileMapPanel from './MobileMapPanel';
 
 interface FoodMapLayoutProps {
   dishes: Dish[];
@@ -87,13 +32,19 @@ const FoodMapLayout: React.FC<FoodMapLayoutProps> = ({
   const [selectedLocation, setSelectedLocation] = useState<Location | null>(
     null
   );
+  const [isPanelCollapsed, setIsPanelCollapsed] = useState(false);
 
   const handleLocationClick = (location: Location) => {
     setSelectedLocation(location);
+    setIsPanelCollapsed(false); // Expand panel when a location is clicked
   };
 
   const closeLocationDetail = () => {
     setSelectedLocation(null);
+  };
+
+  const togglePanelCollapse = () => {
+    setIsPanelCollapsed(!isPanelCollapsed);
   };
 
   // Combine all locations from all selected dishes
@@ -110,84 +61,62 @@ const FoodMapLayout: React.FC<FoodMapLayoutProps> = ({
           <FoodPrintsNavbar />
         </section>
 
-        <div className="h-full w-full pt-16">
-          <LeftSidePanel
-            selectedLocation={selectedLocation}
-            closeLocationDetail={closeLocationDetail}
-            activeFilters={activeFilters}
-            onFilterChange={onFilterChange}
-            locationsMap={locationsMap}
-            isMobile={true}
-          />
-          <div className="relative h-full w-full">
-            {/* Filter UI on mobile - top left of map */}
-            {filterUI && activeFilters.length > 0 && (
-              <div className="absolute top-4 left-4 z-50 max-w-[85%]">
-                {filterUI}
-              </div>
-            )}
+        <div className="h-full w-full pt-16 relative">
+          {/* Panel layer - absolute positioned with higher z-index */}
+          {!isPanelCollapsed && (
+            <div className="absolute inset-0 z-30 pt-16">
+              <LeftSidePanel
+                selectedLocation={selectedLocation}
+                closeLocationDetail={closeLocationDetail}
+                activeFilters={activeFilters}
+                onFilterChange={onFilterChange}
+                locationsMap={locationsMap}
+                isMobile={true}
+                onToggleCollapse={togglePanelCollapse}
+              />
+            </div>
+          )}
 
-            {hasDishes ? (
-              <ClientOnly>
-                <MapComponent
-                  locations={allLocations}
-                  mapImageUrl="/map.png"
-                  mapBounds={[
-                    [0, 0],
-                    [1000, 1000],
-                  ]}
-                  defaultZoom={3}
-                  onLocationClick={handleLocationClick}
-                  useCustomMap={true}
-                />
-              </ClientOnly>
-            ) : (
-              <EmptyState />
-            )}
-          </div>
+          {/* Map layer - always fills the container */}
+          <MobileMapPanel
+            filterUI={filterUI}
+            hasDishes={hasDishes}
+            locations={allLocations}
+            onLocationClick={handleLocationClick}
+          />
         </div>
       </div>
 
       {/* DESKTOP VIEW */}
-      <div className="hidden lg:flex h-screen w-full bg-white">
+      <div className="hidden lg:flex h-screen w-full bg-white overflow-hidden">
         {/* Left Side - Text Content (30% Width) */}
-        <div className="w-[30%] h-full overflow-hidden">
-          <LeftSidePanel
-            selectedLocation={selectedLocation}
-            closeLocationDetail={closeLocationDetail}
-            activeFilters={activeFilters}
-            onFilterChange={onFilterChange}
-            locationsMap={locationsMap}
-          />
+        <div
+          className={`${
+            isPanelCollapsed ? 'w-0 opacity-0' : 'w-[30%] opacity-100'
+          } h-full overflow-hidden transition-all duration-300 ease-in-out`}
+        >
+          {!isPanelCollapsed && (
+            <div className="w-full h-full">
+              <LeftSidePanel
+                selectedLocation={selectedLocation}
+                closeLocationDetail={closeLocationDetail}
+                activeFilters={activeFilters}
+                onFilterChange={onFilterChange}
+                locationsMap={locationsMap}
+                onToggleCollapse={togglePanelCollapse}
+              />
+            </div>
+          )}
         </div>
 
-        {/* Right Side - Map (70% Width) */}
-        <div className="w-[70%] relative h-full">
-          <div className="relative h-full w-full">
-            {/* Filter UI on desktop - top left of map */}
-            {filterUI && activeFilters.length > 0 && (
-              <div className="absolute top-6 left-6 z-[100]">{filterUI}</div>
-            )}
-
-            {hasDishes ? (
-              <ClientOnly>
-                <MapComponent
-                  locations={allLocations}
-                  mapImageUrl="/map.png"
-                  mapBounds={[
-                    [0, 0],
-                    [1000, 1000],
-                  ]}
-                  defaultZoom={3}
-                  onLocationClick={handleLocationClick}
-                  useCustomMap={true}
-                />
-              </ClientOnly>
-            ) : (
-              <EmptyState />
-            )}
-          </div>
-        </div>
+        {/* Right Side - Map (expanding to 100% when panel is collapsed) */}
+        <RightSideMapPanel
+          isPanelCollapsed={isPanelCollapsed}
+          filterUI={filterUI}
+          hasDishes={hasDishes}
+          locations={allLocations}
+          onLocationClick={handleLocationClick}
+        />
       </div>
     </div>
   );

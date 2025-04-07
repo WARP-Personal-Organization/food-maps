@@ -68,11 +68,11 @@ const FilterDishesView: React.FC<FilterDishesViewProps> = ({
   };
 
   return (
-    <div className="h-full flex flex-col bg-white overflow-y-auto">
+    <div className="h-full flex flex-col bg-white overflow-y-auto z-40">
       <div className="relative w-full bg-white shadow-md">
         <div className="flex items-center p-4 border-b border-gray-200">
           <div className="flex items-center">
-            <span className="font-medium text-lg">ᜌᜌ Filter Dishes</span>
+            <span className="font-medium text-lg">Filter Dishes</span>
           </div>
           <button
             onClick={closePanel}

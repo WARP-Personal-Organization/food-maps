@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 import { Dish } from '@/lib/dishData';
-
+import Image from 'next/image';
 // Define props interface for the DishFilter component
 interface DishFilterProps {
   dishes: Dish[];
@@ -85,7 +85,7 @@ const DishFilter: React.FC<DishFilterProps> = ({
         onClick={toggleFilter}
         className="bg-white rounded-md shadow-md px-3 py-2 text-gray-900 font-medium flex items-center gap-2"
       >
-        <img src="/filter-icon.png" alt="Filter" className="w-5 h-5" />
+        <Image src="/filter-icon.png" alt="Filter" width={20} height={20} />
         <span className="sm:inline hidden">Filter Dishes</span>
       </button>
 
