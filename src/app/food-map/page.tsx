@@ -12,6 +12,7 @@ export default function FoodMapPage() {
   const router = useRouter();
   const [mounted, setMounted] = useState(false);
   const [activeFilters, setActiveFilters] = useState<string[]>([]);
+  const [isFilterDishesViewOpen, setIsFilterDishesViewOpen] = useState(false);
 
   // Initialize client-side state
   useEffect(() => {
@@ -64,6 +65,26 @@ export default function FoodMapPage() {
     updateUrl(newFilters);
   };
 
+  // Toggle the filter dishes view
+  const toggleFilterDishesView = () => {
+    console.log(
+      'toggleFilterDishesView called, current state:',
+      isFilterDishesViewOpen
+    );
+
+    // Create a custom event to signal we're changing the filter view
+    // without wanting to collapse the panel
+    const preventCollapseEvent = new CustomEvent('preventPanelCollapse', {
+      bubbles: true,
+      detail: { isOpeningFilter: !isFilterDishesViewOpen },
+    });
+    document.dispatchEvent(preventCollapseEvent);
+
+    // Toggle the filter view state
+    setIsFilterDishesViewOpen(!isFilterDishesViewOpen);
+    console.log('Filter view state toggled to:', !isFilterDishesViewOpen);
+  };
+
   // Filter dishes based on active filters
   const filteredDishes =
     activeFilters.length === 0
@@ -92,12 +113,18 @@ export default function FoodMapPage() {
         dishes={filteredDishes}
         locationsMap={filteredLocations}
         activeFilters={activeFilters}
+        onFilterChange={handleFilterChange}
+        isFilterDishesViewOpen={isFilterDishesViewOpen}
+        toggleFilterDishesView={toggleFilterDishesView}
         filterUI={
-          <DishFilter
-            dishes={ilonggoDishes}
-            activeFilters={activeFilters}
-            onFilterChange={handleFilterChange}
-          />
+          !isFilterDishesViewOpen ? (
+            <DishFilter
+              dishes={ilonggoDishes}
+              activeFilters={activeFilters}
+              onFilterChange={handleFilterChange}
+              onFilterButtonClick={toggleFilterDishesView}
+            />
+          ) : null
         }
       />
     </div>

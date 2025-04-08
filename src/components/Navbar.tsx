@@ -174,7 +174,7 @@ export default function Navbar() {
             className="bg-yellow-400 text-black font-bold mt-4 px-4 py-2 rounded w-full"
             onClick={() => setIsFilterOpen(false)}
           >
-            Add to Filter 1 ({selectedDishes.length})
+            Add to Filter ({selectedDishes.length})
           </button>
         </div>
       </div>

@@ -8,6 +8,7 @@ interface DishFilterProps {
   dishes: Dish[];
   activeFilters: string[];
   onFilterChange: (filters: string[]) => void;
+  onFilterButtonClick?: () => void; // New prop to handle the filter button click
 }
 
 // Filter component with dish category buttons
@@ -15,6 +16,7 @@ const DishFilter: React.FC<DishFilterProps> = ({
   dishes,
   activeFilters,
   onFilterChange,
+  onFilterButtonClick,
 }) => {
   // State for client-side only functionality
   const [mounted, setMounted] = useState(false);
@@ -27,7 +29,19 @@ const DishFilter: React.FC<DishFilterProps> = ({
   }, []);
 
   const toggleFilter = () => {
-    setIsFilterOpen(!isFilterOpen);
+    console.log(
+      'toggleFilter called, onFilterButtonClick exists:',
+      !!onFilterButtonClick
+    );
+    if (onFilterButtonClick) {
+      // If onFilterButtonClick is provided, use it instead of opening the dropdown
+      console.log('Calling onFilterButtonClick');
+      onFilterButtonClick();
+    } else {
+      // Otherwise, behave normally and toggle the dropdown
+      console.log('Toggling dropdown');
+      setIsFilterOpen(!isFilterOpen);
+    }
   };
 
   const removeFilter = (filterName: string) => {
@@ -108,7 +122,7 @@ const DishFilter: React.FC<DishFilterProps> = ({
       </div>
 
       {/* Filter Dropdown (appears when filter button is clicked) */}
-      {isFilterOpen && (
+      {isFilterOpen && !onFilterButtonClick && (
         <div className="absolute top-12 left-0 z-[1500] bg-white rounded-lg shadow-lg p-3 min-w-[200px] max-h-[60vh] overflow-y-auto">
           <div className="flex flex-col gap-2">
             <button
