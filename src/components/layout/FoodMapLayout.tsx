@@ -170,7 +170,7 @@ const FoodMapLayout: React.FC<FoodMapLayoutProps> = ({
     <div className="h-screen w-full">
       {/* MOBILE VIEW */}
       <div className="lg:hidden flex flex-col h-screen">
-        <section className="fixed top-0 z-50 w-full">
+        <section className="fixed top-0 z-30 w-full">
           <FoodPrintsNavbar />
         </section>
 
@@ -198,6 +198,8 @@ const FoodMapLayout: React.FC<FoodMapLayoutProps> = ({
             hasDishes={hasDishes}
             locations={allLocations}
             onLocationClick={handleLocationClick}
+            activeFilters={activeFilters}
+            onFilterChange={onFilterChange}
             showBackButton={isPanelCollapsed}
           />
         </div>
@@ -234,6 +236,8 @@ const FoodMapLayout: React.FC<FoodMapLayoutProps> = ({
           hasDishes={hasDishes}
           locations={allLocations}
           onLocationClick={handleLocationClick}
+          activeFilters={activeFilters}
+          onFilterChange={onFilterChange}
         />
       </div>
     </div>

@@ -37,7 +37,7 @@ const MobileLayout: React.FC<MobileLayoutProps> = ({
 
   return (
     <div className="lg:hidden flex flex-col h-screen bg-white">
-      <section className="fixed top-0 z-50 w-full">
+      <section className="fixed top-0 z-30 w-full">
         <FoodPrintsNavbar />
       </section>
 

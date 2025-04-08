@@ -128,6 +128,7 @@ export default function FoodMapPage() {
               activeFilters={activeFilters}
               onFilterChange={handleFilterChange}
               onFilterButtonClick={toggleFilterDishesView}
+              hidePills={true}
             />
           ) : null
         }

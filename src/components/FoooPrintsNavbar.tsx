@@ -1,20 +1,28 @@
-"use client";
+'use client';
 
-import React, { useState, useEffect, useRef } from "react";
-import { useRouter } from "next/navigation"; // Import Next.js Router
-import { LuUtensils } from "react-icons/lu";
-import { FiMenu, FiX } from "react-icons/fi";
-import Image from "next/image";
-import About from "./About"; // Import the About component
-import Link from "next/link";
+import React, { useState, useEffect, useRef } from 'react';
+import { useRouter } from 'next/navigation'; // Import Next.js Router
+import { LuUtensils } from 'react-icons/lu';
+import { FiMenu, FiX } from 'react-icons/fi';
+import Image from 'next/image';
+import About from './About'; // Import the About component
+import Link from 'next/link';
 
 const dishes = [
-  { name: "Siopao", locations: 5, image: "/images/filter-dish/siopao.jpg" },
-  { name: "La Paz Batchoy", locations: 3, image: "/images/filter-dish/batchoy.webp" },
-  { name: "Cansi", locations: 4, image: "/images/filter-dish/cansi.jpg" },
-  { name: "Inasal", locations: 6, image: "/images/filter-dish/inasal.jpg" },
-  { name: "KBL", locations: 2, image: "/images/filter-dish/kbl.jpg" },
-  { name: "Pancit Molo", locations: 3, image: "/images/filter-dish/pancit_molo.jpg" },
+  { name: 'Siopao', locations: 5, image: '/images/filter-dish/siopao.jpg' },
+  {
+    name: 'La Paz Batchoy',
+    locations: 3,
+    image: '/images/filter-dish/batchoy.webp',
+  },
+  { name: 'Cansi', locations: 4, image: '/images/filter-dish/cansi.jpg' },
+  { name: 'Inasal', locations: 6, image: '/images/filter-dish/inasal.jpg' },
+  { name: 'KBL', locations: 2, image: '/images/filter-dish/kbl.jpg' },
+  {
+    name: 'Pancit Molo',
+    locations: 3,
+    image: '/images/filter-dish/pancit_molo.jpg',
+  },
 ];
 
 export default function FoodPrintsNavbar() {
@@ -33,31 +41,32 @@ export default function FoodPrintsNavbar() {
       if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
         setIsMenuOpen(false);
       }
-      if (filterRef.current && !filterRef.current.contains(event.target as Node)) {
+      if (
+        filterRef.current &&
+        !filterRef.current.contains(event.target as Node)
+      ) {
         setIsFilterOpen(false);
       }
     }
 
     if (isMenuOpen || isFilterOpen) {
-      document.addEventListener("mousedown", handleClickOutside);
+      document.addEventListener('mousedown', handleClickOutside);
     }
 
     return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
+      document.removeEventListener('mousedown', handleClickOutside);
     };
   }, [isMenuOpen, isFilterOpen]);
 
   const toggleDishSelection = (dish: string) => {
     setSelectedDishes((prev) =>
-      prev.includes(dish)
-        ? prev.filter((d) => d !== dish)
-        : [...prev, dish]
+      prev.includes(dish) ? prev.filter((d) => d !== dish) : [...prev, dish]
     );
   };
 
   const handleHomeClick = () => {
     setIsMenuOpen(false); // Close menu after navigating
-    router.push("/"); // Navigate to the homepage
+    router.push('/'); // Navigate to the homepage
   };
 
   const handleAboutClick = () => {
@@ -85,16 +94,24 @@ export default function FoodPrintsNavbar() {
 
       <div className="flex justify-between items-center bg-none text-white py-4 px-6 relative z-50">
         {/* Left - Filter Button */}
-        <Link href="/"  className={`text-2xl flex items-center gap-2 text-blacktransition-all ${
-            isMenuOpen || isFilterOpen ? "blur-sm" : "blur-0"
-          }`}>
-            <Image src={"/images/foodprints-logo.png"} alt="Logo" width={100} height={110} />
+        <Link
+          href="/"
+          className={`text-2xl flex items-center gap-2 text-blacktransition-all ${
+            isMenuOpen || isFilterOpen ? 'blur-sm' : 'blur-0'
+          }`}
+        >
+          <Image
+            src={'/images/foodprints-logo.png'}
+            alt="Logo"
+            width={100}
+            height={110}
+          />
         </Link>
 
         {/* Right - Menu Button */}
         <button
           className={`text-2xl text-black bg-white rounded p-2 shadow-lg transition-all ${
-            isMenuOpen || isFilterOpen ? "blur-sm" : "blur-0"
+            isMenuOpen || isFilterOpen ? 'blur-sm' : 'blur-0'
           }`}
           onClick={() => setIsMenuOpen(true)}
           aria-label="Open Menu"
@@ -107,12 +124,16 @@ export default function FoodPrintsNavbar() {
       <div
         ref={filterRef}
         className={`fixed top-0 left-0 w-5/6 lg:w-1/3 h-full bg-white shadow-lg z-50 transform transition-transform duration-300 ${
-          isFilterOpen ? "translate-x-0 opacity-100" : "-translate-x-full opacity-0"
+          isFilterOpen
+            ? 'translate-x-0 opacity-100'
+            : '-translate-x-full opacity-0'
         }`}
       >
         <div className="p-6 h-full flex flex-col">
           <div className="flex items-start mb-4">
-            <span className="text-black"><LuUtensils /></span>
+            <span className="text-black">
+              <LuUtensils />
+            </span>
             <h2 className="text-xl font-semibold text-black">Filter Dishes</h2>
             <button
               className="text-2xl text-black ml-auto"
@@ -129,8 +150,8 @@ export default function FoodPrintsNavbar() {
                 key={dish.name}
                 className={`relative border rounded-sm cursor-pointer ${
                   selectedDishes.includes(dish.name)
-                    ? "border-yellow-400"
-                    : "border-gray-300"
+                    ? 'border-yellow-400'
+                    : 'border-gray-300'
                 }`}
                 onClick={() => toggleDishSelection(dish.name)}
               >
@@ -167,13 +188,20 @@ export default function FoodPrintsNavbar() {
       <div
         ref={menuRef}
         className={`fixed top-0 right-0 w-5/6 lg:w-1/3 h-full bg-white shadow-lg z-50 transform transition-transform duration-300 ${
-          isMenuOpen ? "translate-x-0 opacity-100" : "translate-x-full opacity-0"
+          isMenuOpen
+            ? 'translate-x-0 opacity-100'
+            : 'translate-x-full opacity-0'
         }`}
       >
         <div className="p-6 h-full flex flex-col">
           <div className="flex justify-between items-center mb-4">
             <div>
-              <Image src={"/images/foodprints-logo-menu.png"} alt="Logo" width={100} height={110} />
+              <Image
+                src={'/images/foodprints-logo-menu.png'}
+                alt="Logo"
+                width={100}
+                height={110}
+              />
             </div>
             <button
               className="text-2xl text-black"
@@ -201,31 +229,36 @@ export default function FoodPrintsNavbar() {
 
       {/* About Modal */}
       {/* About Modal */}
-{isAboutModalOpen && (
-  <div
-    className="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm z-50 flex justify-center items-center h-screen w-screen"
-    onClick={closeAboutModal}
-  >
-    <div
-      className="bg-white p-6 w-full h-full max-w-none"
-      onClick={(e) => e.stopPropagation()} // Prevent closing when clicking inside modal
-    >
-      <section className="flex justify-between items-center">
-        <Image src={"/images/DGLogo.png"} alt="DG Logo" width={400} height={20}  className="w-1/3 h-1/3"/>
-        <button
-          className="text-2xl text-black bg-yellow-300 p-2 rounded"
+      {isAboutModalOpen && (
+        <div
+          className="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm z-50 flex justify-center items-center h-screen w-screen"
           onClick={closeAboutModal}
         >
-          <FiX /> 
-        </button>
-      </section>
-      <section>
-        <About/>
-      </section>
-    
-    </div>
-  </div>
-)}
+          <div
+            className="bg-white p-6 w-full h-full max-w-none"
+            onClick={(e) => e.stopPropagation()} // Prevent closing when clicking inside modal
+          >
+            <section className="flex justify-between items-center">
+              <Image
+                src={'/images/DGLogo.png'}
+                alt="DG Logo"
+                width={400}
+                height={20}
+                className="w-1/3 h-1/3"
+              />
+              <button
+                className="text-2xl text-black bg-yellow-300 p-2 rounded"
+                onClick={closeAboutModal}
+              >
+                <FiX />
+              </button>
+            </section>
+            <section>
+              <About />
+            </section>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

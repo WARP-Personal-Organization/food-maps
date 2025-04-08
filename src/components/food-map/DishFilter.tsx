@@ -9,6 +9,7 @@ interface DishFilterProps {
   activeFilters: string[];
   onFilterChange: (filters: string[]) => void;
   onFilterButtonClick?: () => void; // New prop to handle the filter button click
+  hidePills?: boolean; // Whether to hide the filter pills (for mobile view)
 }
 
 // Filter component with dish category buttons
@@ -17,6 +18,7 @@ const DishFilter: React.FC<DishFilterProps> = ({
   activeFilters,
   onFilterChange,
   onFilterButtonClick,
+  hidePills = false,
 }) => {
   // State for client-side only functionality
   const [mounted, setMounted] = useState(false);
@@ -97,29 +99,31 @@ const DishFilter: React.FC<DishFilterProps> = ({
       {/* Filter Dishes Button */}
       <button
         onClick={toggleFilter}
-        className="bg-white rounded-md shadow-md px-3 py-2 text-gray-900 font-medium flex items-center gap-2"
+        className="bg-white rounded-md shadow-md px-3 py-2 text-gray-900 font-medium flex items-center gap-2 cursor-pointer"
       >
         <Image src="/filter-icon.png" alt="Filter" width={20} height={20} />
         <span className="sm:inline hidden">Filter Dishes</span>
       </button>
 
       {/* Active Filter Pills - Wrap to next line on mobile */}
-      <div className="flex flex-wrap gap-2 max-w-[250px] sm:max-w-[500px]">
-        {activeFilters.map((filter) => (
-          <div
-            key={filter}
-            className="bg-yellow-300 rounded-full px-4 py-1.5 text-gray-900 font-medium flex items-center gap-2 shadow-sm text-sm"
-          >
-            <span>{filter}</span>
-            <button
-              onClick={() => removeFilter(filter)}
-              className="hover:bg-yellow-400 rounded-full w-5 h-5 flex items-center justify-center transition-colors"
+      {!hidePills && (
+        <div className="flex flex-wrap gap-2 max-w-[250px] sm:max-w-[500px]">
+          {activeFilters.map((filter) => (
+            <div
+              key={filter}
+              className="bg-yellow-300 rounded-full px-4 py-1.5 text-gray-900 font-medium flex items-center gap-2 shadow-sm text-sm"
             >
-              ×
-            </button>
-          </div>
-        ))}
-      </div>
+              <span>{filter}</span>
+              <button
+                onClick={() => removeFilter(filter)}
+                className="hover:bg-yellow-400 rounded-full w-5 h-5 flex items-center justify-center transition-colors"
+              >
+                ×
+              </button>
+            </div>
+          ))}
+        </div>
+      )}
 
       {/* Filter Dropdown (appears when filter button is clicked) */}
       {isFilterOpen && !onFilterButtonClick && (

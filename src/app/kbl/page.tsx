@@ -48,7 +48,7 @@ export default function KBLPage() {
     <div className="h-screen w-full">
       {/* MOBILE VIEW */}
       <div className="lg:hidden flex flex-col h-screen">
-        <section className="fixed top-0 z-50 w-full">
+        <section className="fixed top-0 z-30 w-full">
           <FoodPrintsNavbar />
         </section>
         {/* Top Image (40% height) */}

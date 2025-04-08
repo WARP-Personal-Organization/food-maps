@@ -102,13 +102,16 @@ const LeftSidePanel: React.FC<LeftSidePanelProps> = ({
 
   // Handler for closing the filter dishes view
   const handleCloseFilterDishesView = () => {
+    console.log('handleCloseFilterDishesView triggered');
     // Toggle the filter view state
     if (toggleFilterDishesView) {
+      console.log('Calling toggleFilterDishesView');
       toggleFilterDishesView();
     }
 
     // Collapse the panel if there's no single dish filter active
     if (onToggleCollapse && !singleFilterMode) {
+      console.log('Calling onToggleCollapse');
       onToggleCollapse();
     }
   };
@@ -118,7 +121,20 @@ const LeftSidePanel: React.FC<LeftSidePanelProps> = ({
     return null;
   }
 
-  // Mobile rendering adds extra wrapper and classes
+  // Special case for FilterDishesView on mobile
+  if (isMobile && isFilterDishesViewOpen) {
+    return (
+      <FilterDishesView
+        activeFilters={activeFilters}
+        onFilterChange={onFilterChange}
+        locationsMap={locationsMap}
+        onClose={handleCloseFilterDishesView}
+        isMobile={true}
+      />
+    );
+  }
+
+  // Mobile rendering for other panels
   if (isMobile) {
     return (
       <div className="absolute inset-0 z-40 bg-white overflow-y-auto">
@@ -127,13 +143,6 @@ const LeftSidePanel: React.FC<LeftSidePanelProps> = ({
             <LocationDetailPanel
               location={selectedLocation}
               onClose={closeLocationDetail}
-            />
-          ) : isFilterDishesViewOpen ? (
-            <FilterDishesView
-              activeFilters={activeFilters}
-              onFilterChange={onFilterChange}
-              locationsMap={locationsMap}
-              onClose={handleCloseFilterDishesView}
             />
           ) : singleFilterMode ? (
             <FilteredDishPanel
@@ -161,6 +170,7 @@ const LeftSidePanel: React.FC<LeftSidePanelProps> = ({
           onFilterChange={onFilterChange}
           locationsMap={locationsMap}
           onClose={handleCloseFilterDishesView}
+          isMobile={false}
         />
       ) : singleFilterMode ? (
         <FilteredDishPanel

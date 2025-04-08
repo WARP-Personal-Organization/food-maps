@@ -10,6 +10,8 @@ interface RightSideMapPanelProps {
   hasDishes: boolean;
   locations: Location[];
   onLocationClick: (location: Location) => void;
+  activeFilters?: string[];
+  onFilterChange?: (filters: string[]) => void;
 }
 
 const RightSideMapPanel: React.FC<RightSideMapPanelProps> = ({
@@ -18,6 +20,8 @@ const RightSideMapPanel: React.FC<RightSideMapPanelProps> = ({
   hasDishes,
   locations,
   onLocationClick,
+  activeFilters = [],
+  onFilterChange,
 }) => {
   // Track previous panel collapse state to detect changes
   const prevCollapsedStateRef = useRef(isPanelCollapsed);
@@ -42,6 +46,13 @@ const RightSideMapPanel: React.FC<RightSideMapPanelProps> = ({
     }
   }, [isPanelCollapsed]);
 
+  // Function to remove a filter
+  const removeFilter = (filterName: string) => {
+    if (onFilterChange) {
+      onFilterChange(activeFilters.filter((filter) => filter !== filterName));
+    }
+  };
+
   return (
     <div
       className={`${
@@ -49,8 +60,32 @@ const RightSideMapPanel: React.FC<RightSideMapPanelProps> = ({
       } relative h-full transition-all duration-300`}
     >
       <div className="relative h-full w-full overflow-hidden">
-        {/* Filter UI on desktop - top left of map */}
-        <div className="absolute top-6 left-6 z-[100]">{filterUI}</div>
+        {/* Filter UI and Active Filters container */}
+        <div className="absolute top-6 left-6 z-[100] flex flex-wrap gap-2 items-center">
+          {/* Filter UI (button) */}
+          {filterUI}
+
+          {/* Active Filter Pills - only shown when filters are active */}
+          {activeFilters.length > 0 && (
+            <div className="flex flex-wrap gap-2 max-w-[500px]">
+              {activeFilters.map((filter) => (
+                <div
+                  key={filter}
+                  className="bg-yellow-300 rounded-full px-4 py-1.5 text-gray-900 font-medium flex items-center gap-2 shadow-sm text-sm"
+                >
+                  <span>{filter}</span>
+                  <button
+                    onClick={() => removeFilter(filter)}
+                    className="hover:bg-yellow-400 rounded-full w-5 h-5 flex items-center justify-center transition-colors"
+                    aria-label={`Remove ${filter} filter`}
+                  >
+                    ×
+                  </button>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
 
         {hasDishes ? (
           <ClientOnly>
