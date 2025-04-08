@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Location } from '@/lib/locationData';
 import LocationDetailPanel from '@/components/LocationDetailPanel';
 import FilteredDishPanel from '@/components/food-map/FilteredDishPanel';
@@ -37,6 +37,9 @@ const LeftSidePanel: React.FC<LeftSidePanelProps> = ({
   const activeDishFilter = singleFilterMode ? activeFilters[0] : null;
   const [shouldPreventCollapse, setShouldPreventCollapse] = useState(false);
 
+  // Ref to prevent infinite loops when collapsing
+  const hasTriggeredCollapseRef = useRef(false);
+
   // Listen for closeFilterViewOnly event
   useEffect(() => {
     const handleCloseFilterViewOnly = () => {
@@ -58,9 +61,41 @@ const LeftSidePanel: React.FC<LeftSidePanelProps> = ({
     };
   }, []);
 
+  // Effect to auto-collapse panel when no content is available
+  useEffect(() => {
+    // Reset the ref when dependencies change
+    hasTriggeredCollapseRef.current = false;
+
+    // If there's no location, no filter dishes view, and no single dish filter, collapse the panel
+    if (
+      !selectedLocation &&
+      !isFilterDishesViewOpen &&
+      !singleFilterMode &&
+      onToggleCollapse &&
+      !hasTriggeredCollapseRef.current &&
+      !shouldPreventCollapse
+    ) {
+      // Set ref to prevent future collapses during this render cycle
+      hasTriggeredCollapseRef.current = true;
+
+      // Use a timeout to avoid immediate collapse which may cause issues
+      setTimeout(() => {
+        onToggleCollapse();
+      }, 0);
+    }
+  }, [
+    selectedLocation,
+    isFilterDishesViewOpen,
+    singleFilterMode,
+    onToggleCollapse,
+    shouldPreventCollapse,
+  ]);
+
   // Handler for when "X" is clicked to close the panel
   const handleClosePanel = () => {
     if (onToggleCollapse && !shouldPreventCollapse) {
+      console.log('Collapsing panel from handleClosePanel');
+      // Call immediately without timeout since this is directly triggered by user action
       onToggleCollapse();
     }
   };
@@ -77,6 +112,11 @@ const LeftSidePanel: React.FC<LeftSidePanelProps> = ({
       onToggleCollapse();
     }
   };
+
+  // If there's nothing to display, return null to allow the panel to collapse
+  if (!selectedLocation && !isFilterDishesViewOpen && !singleFilterMode) {
+    return null;
+  }
 
   // Mobile rendering adds extra wrapper and classes
   if (isMobile) {
@@ -100,19 +140,7 @@ const LeftSidePanel: React.FC<LeftSidePanelProps> = ({
             activeFilter={activeDishFilter}
             onClose={handleClosePanel}
           />
-        ) : (
-          // Show a blank panel when no specific content is available
-          <div className="flex h-full items-center justify-center p-8 text-center">
-            <div>
-              <h3 className="text-lg font-medium text-gray-900">
-                No dish selected
-              </h3>
-              <p className="mt-2 text-sm text-gray-500">
-                Select a dish from the filter menu to see more details.
-              </p>
-            </div>
-          </div>
-        )}
+        ) : null}
       </div>
     );
   }
@@ -138,19 +166,7 @@ const LeftSidePanel: React.FC<LeftSidePanelProps> = ({
           activeFilter={activeDishFilter}
           onClose={handleClosePanel}
         />
-      ) : (
-        // Show a blank panel when no specific content is available
-        <div className="flex h-full items-center justify-center p-8 text-center">
-          <div>
-            <h3 className="text-lg font-medium text-gray-900">
-              No dish selected
-            </h3>
-            <p className="mt-2 text-sm text-gray-500">
-              Select a dish from the filter menu to see more details.
-            </p>
-          </div>
-        </div>
-      )}
+      ) : null}
     </div>
   );
 };
