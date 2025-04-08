@@ -1,9 +1,9 @@
 import React from 'react';
-import Link from 'next/link';
 import { GoArrowRight } from 'react-icons/go';
 import { Dish } from '@/lib/dishData';
 import DishImage from '../dishes/DishImage';
 import FoodPrintsNavbar from '../FoooPrintsNavbar';
+import { useRouter } from 'next/navigation';
 
 interface MobileLayoutProps {
   dishes: Dish[];
@@ -23,15 +23,26 @@ const MobileLayout: React.FC<MobileLayoutProps> = ({
   onPrev,
 }) => {
   const activeDish = dishes[activeIndex];
+  const router = useRouter();
+
+  const handleWhereToEat = () => {
+    if (activeDish.href === '/food-map') {
+      router.push(
+        `/food-map?dish=${encodeURIComponent(activeDish.name)}&view=map`
+      );
+    } else {
+      router.push(activeDish.href);
+    }
+  };
 
   return (
-    <div className="lg:hidden flex flex-col h-screen">
+    <div className="lg:hidden flex flex-col h-screen bg-white">
       <section className="fixed top-0 z-50 w-full">
         <FoodPrintsNavbar />
       </section>
 
       {/* Top Image */}
-      <div className="relative h-[40vh] w-full">
+      <div className="relative h-[45vh] w-full">
         <DishImage
           dish={activeDish}
           className="relative h-full w-full"
@@ -43,23 +54,25 @@ const MobileLayout: React.FC<MobileLayoutProps> = ({
       </div>
 
       {/* Bottom Content */}
-      <div className="bg-white flex flex-col h-[60vh] p-6">
+      <div className="bg-white flex flex-col h-[55vh] p-6 overflow-y-auto">
         {/* Dish Name and Navigation */}
-        <div className="flex justify-between items-center mb-1">
-          <h1 className="text-4xl font-bold">{activeDish.name}</h1>
+        <div className="flex justify-between items-center mb-2">
+          <h1 className="text-3xl font-bold text-gray-900">
+            {activeDish.name}
+          </h1>
 
           {/* Chevron Navigation */}
           <div className="flex items-center gap-2">
             <button
               onClick={onPrev}
-              className="h-10 w-10 rounded-full bg-gray-100 flex items-center justify-center focus:outline-none cursor-pointer"
+              className="h-10 w-10 rounded-full bg-gray-100 flex items-center justify-center focus:outline-none cursor-pointer hover:bg-gray-200 transition-colors"
               aria-label="Previous dish"
             >
               <span className="text-gray-500 text-sm">❮</span>
             </button>
             <button
               onClick={onNext}
-              className="h-10 w-10 rounded-full bg-[#F9D408] flex items-center justify-center focus:outline-none cursor-pointer"
+              className="h-10 w-10 rounded-full bg-[#F9D408] flex items-center justify-center focus:outline-none cursor-pointer hover:bg-[#E6C207] transition-colors"
               aria-label="Next dish"
             >
               <span className="text-black text-sm">❯</span>
@@ -68,35 +81,33 @@ const MobileLayout: React.FC<MobileLayoutProps> = ({
         </div>
 
         {/* Tagline */}
-        <h3 className="italic text-gray-600 mb-6">{activeDish.tagline}</h3>
+        <h3 className="italic text-gray-600 mb-4 text-lg">
+          {activeDish.tagline}
+        </h3>
 
         {/* Description */}
-        <div className="text-gray-700">
-          <p>{activeDish.description}</p>
+        <div className="text-gray-700 mb-6">
+          <p className="leading-relaxed">{activeDish.description}</p>
         </div>
 
         {/* Spacer */}
         <div className="flex-grow"></div>
 
         {/* Swipe Indicator */}
-        <div className="border-t pt-4 mb-4">
-          <p className="flex items-center justify-center text-gray-600">
+        <div className="border-t border-gray-200 pt-4 mb-4">
+          <p className="flex items-center justify-center text-gray-600 text-sm">
             Swipe to see other Ilonggo top dishes{' '}
             <GoArrowRight className="ml-2" />
           </p>
         </div>
 
         {/* Button */}
-        <Link
-          href={
-            activeDish.href === '/food-map'
-              ? `/food-map?dish=${encodeURIComponent(activeDish.name)}`
-              : activeDish.href
-          }
-          className="w-full bg-[#F9D408] text-black font-semibold py-4 rounded text-center inline-block cursor-pointer"
+        <button
+          onClick={handleWhereToEat}
+          className="w-full bg-[#F9D408] text-black font-semibold py-4 rounded-lg text-center inline-block cursor-pointer hover:bg-[#E6C207] transition-colors shadow-sm"
         >
           Where to Eat
-        </Link>
+        </button>
       </div>
     </div>
   );

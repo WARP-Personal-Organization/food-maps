@@ -24,6 +24,8 @@ interface FoodMapLayoutProps {
   isFilterDishesViewOpen?: boolean;
   // Function to toggle the filter dishes view
   toggleFilterDishesView?: () => void;
+  // Whether the panel should be initially collapsed (map-only view)
+  initialPanelCollapsed?: boolean;
 }
 
 const FoodMapLayout: React.FC<FoodMapLayoutProps> = ({
@@ -34,12 +36,20 @@ const FoodMapLayout: React.FC<FoodMapLayoutProps> = ({
   onFilterChange,
   isFilterDishesViewOpen = false,
   toggleFilterDishesView,
+  initialPanelCollapsed = false,
 }) => {
   const [selectedLocation, setSelectedLocation] = useState<Location | null>(
     null
   );
-  const [isPanelCollapsed, setIsPanelCollapsed] = useState(false);
+  const [isPanelCollapsed, setIsPanelCollapsed] = useState(
+    initialPanelCollapsed
+  );
   const [preventPanelCollapse, setPreventPanelCollapse] = useState(false);
+
+  // Set panel collapsed state when initialPanelCollapsed changes
+  useEffect(() => {
+    setIsPanelCollapsed(initialPanelCollapsed);
+  }, [initialPanelCollapsed]);
 
   // Add event listener for custom events
   useEffect(() => {
@@ -188,6 +198,7 @@ const FoodMapLayout: React.FC<FoodMapLayoutProps> = ({
             hasDishes={hasDishes}
             locations={allLocations}
             onLocationClick={handleLocationClick}
+            showBackButton={isPanelCollapsed}
           />
         </div>
       </div>

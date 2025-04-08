@@ -121,26 +121,28 @@ const LeftSidePanel: React.FC<LeftSidePanelProps> = ({
   // Mobile rendering adds extra wrapper and classes
   if (isMobile) {
     return (
-      <div className="absolute inset-0 z-40 bg-white">
-        {selectedLocation ? (
-          <LocationDetailPanel
-            location={selectedLocation}
-            onClose={closeLocationDetail}
-          />
-        ) : isFilterDishesViewOpen ? (
-          <FilterDishesView
-            activeFilters={activeFilters}
-            onFilterChange={onFilterChange}
-            locationsMap={locationsMap}
-            onClose={handleCloseFilterDishesView}
-          />
-        ) : singleFilterMode ? (
-          <FilteredDishPanel
-            dishes={ilonggoDishes}
-            activeFilter={activeDishFilter}
-            onClose={handleClosePanel}
-          />
-        ) : null}
+      <div className="absolute inset-0 z-40 bg-white overflow-y-auto">
+        <div className="p-4">
+          {selectedLocation ? (
+            <LocationDetailPanel
+              location={selectedLocation}
+              onClose={closeLocationDetail}
+            />
+          ) : isFilterDishesViewOpen ? (
+            <FilterDishesView
+              activeFilters={activeFilters}
+              onFilterChange={onFilterChange}
+              locationsMap={locationsMap}
+              onClose={handleCloseFilterDishesView}
+            />
+          ) : singleFilterMode ? (
+            <FilteredDishPanel
+              dishes={ilonggoDishes}
+              activeFilter={activeDishFilter}
+              onClose={handleClosePanel}
+            />
+          ) : null}
+        </div>
       </div>
     );
   }

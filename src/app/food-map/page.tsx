@@ -13,10 +13,18 @@ export default function FoodMapPage() {
   const [mounted, setMounted] = useState(false);
   const [activeFilters, setActiveFilters] = useState<string[]>([]);
   const [isFilterDishesViewOpen, setIsFilterDishesViewOpen] = useState(false);
+  const [initialPanelCollapsed, setInitialPanelCollapsed] = useState(false);
 
   // Initialize client-side state
   useEffect(() => {
     setMounted(true);
+
+    // Get the view parameter from the URL
+    const viewParam = searchParams.get('view');
+    // If view=map, set the panel to be initially collapsed
+    if (viewParam === 'map') {
+      setInitialPanelCollapsed(true);
+    }
 
     // Get the dish parameter from the URL
     const dishParam = searchParams.get('dish');
@@ -49,11 +57,17 @@ export default function FoodMapPage() {
 
   // Update the URL when filters change
   const updateUrl = (filters: string[]) => {
+    // Preserve view parameter if it exists
+    const viewParam = searchParams.get('view');
+    const viewQueryString = viewParam ? `&view=${viewParam}` : '';
+
     const newUrl =
       filters.length > 0
         ? `/food-map?dish=${filters
             .map((f) => encodeURIComponent(f))
-            .join(',')}`
+            .join(',')}${viewQueryString}`
+        : viewParam
+        ? `/food-map?view=${viewParam}`
         : '/food-map';
 
     router.push(newUrl, { scroll: false });
@@ -106,6 +120,7 @@ export default function FoodMapPage() {
         onFilterChange={handleFilterChange}
         isFilterDishesViewOpen={isFilterDishesViewOpen}
         toggleFilterDishesView={toggleFilterDishesView}
+        initialPanelCollapsed={initialPanelCollapsed}
         filterUI={
           !isFilterDishesViewOpen ? (
             <DishFilter
