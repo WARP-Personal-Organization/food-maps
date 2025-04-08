@@ -30,7 +30,7 @@ const MobileMapPanel: React.FC<MobileMapPanelProps> = ({
     <div className="absolute inset-0 z-20">
       {/* Filter UI on mobile - top left of map */}
       {filterUI && (
-        <div className="absolute top-4 left-4 z-50 max-w-[85%] bg-white rounded-lg shadow-lg p-4">
+        <div className="fixed top-20 left-4 z-[100] max-w-[85%] bg-white rounded-lg shadow-lg p-4">
           {filterUI}
         </div>
       )}
