@@ -45,7 +45,7 @@ export const ilonggoDishes: Dish[] = [
     description:
       'KBL (Kadyos, Baboy, Langka) is a traditional Ilonggo stew made with pigeon peas, pork, and unripe jackfruit, flavored with batwan fruit.',
     tagline: 'Pork & Jackfruit Stew',
-    href: '/kbl',
+    href: '/food-map',
   },
   {
     name: 'Pancit Molo',

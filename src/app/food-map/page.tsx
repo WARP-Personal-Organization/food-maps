@@ -91,16 +91,6 @@ export default function FoodMapPage() {
       ? ilonggoDishes
       : ilonggoDishes.filter((dish) => activeFilters.includes(dish.name));
 
-  // Filter locations based on active filters
-  const filteredLocations =
-    activeFilters.length === 0
-      ? dishLocations
-      : Object.fromEntries(
-          Object.entries(dishLocations).filter(([dishName]) =>
-            activeFilters.includes(dishName)
-          )
-        );
-
   // If not mounted yet, render a minimal placeholder to avoid hydration mismatch
   if (!mounted) {
     return <div className="flex flex-col h-screen overflow-hidden"></div>;
@@ -111,7 +101,7 @@ export default function FoodMapPage() {
       {/* We'll pass the filter UI to FoodMapLayout instead of positioning it here */}
       <FoodMapLayout
         dishes={filteredDishes}
-        locationsMap={filteredLocations}
+        locationsMap={dishLocations}
         activeFilters={activeFilters}
         onFilterChange={handleFilterChange}
         isFilterDishesViewOpen={isFilterDishesViewOpen}

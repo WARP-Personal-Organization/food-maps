@@ -140,8 +140,18 @@ const FoodMapLayout: React.FC<FoodMapLayoutProps> = ({
     }, 500);
   };
 
-  // Combine all locations from all selected dishes
-  const allLocations = Object.values(locationsMap).flat();
+  // Filter locations based on active filters inside FoodMapLayout
+  const filteredLocations =
+    activeFilters.length === 0
+      ? locationsMap // Use the passed-in complete locationsMap
+      : Object.fromEntries(
+          Object.entries(locationsMap).filter(([dishName]) =>
+            activeFilters.includes(dishName)
+          )
+        );
+
+  // Combine all locations from the *filtered* locations for the map
+  const allLocations = Object.values(filteredLocations).flat();
 
   // Check if we have any dishes to display
   const hasDishes = dishes.length > 0;
