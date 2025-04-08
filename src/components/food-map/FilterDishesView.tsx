@@ -67,67 +67,108 @@ const FilterDishesView: React.FC<FilterDishesViewProps> = ({
     }
   };
 
+  // Helper function to render a dish card
+  const renderDishCard = (name: string, image: string) => {
+    const isSelected = selectedDishes.includes(name);
+    const locationCount = locationsMap[name]?.length || 5;
+
+    return (
+      <div
+        className={`rounded-lg overflow-hidden cursor-pointer ${
+          isSelected ? 'ring-2 ring-yellow-400' : ''
+        }`}
+        onClick={() => toggleDishSelection(name)}
+      >
+        <div className="relative">
+          <img src={image} alt={name} className="w-full h-32 object-cover" />
+          {isSelected && (
+            <div className="absolute top-1 right-1 z-10">
+              <div className="bg-yellow-400 w-7 h-7 flex items-center justify-center">
+                <svg
+                  width="16"
+                  height="16"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="text-white"
+                >
+                  <path
+                    d="M9 16.17L4.83 12L3.41 13.41L9 19L21 7L19.59 5.59L9 16.17Z"
+                    fill="currentColor"
+                  />
+                </svg>
+              </div>
+            </div>
+          )}
+        </div>
+        <div className="p-2 bg-gray-50 min-h-[60px] flex flex-col justify-between">
+          <h3 className="font-medium text-sm line-clamp-2">{name}</h3>
+          <p className="text-xs text-gray-500 mt-1 whitespace-nowrap overflow-visible">
+            {locationCount} {locationCount === 1 ? 'Location' : 'Locations'}
+          </p>
+        </div>
+      </div>
+    );
+  };
+
   return (
-    <div className="h-full flex flex-col bg-white overflow-y-auto z-40">
+    <div className="h-full w-full flex flex-col bg-white overflow-hidden z-40 max-w-[540px] mx-auto sm:max-w-none">
       {/* Header Section */}
-      <div className="relative w-full bg-white shadow-md">
-        <div className="flex items-center p-4 border-b border-gray-200">
-          {/* Filter Icon */}
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-            strokeWidth={1.5}
-            stroke="currentColor"
-            className="w-6 h-6 mr-2 text-gray-600"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              d="M12 3c2.755 0 5.455.232 8.083.678.533.09.917.556.917 1.096v1.044a2.25 2.25 0 0 1-.659 1.591l-5.432 5.432a2.25 2.25 0 0 0-.659 1.591v2.927a2.25 2.25 0 0 1-1.244 2.013L9.75 21v-6.568a2.25 2.25 0 0 0-.659-1.591L3.659 7.409A2.25 2.25 0 0 1 3 5.818V4.774c0-.54.384-1.006.917-1.096A48.32 48.32 0 0 1 12 3Z"
-            />
-          </svg>
-          {/* Title - Revert back to text-xl */}
-          <span className="font-semibold text-xl">Filter Dishes</span>
+      <div className="relative w-full bg-white">
+        <div className="flex items-center p-4">
+          <span className="font-medium text-2xl flex items-center">
+            <svg
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+              className="mr-2"
+            >
+              <path
+                d="M3 4H21V6H3V4ZM9 11H21V13H9V11ZM3 18H21V20H3V18Z"
+                fill="currentColor"
+              />
+            </svg>
+            Filter Dishes
+          </span>
           {/* Close Button */}
           <button
             onClick={closePanel}
-            className="ml-auto w-8 h-8 flex items-center justify-center bg-gray-100 hover:bg-gray-200 rounded text-gray-600"
+            className="ml-auto w-10 h-10 flex items-center justify-center bg-gray-100 rounded-md"
             aria-label="Close"
           >
-            {/* X Icon */}
             <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
+              width="24"
+              height="24"
               viewBox="0 0 24 24"
-              strokeWidth={1.5}
-              stroke="currentColor"
-              className="w-5 h-5"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
             >
               <path
+                d="M18 6L6 18M6 6L18 18"
+                stroke="currentColor"
+                strokeWidth="2"
                 strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M6 18 18 6M6 6l12 12"
               />
             </svg>
           </button>
         </div>
         {/* Search Bar Section */}
-        <div className="relative p-3">
+        <div className="px-4 py-3">
           <div className="relative">
-            <div className="absolute inset-y-0 left-3 flex items-center">
+            <div className="absolute inset-y-0 left-3 flex items-center pointer-events-none">
               <svg
-                className="h-5 w-5 text-gray-400"
-                fill="none"
-                stroke="currentColor"
+                width="20"
+                height="20"
                 viewBox="0 0 24 24"
+                fill="none"
                 xmlns="http://www.w3.org/2000/svg"
+                className="text-gray-400"
               >
                 <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+                  d="M15.5 14H14.71L14.43 13.73C15.41 12.59 16 11.11 16 9.5C16 5.91 13.09 3 9.5 3C5.91 3 3 5.91 3 9.5C3 13.09 5.91 16 9.5 16C11.11 16 12.59 15.41 13.73 14.43L14 14.71V15.5L19 20.49L20.49 19L15.5 14ZM9.5 14C7.01 14 5 11.99 5 9.5C5 7.01 7.01 5 9.5 5C11.99 5 14 7.01 14 9.5C14 11.99 11.99 14 9.5 14Z"
+                  fill="currentColor"
                 />
               </svg>
             </div>
@@ -136,79 +177,43 @@ const FilterDishesView: React.FC<FilterDishesViewProps> = ({
               placeholder="Search Dishes"
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="block w-full pl-10 pr-3 py-2 bg-gray-100 border border-transparent rounded-md focus:outline-none focus:ring-1 focus:ring-yellow-500 focus:border-yellow-500 text-sm"
+              className="block w-full pl-10 pr-3 py-2 bg-gray-100 border border-transparent rounded-md focus:outline-none focus:ring-1 focus:border-gray-300 text-sm"
             />
           </div>
         </div>
       </div>
 
-      {/* Grid for Dishes - Adjust gap based on original image */}
-      <div className="flex-1 overflow-y-auto p-3 grid grid-cols-2 gap-4">
-        {filteredDishes.map((dish) => {
-          const isSelected = selectedDishes.includes(dish.name);
-          const locationCount = locationsMap[dish.name]?.length || 0;
-          return (
-            <div
-              key={dish.name}
-              // Revert selected bg, keep border, remove default shadow
-              className={`rounded-lg overflow-hidden cursor-pointer ${
-                isSelected
-                  ? 'border-2 border-yellow-400 bg-yellow-50'
-                  : 'bg-gray-50'
-              }`}
-              onClick={() => toggleDishSelection(dish.name)}
-            >
-              <div className="relative">
-                <img
-                  src={dish.image}
-                  alt={dish.name}
-                  // Adjust image height based on original image
-                  className="w-full h-32 object-cover"
-                />
-                {isSelected && (
-                  // Checkmark indicator styling - Revert size
-                  <div
-                    className="absolute top-0 right-0 bg-yellow-400 w-6 h-6 flex items-center justify-center"
-                    style={{ clipPath: 'polygon(0 0, 100% 0, 100% 100%)' }}
-                  >
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      className="h-4 w-4 text-white"
-                      viewBox="0 0 20 20"
-                      fill="currentColor"
-                    >
-                      <path
-                        fillRule="evenodd"
-                        d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                        clipRule="evenodd"
-                      />
-                    </svg>
-                  </div>
-                )}
-              </div>
-              {/* Revert padding inside card */}
-              <div className="p-3">
-                {/* Revert dish name text style */}
-                <h3 className="font-semibold text-base">{dish.name}</h3>
-                {/* Show location count on all screens */}
-                <p className="text-xs text-gray-500">
-                  {locationCount}{' '}
-                  {locationCount === 1 ? 'Location' : 'Locations'}
-                </p>
-              </div>
-            </div>
-          );
-        })}
+      {/* Dishes Grid */}
+      <div className="flex-1 overflow-y-auto px-4 pb-4 grid grid-cols-2 gap-4 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-2 auto-rows-min">
+        {renderDishCard('Siopao', '/images/filter-dish/siopao.png')}
+        {renderDishCard('La Paz Batchoy', '/images/filter-dish/batchoy.webp')}
+        {renderDishCard('Cansi', '/images/filter-dish/cansi.jpg')}
+        {renderDishCard('Inasal', '/images/filter-dish/inasal.jpg')}
+        {renderDishCard('KBL', '/images/filter-dish/kbl.jpg')}
+        {renderDishCard('Pancit Molo', '/images/filter-dish/pancit_molo.jpg')}
+
+        {/* Display the rest of the dishes dynamically if not hardcoded above */}
+        {filteredDishes
+          .filter(
+            (dish) =>
+              ![
+                'Siopao',
+                'La Paz Batchoy',
+                'Cansi',
+                'Inasal',
+                'KBL',
+                'Pancit Molo',
+              ].includes(dish.name)
+          )
+          .map((dish) => renderDishCard(dish.name, dish.image))}
       </div>
 
-      {/* Footer Button Section - Revert to original style */}
-      <div className="p-4 border-t border-gray-200">
+      {/* Footer Button */}
+      <div className="p-4 mt-auto border-t border-gray-200 bg-white">
         <button
           onClick={applyFilters}
-          // Revert button styles to match original image (no icon, adjusted padding/text color)
-          className="w-full py-3 bg-yellow-400 text-gray-800 font-semibold rounded-lg shadow-sm hover:bg-yellow-500 transition-colors"
+          className="w-full py-3 bg-yellow-400 text-center font-medium text-gray-900 rounded-md"
         >
-          {/* Text only */}
           Add to Filter ({selectedDishes.length})
         </button>
       </div>
