@@ -139,7 +139,15 @@ const LeftSidePanel: React.FC<LeftSidePanelProps> = ({
     return (
       <div className="absolute inset-0 z-40 bg-white overflow-y-auto">
         <div className="p-4">
-          {selectedLocation ? (
+          {isFilterDishesViewOpen ? (
+            <FilterDishesView
+              activeFilters={activeFilters}
+              onFilterChange={onFilterChange}
+              locationsMap={locationsMap}
+              onClose={handleCloseFilterDishesView}
+              isMobile={true}
+            />
+          ) : selectedLocation ? (
             <LocationDetailPanel
               location={selectedLocation}
               onClose={closeLocationDetail}
@@ -159,18 +167,18 @@ const LeftSidePanel: React.FC<LeftSidePanelProps> = ({
   // Desktop rendering
   return (
     <div className="w-full h-full overflow-hidden">
-      {selectedLocation ? (
-        <LocationDetailPanel
-          location={selectedLocation}
-          onClose={closeLocationDetail}
-        />
-      ) : isFilterDishesViewOpen ? (
+      {isFilterDishesViewOpen ? (
         <FilterDishesView
           activeFilters={activeFilters}
           onFilterChange={onFilterChange}
           locationsMap={locationsMap}
           onClose={handleCloseFilterDishesView}
           isMobile={false}
+        />
+      ) : selectedLocation ? (
+        <LocationDetailPanel
+          location={selectedLocation}
+          onClose={closeLocationDetail}
         />
       ) : singleFilterMode ? (
         <FilteredDishPanel

@@ -49,8 +49,9 @@ const MobileMapPanel: React.FC<MobileMapPanelProps> = ({
         <ClientOnly>
           <div className="h-full w-full">
             <MapComponent
+              key="mobile-map"
               locations={locations}
-              mapImageUrl="/map.png"
+              mapImageUrl="/Map.png"
               mapBounds={[
                 [0, 0],
                 [1000, 1000],

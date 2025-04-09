@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { Dish } from '@/lib/dishData';
 import { Location } from '@/lib/locationData';
 import FoodPrintsNavbar from '@/components/FoooPrintsNavbar';
@@ -80,6 +80,13 @@ const FoodMapLayout: React.FC<FoodMapLayoutProps> = ({
       }, 500);
     };
 
+    // Handle the closeLocationDetail custom event
+    const handleCloseLocationDetail = () => {
+      console.log('Closing location detail from custom event');
+      setSelectedLocation(null);
+    };
+
+    document.addEventListener('closeLocationDetail', handleCloseLocationDetail);
     document.addEventListener('closeFilterViewOnly', handleCloseFilterViewOnly);
     document.addEventListener(
       'preventPanelCollapse',
@@ -87,6 +94,10 @@ const FoodMapLayout: React.FC<FoodMapLayoutProps> = ({
     );
 
     return () => {
+      document.removeEventListener(
+        'closeLocationDetail',
+        handleCloseLocationDetail
+      );
       document.removeEventListener(
         'closeFilterViewOnly',
         handleCloseFilterViewOnly
@@ -139,6 +150,9 @@ const FoodMapLayout: React.FC<FoodMapLayoutProps> = ({
     // Set flag to prevent panel collapse when closing filter view
     setPreventPanelCollapse(true);
 
+    // Clear the selected location when toggling filter view
+    setSelectedLocation(null);
+
     // Toggle filter view
     if (toggleFilterDishesView) {
       toggleFilterDishesView();
@@ -151,17 +165,20 @@ const FoodMapLayout: React.FC<FoodMapLayoutProps> = ({
   };
 
   // Filter locations based on active filters inside FoodMapLayout
-  const filteredLocations =
-    activeFilters.length === 0
+  const filteredLocations = useMemo(() => {
+    return activeFilters.length === 0
       ? locationsMap // Use the passed-in complete locationsMap
       : Object.fromEntries(
           Object.entries(locationsMap).filter(([dishName]) =>
             activeFilters.includes(dishName)
           )
         );
+  }, [locationsMap, activeFilters]);
 
   // Combine all locations from the *filtered* locations for the map
-  const allLocations = Object.values(filteredLocations).flat();
+  const allLocations = useMemo(() => {
+    return Object.values(filteredLocations).flat();
+  }, [filteredLocations]);
 
   // Check if we have any dishes to display
   const hasDishes = dishes.length > 0;

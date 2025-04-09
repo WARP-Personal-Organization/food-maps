@@ -94,6 +94,13 @@ export default function FoodMapPage() {
     });
     document.dispatchEvent(preventCollapseEvent);
 
+    // Create a custom event to signal to close any open location detail
+    // when opening the filter dishes view
+    const closeLocationEvent = new CustomEvent('closeLocationDetail', {
+      bubbles: true,
+    });
+    document.dispatchEvent(closeLocationEvent);
+
     // Toggle the filter view state
     setIsFilterDishesViewOpen(!isFilterDishesViewOpen);
     console.log('Filter view state toggled to:', !isFilterDishesViewOpen);

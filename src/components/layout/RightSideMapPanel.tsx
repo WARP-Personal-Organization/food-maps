@@ -90,8 +90,9 @@ const RightSideMapPanel: React.FC<RightSideMapPanelProps> = ({
         {hasDishes ? (
           <ClientOnly>
             <MapComponent
+              key="right-side-map"
               locations={locations}
-              mapImageUrl="/map.png"
+              mapImageUrl="/Map.png"
               mapBounds={[
                 [0, 0],
                 [1000, 1000],

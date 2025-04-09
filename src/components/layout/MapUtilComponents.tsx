@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import React, { memo } from 'react';
 import dynamic from 'next/dynamic';
 
 // Client Component wrapper for map
@@ -23,7 +23,8 @@ export const ClientOnly = ({ children }: { children: React.ReactNode }) => {
 };
 
 // Dynamically import the Map component to avoid SSR issues with Mapbox
-export const MapComponent = dynamic(() => import('@/components/MapComponent'), {
+// Using a stable key and memoization to prevent re-renders
+const DynamicMapComponent = dynamic(() => import('@/components/MapComponent'), {
   ssr: false,
   loading: () => (
     <div className="h-full w-full flex items-center justify-center bg-gray-100">
@@ -31,6 +32,33 @@ export const MapComponent = dynamic(() => import('@/components/MapComponent'), {
     </div>
   ),
 });
+
+// Create a memoized version of the component to prevent unnecessary re-renders
+export const MapComponent = memo(
+  DynamicMapComponent,
+  (prevProps, nextProps) => {
+    // Custom comparison function that only triggers re-render for specific prop changes
+    // Return true if props are equal (don't re-render), false if they're different (do re-render)
+
+    // Always re-render when locations change as we need to update markers
+    if (
+      JSON.stringify(prevProps.locations) !==
+      JSON.stringify(nextProps.locations)
+    ) {
+      return false;
+    }
+
+    // For other props, only re-render if they actually changed
+    return (
+      prevProps.mapImageUrl === nextProps.mapImageUrl &&
+      JSON.stringify(prevProps.mapBounds) ===
+        JSON.stringify(nextProps.mapBounds) &&
+      prevProps.defaultZoom === nextProps.defaultZoom &&
+      prevProps.mapStyle === nextProps.mapStyle &&
+      prevProps.useCustomMap === nextProps.useCustomMap
+    );
+  }
+);
 
 // Empty state component to show when no dishes are selected
 export const EmptyState = () => (
