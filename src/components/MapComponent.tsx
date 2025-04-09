@@ -19,7 +19,7 @@ interface MapComponentProps {
 
 const MapComponent: React.FC<MapComponentProps> = ({
   locations = [],
-  mapImageUrl = '/Map.svg', // Default to a map image in public
+  mapImageUrl = '/Map.png', // Change default from SVG to PNG for consistency
   mapBounds = [
     [0, 0],
     [1000, 1000],
@@ -111,8 +111,22 @@ const MapComponent: React.FC<MapComponentProps> = ({
     };
   }, [mapInstanceRef.current]);
 
-  // Initialize map when component mounts
+  // Add a debugging function to log map state
+  const logMapState = () => {
+    console.log('Map state:', {
+      hasMap: !!mapInstanceRef.current,
+      initialized: mapInitializedRef.current,
+      locations: locations.length,
+      customMapRef: customMapRef.current,
+      mapImageUrl,
+      useCustomMap,
+    });
+  };
+
+  // Initialize map when component mounts or when key props change
   useEffect(() => {
+    logMapState();
+
     // Only run on client side
     if (!mounted || !mapboxToken) return;
 
@@ -120,9 +134,10 @@ const MapComponent: React.FC<MapComponentProps> = ({
     if (!mapContainerRef.current) return;
 
     // Skip initialization if the map is already initialized
-    // This prevents the "blinking" effect from re-creating the map
+    // AND no critical props have changed
     if (mapInstanceRef.current && mapInitializedRef.current) {
-      // When only locations change, just update the markers
+      // If the map is already initialized, but locations have changed
+      // Just update the markers without recreating the map
       updateMarkers();
       return;
     }
@@ -131,10 +146,15 @@ const MapComponent: React.FC<MapComponentProps> = ({
     const initializeMap = () => {
       // Clean up existing map instance if it exists
       if (mapInstanceRef.current) {
+        console.log('Removing existing map instance');
         mapInstanceRef.current.remove();
       }
 
-      console.log('Creating new map instance');
+      console.log(
+        'Creating new map instance with custom map:',
+        useCustomMap,
+        mapImageUrl
+      );
 
       // Create a new map instance
       const map = new mapboxgl.Map({
@@ -148,6 +168,7 @@ const MapComponent: React.FC<MapComponentProps> = ({
 
       // Function to add markers to the map
       const addMarkers = () => {
+        console.log(`Adding ${locations.length} markers to map`);
         // Clear existing markers
         markersRef.current.forEach((marker) => marker.remove());
         markersRef.current = [];
@@ -397,31 +418,48 @@ const MapComponent: React.FC<MapComponentProps> = ({
             const mapImage = new Image();
             mapImage.onload = () => {
               // Once the image is loaded, add it as a source
+              console.log('Map image loaded successfully:', mapImageUrl);
               if (!map.hasImage('custom-map-image')) {
-                map.addImage('custom-map-image', mapImage);
+                try {
+                  map.addImage('custom-map-image', mapImage);
+                } catch (error) {
+                  console.error('Error adding map image:', error);
+                }
               }
 
-              // Add the image as a source
-              map.addSource(customMapSourceId, {
-                type: 'image',
-                url: mapImageUrl,
-                coordinates: [
-                  [swCoord[0], neCoord[1]], // Top left [lng, lat]
-                  [neCoord[0], neCoord[1]], // Top right [lng, lat]
-                  [neCoord[0], swCoord[1]], // Bottom right [lng, lat]
-                  [swCoord[0], swCoord[1]], // Bottom left [lng, lat]
-                ],
-              });
+              // Add the image as a source if it doesn't exist yet
+              if (!map.getSource(customMapSourceId)) {
+                try {
+                  map.addSource(customMapSourceId, {
+                    type: 'image',
+                    url: mapImageUrl,
+                    coordinates: [
+                      [swCoord[0], neCoord[1]], // Top left [lng, lat]
+                      [neCoord[0], neCoord[1]], // Top right [lng, lat]
+                      [neCoord[0], swCoord[1]], // Bottom right [lng, lat]
+                      [swCoord[0], swCoord[1]], // Bottom left [lng, lat]
+                    ],
+                  });
+                } catch (error) {
+                  console.error('Error adding map source:', error);
+                }
+              }
 
-              // Add a layer for the custom map
-              map.addLayer({
-                id: 'custom-map-layer',
-                type: 'raster',
-                source: customMapSourceId,
-                paint: {
-                  'raster-opacity': 1,
-                },
-              });
+              // Add a layer for the custom map if it doesn't exist yet
+              if (!map.getLayer('custom-map-layer')) {
+                try {
+                  map.addLayer({
+                    id: 'custom-map-layer',
+                    type: 'raster',
+                    source: customMapSourceId,
+                    paint: {
+                      'raster-opacity': 1,
+                    },
+                  });
+                } catch (error) {
+                  console.error('Error adding map layer:', error);
+                }
+              }
 
               // Set up event handlers for map movement to keep image coordinates consistent
               map.on('move', () => {
@@ -474,14 +512,20 @@ const MapComponent: React.FC<MapComponentProps> = ({
 
     // If using a custom map, preload the image first to avoid flickering
     if (useCustomMap && mapImageUrl) {
+      console.log('Preloading custom map image:', mapImageUrl);
       // Preload the image before initializing the map
       const preloadImage = new Image();
       preloadImage.onload = () => {
         // Once the image is loaded, initialize the map
+        console.log('Custom map image preloaded successfully');
         initializeMap();
       };
-      preloadImage.onerror = () => {
-        console.error('Failed to preload custom map image:', mapImageUrl);
+      preloadImage.onerror = (error) => {
+        console.error(
+          'Failed to preload custom map image:',
+          mapImageUrl,
+          error
+        );
         // Initialize map anyway even if preloading fails
         initializeMap();
       };
@@ -497,6 +541,7 @@ const MapComponent: React.FC<MapComponentProps> = ({
         mapInstanceRef.current.remove();
         mapInstanceRef.current = null;
         mapInitializedRef.current = false;
+        customMapRef.current = null; // Reset custom map reference
       }
     };
   }, [
@@ -508,10 +553,12 @@ const MapComponent: React.FC<MapComponentProps> = ({
     defaultZoom,
     mapImageUrl,
     useCustomMap,
+    // Adding a locations.length dependency to ensure map re-renders when filter changes
+    locations.length,
   ]);
 
-  // Create a separate effect for updating markers
-  // This allows us to update markers without re-creating the map
+  // Create a separate effect for updating markers only (not locations.length)
+  // This prevents recreating the entire map when only marker details change
   useEffect(() => {
     if (mapInstanceRef.current && mapInitializedRef.current) {
       updateMarkers();

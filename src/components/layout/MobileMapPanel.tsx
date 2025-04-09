@@ -49,7 +49,7 @@ const MobileMapPanel: React.FC<MobileMapPanelProps> = ({
         <ClientOnly>
           <div className="h-full w-full">
             <MapComponent
-              key="mobile-map"
+              key={`mobile-map-${activeFilters.join('-')}-${locations.length}`}
               locations={locations}
               mapImageUrl="/Map.png"
               mapBounds={[

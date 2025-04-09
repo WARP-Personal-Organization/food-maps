@@ -177,8 +177,12 @@ const FoodMapLayout: React.FC<FoodMapLayoutProps> = ({
 
   // Combine all locations from the *filtered* locations for the map
   const allLocations = useMemo(() => {
-    return Object.values(filteredLocations).flat();
-  }, [filteredLocations]);
+    const locations = Object.values(filteredLocations).flat();
+    console.log(
+      `Filtered to ${locations.length} locations from ${activeFilters.length} active filters`
+    );
+    return locations;
+  }, [filteredLocations, activeFilters.length]);
 
   // Check if we have any dishes to display
   const hasDishes = dishes.length > 0;
