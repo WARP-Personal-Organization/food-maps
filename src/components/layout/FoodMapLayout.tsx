@@ -228,11 +228,13 @@ const FoodMapLayout: React.FC<FoodMapLayoutProps> = ({
 
       {/* DESKTOP VIEW */}
       <div className="hidden lg:flex h-screen w-full bg-white overflow-hidden">
-        {/* Left Side - Text Content (30% Width) */}
+        {/* Left Side - Text Content (responsive width based on screen size) */}
         <div
           className={`${
-            isPanelCollapsed ? 'w-0 opacity-0' : 'w-[30%] opacity-100'
-          } h-full overflow-hidden transition-all duration-300 ease-in-out`}
+            isPanelCollapsed
+              ? 'w-0 opacity-0'
+              : 'lg:w-[320px] xl:w-[400px] 2xl:w-[520px] opacity-100'
+          } h-full overflow-hidden transition-all duration-300 ease-in-out flex-shrink-0`}
         >
           {!isPanelCollapsed && (
             <div className="w-full h-full">
@@ -250,16 +252,18 @@ const FoodMapLayout: React.FC<FoodMapLayoutProps> = ({
           )}
         </div>
 
-        {/* Right Side - Map (expanding to 100% when panel is collapsed) */}
-        <RightSideMapPanel
-          isPanelCollapsed={isPanelCollapsed}
-          filterUI={filterUI}
-          hasDishes={hasDishes}
-          locations={allLocations}
-          onLocationClick={handleLocationClick}
-          activeFilters={activeFilters}
-          onFilterChange={onFilterChange}
-        />
+        {/* Right Side - Map (expanding to take remaining width) */}
+        <div className="flex-grow h-full">
+          <RightSideMapPanel
+            isPanelCollapsed={isPanelCollapsed}
+            filterUI={filterUI}
+            hasDishes={hasDishes}
+            locations={allLocations}
+            onLocationClick={handleLocationClick}
+            activeFilters={activeFilters}
+            onFilterChange={onFilterChange}
+          />
+        </div>
       </div>
     </div>
   );

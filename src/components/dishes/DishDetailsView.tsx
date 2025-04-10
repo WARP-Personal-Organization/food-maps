@@ -5,6 +5,7 @@ import Image from 'next/image';
 import { Dish } from '@/lib/dishData';
 import { dishLocations } from '@/lib/locationData';
 import LocationCard from './LocationCard';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
 
 interface DishDetailsViewProps {
   dish: Dish;
@@ -35,34 +36,16 @@ const DishDetailsView: React.FC<DishDetailsViewProps> = ({
   return (
     <div className="bg-white flex flex-col h-full w-full">
       {/* Header with image */}
-      <div className="relative h-72 w-full bg-amber-50">
+      <div className="relative w-full aspect-[4/3] bg-amber-50 flex-shrink-0">
         <Image
           src={dish.image}
           alt={dish.name}
           fill
-          style={{ objectFit: 'cover' }}
+          sizes="100vw"
+          quality={90}
           priority
+          className="object-cover object-center"
         />
-
-        {/* Left and right navigation arrows */}
-        <div className="absolute inset-y-0 left-0 flex items-center">
-          <button
-            onClick={onPrevDish}
-            className="bg-white rounded-full w-8 h-8 flex items-center justify-center ml-2"
-            aria-label="Previous dish"
-          >
-            <div className="text-gray-400">&lt;</div>
-          </button>
-        </div>
-        <div className="absolute inset-y-0 right-0 flex items-center">
-          <button
-            onClick={onNextDish}
-            className="bg-white rounded-full w-8 h-8 flex items-center justify-center mr-2"
-            aria-label="Next dish"
-          >
-            <div className="text-gray-400">&gt;</div>
-          </button>
-        </div>
 
         {/* Image indicator dots */}
         <div className="absolute bottom-3 left-0 right-0 flex justify-center gap-1">
@@ -77,44 +60,81 @@ const DishDetailsView: React.FC<DishDetailsViewProps> = ({
         </div>
       </div>
 
-      {/* Dish Information */}
-      <div className="px-6 py-6">
-        <h1 className="text-4xl font-bold text-gray-900">{dish.name}</h1>
-        <p className="text-gray-500 mt-1">{dish.tagline}</p>
-
-        {/* Description */}
-        <div className="mt-4">
-          <p className="text-gray-700 leading-relaxed">{dish.description}</p>
+      {/* Scrollable content container */}
+      <div className="flex-grow overflow-y-auto scrollbar-hide">
+        {/* Dish header with title and navigation - Part of scrollable content */}
+        <div className="px-4 lg:px-5 xl:px-6 pt-4 lg:pt-5 pb-3 bg-white">
+          <div className="flex items-center">
+            <h1 className="text-2xl lg:text-3xl xl:text-4xl font-bold text-gray-900">
+              {dish.name}
+            </h1>
+            <div className="flex ml-auto space-x-2 lg:space-x-3">
+              <button
+                onClick={onPrevDish}
+                className="bg-gray-100 rounded-full w-8 h-8 lg:w-10 lg:h-10 flex items-center justify-center"
+                aria-label="Previous dish"
+              >
+                <ChevronLeft
+                  className="text-gray-500 cursor-pointer"
+                  size={18}
+                />
+              </button>
+              <button
+                onClick={onNextDish}
+                className="bg-yellow-400 rounded-full w-8 h-8 lg:w-10 lg:h-10 flex items-center justify-center"
+                aria-label="Next dish"
+              >
+                <ChevronRight className="text-white cursor-pointer" size={18} />
+              </button>
+            </div>
+          </div>
+          <p className="text-gray-500 mt-1 text-sm lg:text-base italic">
+            {dish.tagline}
+          </p>
         </div>
 
-        {/* See Locations Button */}
-        <div className="mt-8 border-b border-gray-200 pb-3">
-          <div className="text-gray-700 font-medium flex items-center justify-between cursor-pointer">
-            <span>See Locations</span>
-            <span className="text-gray-400 text-sm">({locations.length})</span>
+        {/* Main content - Description and locations */}
+        <div className="px-4 lg:px-5 xl:px-6 pt-3">
+          {/* Description */}
+          <div className="mt-1 lg:mt-2">
+            <p className="text-gray-700 leading-relaxed text-sm lg:text-base">
+              {dish.description}
+            </p>
+          </div>
+
+          {/* See Locations Button */}
+          <div className="mt-4 lg:mt-6 border-b border-gray-200 pb-2 lg:pb-3">
+            <div className="text-gray-700 font-medium flex items-center justify-between cursor-pointer">
+              <span>See Locations</span>
+              <span className="text-gray-400 text-sm">
+                ({locations.length})
+              </span>
+            </div>
+          </div>
+
+          {/* Locations List */}
+          <div className="py-2 lg:py-4 mb-6">
+            {locationCards.length > 0 ? (
+              <div className="space-y-3">
+                {locationCards.map((location, index) => (
+                  <LocationCard
+                    key={index}
+                    name={location.name}
+                    image={location.image}
+                    location={location.location}
+                    duration={location.duration}
+                    rating={location.rating}
+                    tags={location.tags}
+                  />
+                ))}
+              </div>
+            ) : (
+              <div className="text-center py-6 lg:py-8 text-gray-500">
+                No locations available for this dish
+              </div>
+            )}
           </div>
         </div>
-      </div>
-
-      {/* Locations List */}
-      <div className="flex-grow overflow-auto py-4">
-        {locationCards.length > 0 ? (
-          locationCards.map((location, index) => (
-            <LocationCard
-              key={index}
-              name={location.name}
-              image={location.image}
-              location={location.location}
-              duration={location.duration}
-              rating={location.rating}
-              tags={location.tags}
-            />
-          ))
-        ) : (
-          <div className="text-center py-8 text-gray-500">
-            No locations available for this dish
-          </div>
-        )}
       </div>
     </div>
   );

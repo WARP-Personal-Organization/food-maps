@@ -28,7 +28,7 @@ const LocationDetailPanel: React.FC<LocationDetailPanelProps> = ({
   return (
     <div className="bg-white rounded-md shadow-md overflow-hidden w-full max-w-md mx-auto flex flex-col h-full">
       {/* Main image with siopao unwrapped showing filling */}
-      <div className="relative h-60 w-full bg-amber-100">
+      <div className="relative h-48 lg:h-52 xl:h-60 w-full bg-amber-100">
         <Image
           src="/images/robertos/r5.jpg"
           alt="Roberto's Siopao Unwrapped"
@@ -60,14 +60,16 @@ const LocationDetailPanel: React.FC<LocationDetailPanelProps> = ({
       </div>
 
       {/* Title */}
-      <div className="px-4 pt-4 pb-2">
-        <h2 className="text-2xl font-bold text-gray-800">Roberto's Siopao</h2>
+      <div className="px-3 lg:px-4 pt-3 lg:pt-4 pb-2">
+        <h2 className="text-xl lg:text-2xl font-bold text-gray-800">
+          Roberto&apos;s Siopao
+        </h2>
       </div>
 
       {/* Info items with yellow icons */}
-      <div className="px-4 pb-3 space-y-2">
+      <div className="px-3 lg:px-4 pb-3 space-y-2">
         {/* Location address */}
-        <div className="flex items-start gap-3">
+        <div className="flex items-start gap-2 lg:gap-3">
           <div className="text-yellow-500 mt-1 flex-shrink-0">
             <svg
               width="14"
@@ -83,7 +85,7 @@ const LocationDetailPanel: React.FC<LocationDetailPanelProps> = ({
         </div>
 
         {/* Hours */}
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-2 lg:gap-3">
           <div className="text-yellow-500 flex-shrink-0">
             <svg
               width="14"
@@ -100,7 +102,7 @@ const LocationDetailPanel: React.FC<LocationDetailPanelProps> = ({
         </div>
 
         {/* Price range */}
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-2 lg:gap-3">
           <div className="text-yellow-500 flex-shrink-0">
             <svg
               width="14"
@@ -120,7 +122,7 @@ const LocationDetailPanel: React.FC<LocationDetailPanelProps> = ({
       <div className="border-b border-gray-200">
         <div className="flex">
           <button
-            className={`flex-1 text-center py-2 px-4 text-sm relative ${
+            className={`flex-1 text-center py-2 px-2 lg:px-4 text-sm relative cursor-pointer ${
               activeTab === 'photos'
                 ? 'text-gray-800 font-medium'
                 : 'text-gray-500'
@@ -133,7 +135,7 @@ const LocationDetailPanel: React.FC<LocationDetailPanelProps> = ({
             )}
           </button>
           <button
-            className={`flex-1 text-center py-2 px-4 text-sm relative ${
+            className={`flex-1 text-center py-2 px-2 lg:px-4 text-sm relative cursor-pointer ${
               activeTab === 'menu'
                 ? 'text-gray-800 font-medium'
                 : 'text-gray-500'
@@ -150,7 +152,7 @@ const LocationDetailPanel: React.FC<LocationDetailPanelProps> = ({
 
       {/* Photos section */}
       {activeTab === 'photos' && (
-        <div className="p-4">
+        <div className="p-3 lg:p-4">
           <div className="flex items-center text-yellow-500 mb-2">
             <span className="text-xs font-medium">See Photos</span>
           </div>
@@ -201,7 +203,7 @@ const LocationDetailPanel: React.FC<LocationDetailPanelProps> = ({
 
       {/* Menu section (empty for now) */}
       {activeTab === 'menu' && (
-        <div className="p-4">
+        <div className="p-3 lg:p-4">
           <p className="text-gray-500 text-center py-4 text-sm">
             Menu information not available
           </p>
@@ -209,8 +211,8 @@ const LocationDetailPanel: React.FC<LocationDetailPanelProps> = ({
       )}
 
       {/* Get Directions button */}
-      <div className="mt-auto p-4 pb-5">
-        <button className="w-full bg-yellow-500 text-white py-3 font-medium rounded-md flex items-center justify-center">
+      <div className="mt-auto p-3 lg:p-4 pb-4 lg:pb-5">
+        <button className="w-full bg-yellow-500 text-white py-2.5 lg:py-3 font-medium rounded-md flex items-center justify-center">
           <svg
             className="mr-2"
             width="16"

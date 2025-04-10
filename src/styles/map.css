@@ -10,6 +10,13 @@
   transition: width 0.3s ease-in-out;
 }
 
+.map-container {
+  height: 100%;
+  width: 100%;
+  background-color: #3b3b3f !important;
+  position: relative;
+}
+
 .mapboxgl-canvas {
   width: 100% !important;
   height: 100% !important;

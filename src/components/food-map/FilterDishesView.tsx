@@ -271,7 +271,7 @@ const FilterDishesView: React.FC<FilterDishesViewProps> = ({
                 console.log('Mobile Add to Filter button clicked');
                 applyFilters();
               }}
-              className="w-full py-3 bg-yellow-400 text-center font-medium text-gray-900 rounded-md"
+              className="w-full py-3 bg-yellow-400 text-center font-medium text-gray-900 rounded-md cursor-pointer"
             >
               Add to Filter ({selectedDishes.length})
             </button>
@@ -286,11 +286,11 @@ const FilterDishesView: React.FC<FilterDishesViewProps> = ({
     <div className="h-full w-full flex flex-col bg-white overflow-hidden z-40 max-w-[540px] mx-auto sm:max-w-none">
       {/* Header Section */}
       <div className="relative w-full bg-white">
-        <div className="flex items-center p-4">
-          <span className="font-medium text-2xl flex items-center">
+        <div className="flex items-center p-3 lg:p-4">
+          <span className="font-medium text-xl lg:text-2xl flex items-center">
             <svg
-              width="24"
-              height="24"
+              width="20"
+              height="20"
               viewBox="0 0 24 24"
               fill="none"
               xmlns="http://www.w3.org/2000/svg"
@@ -306,12 +306,12 @@ const FilterDishesView: React.FC<FilterDishesViewProps> = ({
           {/* Close Button */}
           <button
             onClick={closePanel}
-            className="ml-auto w-10 h-10 flex items-center justify-center bg-gray-100 rounded-md"
+            className="ml-auto w-8 h-8 lg:w-10 lg:h-10 flex items-center justify-center bg-gray-100 rounded-md"
             aria-label="Close"
           >
             <svg
-              width="24"
-              height="24"
+              width="20"
+              height="20"
               viewBox="0 0 24 24"
               fill="none"
               xmlns="http://www.w3.org/2000/svg"
@@ -326,12 +326,12 @@ const FilterDishesView: React.FC<FilterDishesViewProps> = ({
           </button>
         </div>
         {/* Search Bar Section */}
-        <div className="px-4 py-3">
+        <div className="px-3 lg:px-4 py-2 lg:py-3">
           <div className="relative">
             <div className="absolute inset-y-0 left-3 flex items-center pointer-events-none">
               <svg
-                width="20"
-                height="20"
+                width="18"
+                height="18"
                 viewBox="0 0 24 24"
                 fill="none"
                 xmlns="http://www.w3.org/2000/svg"
@@ -355,7 +355,7 @@ const FilterDishesView: React.FC<FilterDishesViewProps> = ({
       </div>
 
       {/* Dishes Grid */}
-      <div className="flex-1 overflow-y-auto px-4 pb-4 grid grid-cols-2 gap-4 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-2 auto-rows-min">
+      <div className="flex-1 overflow-y-auto px-3 lg:px-4 pb-3 lg:pb-4 grid grid-cols-2 gap-3 lg:gap-4 auto-rows-min">
         {renderDishCard('Siopao', '/images/filter-dish/siopao.png')}
         {renderDishCard('La Paz Batchoy', '/images/filter-dish/batchoy.webp')}
         {renderDishCard('Cansi', '/images/filter-dish/cansi.jpg')}
@@ -380,10 +380,10 @@ const FilterDishesView: React.FC<FilterDishesViewProps> = ({
       </div>
 
       {/* Footer Button */}
-      <div className="p-4 mt-auto border-t border-gray-200 bg-white">
+      <div className="p-3 lg:p-4 mt-auto border-t border-gray-200 bg-white">
         <button
           onClick={applyFilters}
-          className="w-full py-3 bg-yellow-400 text-center font-medium text-gray-900 rounded-md"
+          className="w-full py-2.5 lg:py-3 bg-yellow-400 text-center font-medium text-gray-900 rounded-md cursor-pointer"
         >
           Add to Filter ({selectedDishes.length})
         </button>

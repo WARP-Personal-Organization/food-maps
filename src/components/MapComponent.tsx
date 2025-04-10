@@ -164,7 +164,25 @@ const MapComponent: React.FC<MapComponentProps> = ({
         center: [0, 0], // Center at the coordinate system origin
         attributionControl: false, // We'll add this manually in a better position
         renderWorldCopies: false, // Prevent the map from repeating across the world
+        interactive: true, // Allow zooming and panning
       });
+
+      // Set background color immediately
+      if (useCustomMap) {
+        map.once('styledata', () => {
+          // Set the background color manually after style loads
+          map.addLayer(
+            {
+              id: 'custom-background',
+              type: 'background',
+              paint: {
+                'background-color': '#3b3b3f',
+              },
+            },
+            'custom-map-layer'
+          );
+        });
+      }
 
       // Function to add markers to the map
       const addMarkers = () => {
@@ -366,26 +384,26 @@ const MapComponent: React.FC<MapComponentProps> = ({
 
       // Wait for the map to load before adding markers
       map.on('load', () => {
-        // Apply custom background color to the map
-        if (map.getStyle().layers) {
-          const style = map.getStyle() as { layers: Array<{ id: string }> };
-          const backgroundLayer = style.layers.find(
-            (layer) => layer.id === 'background'
-          );
-          if (backgroundLayer) {
-            map.setPaintProperty('background', 'background-color', '#3b3b3f');
-          } else {
-            map.addLayer(
-              {
-                id: 'background',
-                type: 'background',
-                paint: {
-                  'background-color': '#3b3b3f',
-                },
+        // Apply custom background color to the map immediately
+        const style = map.getStyle() as { layers: Array<{ id: string }> };
+        const backgroundLayer = style.layers.find(
+          (layer) => layer.id === 'background'
+        );
+
+        if (backgroundLayer) {
+          map.setPaintProperty('background', 'background-color', '#3b3b3f');
+        } else {
+          // If there's no background layer yet, add one
+          map.addLayer(
+            {
+              id: 'background',
+              type: 'background',
+              paint: {
+                'background-color': '#3b3b3f',
               },
-              'custom-map-layer'
-            ); // Add before custom map layer if it exists
-          }
+            },
+            map.getStyle().layers[0]?.id
+          ); // Add before the first layer
         }
 
         // Convert mapBounds to Mapbox format
@@ -712,16 +730,9 @@ const MapComponent: React.FC<MapComponentProps> = ({
   return (
     <div
       ref={mapContainerRef}
-      className="h-full w-full z-10"
-      style={{
-        position: 'absolute',
-        top: 0,
-        left: 0,
-        right: 0,
-        bottom: 0,
-        overflow: 'hidden', // Prevent any potential scrollbars
-      }}
-    />
+      className="map-container w-full h-full"
+      style={{ backgroundColor: '#3b3b3f' }}
+    ></div>
   );
 };
 

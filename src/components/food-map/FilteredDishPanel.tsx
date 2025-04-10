@@ -56,7 +56,7 @@ const FilteredDishPanel: React.FC<FilteredDishPanelProps> = ({
       {/* Close button */}
       <button
         onClick={handleClose}
-        className="absolute top-4 right-4 z-10 p-2 bg-white rounded-full shadow-md text-gray-500 hover:text-gray-700"
+        className="absolute top-2 lg:top-4 right-2 lg:right-4 z-10 p-1.5 lg:p-2 bg-gray-50 rounded-sm shadow-md text-gray-500 hover:text-gray-700 cursor-pointer"
         aria-label="Close panel"
       >
         ×

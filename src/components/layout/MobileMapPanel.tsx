@@ -37,7 +37,7 @@ const MobileMapPanel: React.FC<MobileMapPanelProps> = ({
   };
 
   return (
-    <div className="absolute inset-0 z-20">
+    <div className="absolute inset-0 z-20 w-full">
       {/* Filter UI on mobile - top left of map */}
       {filterUI && (
         <div className="fixed top-20 left-4 z-[100] max-w-[85%] cursor-pointer">
@@ -47,7 +47,7 @@ const MobileMapPanel: React.FC<MobileMapPanelProps> = ({
 
       {hasDishes ? (
         <ClientOnly>
-          <div className="h-full w-full">
+          <div className="h-full w-full" style={{ backgroundColor: '#3b3b3f' }}>
             <MapComponent
               key={`mobile-map-${activeFilters.join('-')}-${locations.length}`}
               locations={locations}

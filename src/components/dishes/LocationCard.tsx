@@ -1,7 +1,6 @@
 'use client';
 
 import React from 'react';
-import Image from 'next/image';
 
 interface LocationCardProps {
   name: string;
@@ -21,11 +20,19 @@ const LocationCard: React.FC<LocationCardProps> = ({
   tags,
 }) => {
   return (
-    <div className="mb-4 mx-6 bg-gray-50 rounded-xl shadow-sm border border-gray-100">
+    <div className="mb-4 mx-6 bg-gray-50 rounded-xl shadow-sm border border-gray-100 cursor-pointer">
       <div className="p-4">
         <div className="flex">
           <div className="h-16 w-16 relative rounded-md overflow-hidden bg-gray-100 flex-shrink-0">
-            <Image src={image} alt={name} fill style={{ objectFit: 'cover' }} />
+            <img
+              src={image}
+              alt={name}
+              className="w-full h-full object-cover"
+              onError={(e) => {
+                const target = e.target as HTMLImageElement;
+                target.src = '/images/filter-dish/siopao.png'; // Fallback image
+              }}
+            />
           </div>
           <div className="ml-4 flex-grow">
             <div className="flex justify-between">
