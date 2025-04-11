@@ -2,16 +2,16 @@
 
 /* Style for the pagination container */
 .swiper-pagination {
-  bottom: 10px !important;
+  bottom: 8px !important;
 }
 
 /* Style for pagination bullets */
 .swiper-pagination-bullet {
-  width: 8px !important;
-  height: 8px !important;
+  width: 5px !important;
+  height: 5px !important;
   background: rgba(255, 255, 255, 0.5) !important;
   opacity: 1 !important;
-  margin: 0 4px !important;
+  margin: 0 3px !important;
 }
 
 /* Style for active pagination bullet */
