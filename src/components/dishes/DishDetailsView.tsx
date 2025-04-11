@@ -1,11 +1,22 @@
 'use client';
 
-import React from 'react';
+import React, { useRef, useEffect } from 'react';
 import Image from 'next/image';
 import { Dish } from '@/lib/dishData';
 import { dishLocations } from '@/lib/locationData';
 import LocationCard from './LocationCard';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
+// Import Swiper components and styles
+import { Swiper, SwiperSlide } from 'swiper/react';
+import { Pagination, Autoplay } from 'swiper/modules';
+import type { SwiperRef } from 'swiper/react';
+// Import Swiper styles
+import 'swiper/css';
+import 'swiper/css/pagination';
+import 'swiper/css/autoplay';
+
+// Custom styles for Swiper pagination
+import './dish-details-swiper.css';
 
 interface DishDetailsViewProps {
   dish: Dish;
@@ -18,6 +29,17 @@ const DishDetailsView: React.FC<DishDetailsViewProps> = ({
   onPrevDish,
   onNextDish,
 }) => {
+  // Reference to the Swiper instance
+  const swiperRef = useRef<SwiperRef>(null);
+
+  // Effect to reset the Swiper to the first slide when the dish changes
+  useEffect(() => {
+    if (swiperRef.current && swiperRef.current.swiper) {
+      // Reset to the first slide
+      swiperRef.current.swiper.slideTo(0, 0);
+    }
+  }, [dish.name]); // Dependency on dish.name to trigger when dish changes
+
   // Get actual locations for this dish from dishLocations
   const locations = dishLocations[dish.name] || [];
 
@@ -33,31 +55,43 @@ const DishDetailsView: React.FC<DishDetailsViewProps> = ({
     tags: [dish.name],
   }));
 
+  // Create an array of images for the dish
+  const dishImages =
+    dish.images && dish.images.length > 0 ? dish.images : [dish.image]; // Fallback to single image if no images array
+
   return (
     <div className="bg-white flex flex-col h-full w-full">
-      {/* Header with image */}
+      {/* Header with image slider */}
       <div className="relative w-full aspect-[4/3] bg-amber-50 flex-shrink-0">
-        <Image
-          src={dish.image}
-          alt={dish.name}
-          fill
-          sizes="100vw"
-          quality={90}
-          priority
-          className="object-cover object-center"
-        />
-
-        {/* Image indicator dots */}
-        <div className="absolute bottom-3 left-0 right-0 flex justify-center gap-1">
-          {[1, 2, 3, 4, 5, 6, 7].map((_, index) => (
-            <div
-              key={index}
-              className={`h-1 w-1 rounded-full ${
-                index === 0 ? 'bg-white' : 'bg-white/40'
-              }`}
-            />
+        <Swiper
+          ref={swiperRef}
+          modules={[Pagination, Autoplay]}
+          pagination={{
+            clickable: true,
+          }}
+          spaceBetween={0}
+          slidesPerView={1}
+          loop={true}
+          autoplay={{ delay: 5000, disableOnInteraction: false }}
+          speed={500}
+          className="h-full w-full"
+        >
+          {dishImages.map((imgSrc, index) => (
+            <SwiperSlide key={index}>
+              <div className="relative w-full h-full">
+                <Image
+                  src={imgSrc}
+                  alt={`${dish.name} - image ${index + 1}`}
+                  fill
+                  sizes="100vw"
+                  quality={90}
+                  priority={index === 0}
+                  className="object-cover object-center"
+                />
+              </div>
+            </SwiperSlide>
           ))}
-        </div>
+        </Swiper>
       </div>
 
       {/* Scrollable content container */}
