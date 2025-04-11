@@ -189,8 +189,8 @@ const FoodMapLayout: React.FC<FoodMapLayoutProps> = ({
 
   return (
     <div className="h-screen w-full">
-      {/* MOBILE VIEW */}
-      <div className="lg:hidden flex flex-col h-screen">
+      {/* MOBILE VIEW - now only visible on screens below 900px */}
+      <div className="hidden max-[899px]:flex flex-col h-screen">
         <section className="fixed top-0 z-30 w-full">
           <FoodPrintsNavbar />
         </section>
@@ -226,15 +226,15 @@ const FoodMapLayout: React.FC<FoodMapLayoutProps> = ({
         </div>
       </div>
 
-      {/* DESKTOP VIEW */}
-      <div className="hidden lg:flex h-screen w-full bg-white overflow-hidden">
+      {/* DESKTOP VIEW - now visible from 900px and up */}
+      <div className="hidden min-[900px]:flex h-screen w-full bg-white overflow-hidden">
         {/* Left Side - Text Content (responsive width based on screen size) */}
         <div
           className={`${
             isPanelCollapsed
               ? 'w-0 opacity-0'
-              : 'lg:w-[320px] xl:w-[400px] 2xl:w-[520px] opacity-100'
-          } h-full overflow-hidden transition-all duration-300 ease-in-out flex-shrink-0`}
+              : 'min-[900px]:w-[260px] lg:w-[300px] xl:w-[360px] 2xl:w-[450px] 3xl:w-[520px] opacity-100'
+          } h-full overflow-hidden transition-all duration-300 ease-in-out flex-shrink-0 border-r border-gray-200`}
         >
           {!isPanelCollapsed && (
             <div className="w-full h-full">
@@ -252,7 +252,7 @@ const FoodMapLayout: React.FC<FoodMapLayoutProps> = ({
           )}
         </div>
 
-        {/* Right Side - Map (expanding to take remaining width) */}
+        {/* Right Side - Map (fills remaining space) */}
         <div className="flex-grow h-full">
           <RightSideMapPanel
             isPanelCollapsed={isPanelCollapsed}

@@ -20,7 +20,7 @@ const DesktopLayout: React.FC<DesktopLayoutProps> = ({
   const activeDish = dishes[activeIndex];
 
   return (
-    <div className="hidden lg:flex h-screen w-full bg-white">
+    <div className="hidden min-[900px]:flex h-screen w-full bg-white">
       {/* Left Side - Text Content (30% Width) */}
       <div className="w-[30%] flex flex-col justify-center items-center p-10">
         <h2 className="italic text-gray-600 text-lg">
@@ -48,7 +48,7 @@ const DesktopLayout: React.FC<DesktopLayoutProps> = ({
       {/* Right Side - Full Image (70% Width) */}
       <DishImage
         dish={activeDish}
-        className="w-[70%] relative h-full"
+        className="w-[7`%] relative h-full"
         priority
       />
     </div>

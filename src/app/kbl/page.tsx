@@ -2,7 +2,6 @@
 
 import React, { useState, useRef } from 'react';
 import { FaCircleChevronLeft, FaCircleChevronRight } from 'react-icons/fa6';
-import { GoArrowRight } from 'react-icons/go';
 import Image from 'next/image';
 import Link from 'next/link'; // Import Link
 import FoodPrintsNavbar from '@/components/FoooPrintsNavbar';
@@ -47,7 +46,7 @@ export default function KBLPage() {
   return (
     <div className="h-screen w-full">
       {/* MOBILE VIEW */}
-      <div className="lg:hidden flex flex-col h-screen">
+      <div className="max-[899px]:flex hidden flex-col h-screen">
         <section className="fixed top-0 z-30 w-full">
           <FoodPrintsNavbar />
         </section>
@@ -90,11 +89,11 @@ export default function KBLPage() {
       </div>
 
       {/* DESKTOP VIEW */}
-      <div className="hidden lg:flex h-screen w-full bg-white">
+      <div className="hidden min-[900px]:flex h-screen w-full bg-white">
         {/* Left Side - Text Content (30% Width) */}
         <div className="w-[30%] flex flex-col justify-center items-center p-10">
           <h2 className="italic text-gray-600 text-lg">
-            Ilonggo's Best Dishes
+            Ilonggo&apos;s Best Dishes
           </h2>
           <h1 className="text-4xl font-bold mt-2">
             {dishes[activeIndex].name}

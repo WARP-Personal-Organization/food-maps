@@ -123,7 +123,7 @@ export default function FoodPrintsNavbar() {
       {/* Dish Filter Slide-in Menu (Left to Right) */}
       <div
         ref={filterRef}
-        className={`fixed top-0 left-0 w-5/6 lg:w-1/3 h-full bg-white shadow-lg z-50 transform transition-transform duration-300 ${
+        className={`fixed top-0 left-0 w-5/6 min-[900px]:w-1/3 h-full bg-white shadow-lg z-50 transform transition-transform duration-300 ${
           isFilterOpen
             ? 'translate-x-0 opacity-100'
             : '-translate-x-full opacity-0'
@@ -144,7 +144,7 @@ export default function FoodPrintsNavbar() {
           </div>
 
           {/* Dynamic Image Ratio */}
-          <div className="grid grid-cols-2 lg:grid-cols-2 gap-4 flex-grow overflow-y-auto">
+          <div className="grid grid-cols-2 min-[900px]:grid-cols-2 gap-4 flex-grow overflow-y-auto">
             {dishes.map((dish) => (
               <div
                 key={dish.name}
@@ -155,7 +155,7 @@ export default function FoodPrintsNavbar() {
                 }`}
                 onClick={() => toggleDishSelection(dish.name)}
               >
-                <div className="relative w-full h-[80px] lg:h-[100px] aspect-[4/5] lg:aspect-[5/4]">
+                <div className="relative w-full h-[80px] min-[900px]:h-[100px] aspect-[4/5] min-[900px]:aspect-[5/4]">
                   <Image
                     src={dish.image}
                     alt={dish.name}
@@ -187,7 +187,7 @@ export default function FoodPrintsNavbar() {
       {/* Menu Slide-in (Right to Left) */}
       <div
         ref={menuRef}
-        className={`fixed top-0 right-0 w-5/6 lg:w-1/3 h-full bg-white shadow-lg z-50 transform transition-transform duration-300 ${
+        className={`fixed top-0 right-0 w-5/6 min-[900px]:w-1/3 h-full bg-white shadow-lg z-50 transform transition-transform duration-300 ${
           isMenuOpen
             ? 'translate-x-0 opacity-100'
             : 'translate-x-full opacity-0'

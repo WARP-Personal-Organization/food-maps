@@ -1,6 +1,11 @@
 import type { Config } from 'tailwindcss';
 
-const config: Config = {
+// Define extended config type including safelist
+type ExtendedConfig = Config & {
+  safelist?: string[];
+};
+
+const config: ExtendedConfig = {
   darkMode: ['class', 'dark'],
   content: [
     './pages/**/*.{js,ts,jsx,tsx,mdx}',
@@ -9,8 +14,12 @@ const config: Config = {
     '*.{js,ts,jsx,tsx,mdx}',
     './src/**/*.{js,ts,jsx,tsx,mdx}',
   ],
+  safelist: ['3xl:h-96', '2xl:h-80', 'xl:h-72', 'lg:h-64', 'h-56'],
   theme: {
     extend: {
+      screens: {
+        '3xl': '1920px',
+      },
       colors: {
         background: 'hsl(var(--background))',
         foreground: 'hsl(var(--foreground))',

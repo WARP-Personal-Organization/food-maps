@@ -271,6 +271,17 @@ const LeftSidePanel: React.FC<LeftSidePanelProps> = ({
 
   // Mobile rendering for other panels
   if (isMobile) {
+    if (selectedLocation) {
+      return (
+        <div className="absolute inset-0 z-40 bg-white overflow-hidden h-screen">
+          <LocationDetailPanel
+            location={selectedLocation}
+            onClose={closeLocationDetail}
+          />
+        </div>
+      );
+    }
+
     return (
       <div className="absolute inset-0 z-40 bg-white overflow-y-auto">
         <div className="p-4">
@@ -281,11 +292,6 @@ const LeftSidePanel: React.FC<LeftSidePanelProps> = ({
               locationsMap={locationsMap}
               onClose={handleCloseFilterDishesView}
               isMobile={true}
-            />
-          ) : selectedLocation ? (
-            <LocationDetailPanel
-              location={selectedLocation}
-              onClose={closeLocationDetail}
             />
           ) : singleFilterMode ? (
             <FilteredDishPanel
