@@ -48,7 +48,7 @@ const DesktopLayout: React.FC<DesktopLayoutProps> = ({
       {/* Right Side - Full Image (70% Width) */}
       <DishImage
         dish={activeDish}
-        className="w-[7`%] relative h-full"
+        className="w-[70%] relative h-full"
         priority
       />
     </div>
