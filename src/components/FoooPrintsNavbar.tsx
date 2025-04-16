@@ -194,7 +194,7 @@ export default function FoodPrintsNavbar() {
         }`}
       >
         <div className="p-6 h-full flex flex-col">
-          <div className="flex justify-between items-center mb-4">
+          <div className="flex justify-between items-center mb-24">
             <div>
               <Image
                 src={'/images/foodprints-logo-menu.png'}
@@ -212,16 +212,21 @@ export default function FoodPrintsNavbar() {
           </div>
           <ul className="space-y-4 flex-grow">
             <li
-              className="text-black hover:text-yellow-500 cursor-pointer"
-              onClick={handleHomeClick} // Navigate to homepage
-            >
-              Home
+                className="text-black text-3xl font-bold hover:text-yellow-500 cursor-pointer flex justify-between items-center"
+                onClick={handleHomeClick} // Navigate to homepage
+              >
+                Home
+              <p className='text-sm font-light text-amber-300'>01</p>
             </li>
+            <div>
+              <hr className="border-amber-300 my-8" />
+            </div>
             <li
-              className="text-black hover:text-yellow-500 cursor-pointer"
+              className="text-black text-3xl font-bold hover:text-yellow-500 cursor-pointer flex justify-between items-center"
               onClick={handleAboutClick} // Open About modal
             >
               About
+            <p className='text-sm font-light text-amber-300'>02</p>
             </li>
           </ul>
         </div>
