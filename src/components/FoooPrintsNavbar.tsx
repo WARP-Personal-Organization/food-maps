@@ -204,7 +204,7 @@ export default function FoodPrintsNavbar() {
               />
             </div>
             <button
-              className="text-2xl text-black"
+              className="text-2xl bg-gray-200 rounded p-2 text-black"
               onClick={() => setIsMenuOpen(false)}
             >
               <FiX />
