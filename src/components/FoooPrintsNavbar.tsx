@@ -229,6 +229,41 @@ export default function FoodPrintsNavbar() {
             <p className='text-sm font-light text-amber-300'>02</p>
             </li>
           </ul>
+            <section className='text-sm font-medium'>
+            <div className="flex flex-col justify-center mt-8">
+              <h2 className='text-amber-300 font-bold'>WEBSITE</h2>
+              <a
+              href="https://dailyguardian.com.ph/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-black hover:underline"
+              >
+              dailyguardian.com.ph
+              </a>
+            </div>
+            <div className="flex flex-col justify-center mt-8">
+              <h2 className='text-amber-300 font-bold'>EXPLORE</h2>
+              <div className=' flex flex-row gap-4'>
+              <a
+              href="https://www.facebook.com/DailyGuardianPH/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-black hover:underline"
+              >
+              FACEBOOK
+              </a>
+              <p>/</p>
+              <a
+              href="https://instagram.com"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-black hover:underline"
+              >
+              INSTAGRAM
+              </a>
+              </div>
+            </div>
+            </section>
         </div>
       </div>
 
