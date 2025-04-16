@@ -241,7 +241,7 @@ export default function FoodPrintsNavbar() {
               dailyguardian.com.ph
               </a>
             </div>
-            <div className="flex flex-col justify-center mt-8">
+            <div className="flex flex-col justify-center my-8">
               <h2 className='text-amber-300 font-bold'>EXPLORE</h2>
               <div className=' flex flex-row gap-4'>
               <a
