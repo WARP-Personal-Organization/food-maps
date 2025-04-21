@@ -1,19 +1,19 @@
-"use client";
+'use client';
 
-import React, { useState, useRef } from "react";
-import { FaCircleChevronLeft, FaCircleChevronRight } from "react-icons/fa6";
-import Image from "next/image";
-import Link from "next/link"; // Import Link
-import FoodPrintsNavbar from "@/components/FoooPrintsNavbar";
+import React, { useState, useRef } from 'react';
+import { FaCircleChevronLeft, FaCircleChevronRight } from 'react-icons/fa6';
+import Image from 'next/image';
+import Link from 'next/link'; // Import Link
+import FoodPrintsNavbar from '@/components/FoooPrintsNavbar';
 
 const dishes = [
   {
-    name: "KBL",
-    image: "/images/filter-dish/kbl.jpg",
+    name: 'KBL',
+    image: '/images/filter-dish/kbl.jpg',
     description:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
-    tagline: "Kadios, Baboy, Langka",
-  }
+      'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
+    tagline: 'Kadios, Baboy, Langka',
+  },
 ];
 
 export default function KBLPage() {
@@ -46,8 +46,8 @@ export default function KBLPage() {
   return (
     <div className="h-screen w-full">
       {/* MOBILE VIEW */}
-      <div className="lg:hidden flex flex-col h-screen">
-        <section className="fixed top-0 z-50 w-full">
+      <div className="max-[899px]:flex hidden flex-col h-screen">
+        <section className="fixed top-0 z-30 w-full">
           <FoodPrintsNavbar />
         </section>
         {/* Top Image (40% height) */}
@@ -70,17 +70,18 @@ export default function KBLPage() {
           {/* Dish Name */}
           <h1 className="text-3xl font-bold">{dishes[activeIndex].name}</h1>
           {/* Tagline */}
-          <h3 className="italic text-gray-400">{dishes[activeIndex].tagline}</h3>
+          <h3 className="italic text-gray-400">
+            {dishes[activeIndex].tagline}
+          </h3>
 
           {/* Description */}
           <p className="text-gray-800">{dishes[activeIndex].description}</p>
           {/* Swipe Indicator */}
-          <div className="border-t pt-4">
-          </div>
+          <div className="border-t pt-4"></div>
 
           {/* Button */}
           <Link href="/food-map">
-          <button className="w-[100%] bg-yellow-300 text-black font-bold py-3 rounded mx-auto">
+            <button className="w-[100%] bg-yellow-300 text-black font-bold py-3 rounded mx-auto">
               Where to Eat
             </button>
           </Link>
@@ -88,15 +89,23 @@ export default function KBLPage() {
       </div>
 
       {/* DESKTOP VIEW */}
-      <div className="hidden lg:flex h-screen w-full bg-white">
+      <div className="hidden min-[900px]:flex h-screen w-full bg-white">
         {/* Left Side - Text Content (30% Width) */}
         <div className="w-[30%] flex flex-col justify-center items-center p-10">
-            <h2 className="italic text-gray-600 text-lg">Ilonggo&apos;s Best Dishes</h2>
-          <h1 className="text-4xl font-bold mt-2">{dishes[activeIndex].name}</h1>
-          <h3 className="italic text-gray-500 text-lg">{dishes[activeIndex].tagline}</h3>
+          <h2 className="italic text-gray-600 text-lg">
+            Ilonggo&apos;s Best Dishes
+          </h2>
+          <h1 className="text-4xl font-bold mt-2">
+            {dishes[activeIndex].name}
+          </h1>
+          <h3 className="italic text-gray-500 text-lg">
+            {dishes[activeIndex].tagline}
+          </h3>
 
           {/* Description */}
-          <p className="text-gray-700 mt-4">{dishes[activeIndex].description}</p>
+          <p className="text-gray-700 mt-4">
+            {dishes[activeIndex].description}
+          </p>
 
           {/* Button */}
           <Link href="/food-map">
@@ -116,7 +125,7 @@ export default function KBLPage() {
                 <span
                   key={index}
                   className={`h-3 w-3 rounded-full ${
-                    activeIndex === index ? "bg-yellow-500" : "bg-gray-300"
+                    activeIndex === index ? 'bg-yellow-500' : 'bg-gray-300'
                   }`}
                 />
               ))}
