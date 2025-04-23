@@ -64,40 +64,30 @@ export const ClientOnly = ({ children }: { children: React.ReactNode }) => {
 
 // Dynamically import the Map component to avoid SSR issues with Mapbox
 // Using a stable key and memoization to prevent re-renders
-const DynamicMapComponent = dynamic(() => import('@/components/MapComponent'), {
-  ssr: false,
-  loading: () => (
-    <div
-      className="h-full w-full flex items-center justify-center"
-      style={{ backgroundColor: '#3b3b3f' }}
-    >
-      <p className="text-white">Loading map...</p>
-    </div>
-  ),
-});
+const DynamicMapComponent = dynamic(
+  () => import('@/components/FoodMapRenderer'),
+  {
+    ssr: false,
+    loading: () => (
+      <div
+        className="h-full w-full flex items-center justify-center"
+        style={{ backgroundColor: '#3b3b3f' }}
+      >
+        <p className="text-white">Loading map...</p>
+      </div>
+    ),
+  }
+);
 
 // Create a memoized version of the component to prevent unnecessary re-renders
 export const MapComponent = memo(
   DynamicMapComponent,
   (prevProps, nextProps) => {
-    // Custom comparison function that only triggers re-render for specific prop changes
-    // Return true if props are equal (don't re-render), false if they're different (do re-render)
-
-    // Always re-render when locations change as we need to update markers
-    if (
-      JSON.stringify(prevProps.locations) !==
-      JSON.stringify(nextProps.locations)
-    ) {
-      return false;
-    }
-
-    // For other props, only re-render if they actually changed
+    // Simple comparison that just checks for equality in the mapImageUrl and defaultZoom
+    // All other logic is handled internally by FixedMapComponent
     return (
       prevProps.mapImageUrl === nextProps.mapImageUrl &&
-      JSON.stringify(prevProps.mapBounds) ===
-        JSON.stringify(nextProps.mapBounds) &&
       prevProps.defaultZoom === nextProps.defaultZoom &&
-      prevProps.mapStyle === nextProps.mapStyle &&
       prevProps.useCustomMap === nextProps.useCustomMap
     );
   }

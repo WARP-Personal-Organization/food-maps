@@ -63,9 +63,9 @@ const RightSideMapPanel: React.FC<RightSideMapPanelProps> = ({
         {hasDishes ? (
           <ClientOnly>
             <MapComponent
-              key={`right-side-map-${activeFilters.join('-')}-${
-                locations.length
-              }-${isPanelCollapsed}`}
+              key={`fixed-map-desktop-${activeFilters
+                .sort()
+                .join('-')}-${isPanelCollapsed}`}
               locations={locations}
               mapImageUrl="/Map.png"
               mapBounds={[
