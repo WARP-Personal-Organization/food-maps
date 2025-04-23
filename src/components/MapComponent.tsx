@@ -167,23 +167,6 @@ const MapComponent: React.FC<MapComponentProps> = ({
         interactive: true, // Allow zooming and panning
       });
 
-      // Set background color immediately
-      if (useCustomMap) {
-        map.once('styledata', () => {
-          // Set the background color manually after style loads
-          map.addLayer(
-            {
-              id: 'custom-background',
-              type: 'background',
-              paint: {
-                'background-color': '#3b3b3f',
-              },
-            },
-            'custom-map-layer'
-          );
-        });
-      }
-
       // Function to add markers to the map
       const addMarkers = () => {
         console.log(`Adding ${locations.length} markers to map`);
