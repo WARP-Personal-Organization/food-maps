@@ -367,28 +367,6 @@ const MapComponent: React.FC<MapComponentProps> = ({
 
       // Wait for the map to load before adding markers
       map.on('load', () => {
-        // Apply custom background color to the map immediately
-        const style = map.getStyle() as { layers: Array<{ id: string }> };
-        const backgroundLayer = style.layers.find(
-          (layer) => layer.id === 'background'
-        );
-
-        if (backgroundLayer) {
-          map.setPaintProperty('background', 'background-color', '#3b3b3f');
-        } else {
-          // If there's no background layer yet, add one
-          map.addLayer(
-            {
-              id: 'background',
-              type: 'background',
-              paint: {
-                'background-color': '#3b3b3f',
-              },
-            },
-            map.getStyle().layers[0]?.id
-          ); // Add before the first layer
-        }
-
         // Convert mapBounds to Mapbox format
         const swCoord = xyToLngLat(mapBounds[0][1], mapBounds[0][0]);
         const neCoord = xyToLngLat(mapBounds[1][1], mapBounds[1][0]);
@@ -714,7 +692,6 @@ const MapComponent: React.FC<MapComponentProps> = ({
     <div
       ref={mapContainerRef}
       className="map-container w-full h-full"
-      style={{ backgroundColor: '#3b3b3f' }}
     ></div>
   );
 };
