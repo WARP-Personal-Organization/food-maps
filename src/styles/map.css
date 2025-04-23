@@ -46,25 +46,24 @@
   align-items: center;
 }
 
-.siopao-marker img {
+.restaurant-marker img {
   filter: drop-shadow(0px 3px 3px rgba(0, 0, 0, 0.4));
   transition: filter 0.2s, transform 0.2s;
   transform: translateY(-50%);
 }
 
-.custom-marker:hover .siopao-marker img {
+.custom-marker:hover .restaurant-marker img {
   filter: drop-shadow(0px 4px 5px rgba(0, 0, 0, 0.6));
 }
 
-.restaurant-marker svg,
-.shop-marker svg,
-.attraction-marker svg,
-.default-marker svg {
+.shop-marker img,
+.attraction-marker img,
+.default-marker img {
   filter: drop-shadow(0px 3px 3px rgba(0, 0, 0, 0.4));
   transition: filter 0.2s;
 }
 
-.custom-marker:hover svg {
+.custom-marker:hover img {
   filter: drop-shadow(0px 4px 5px rgba(0, 0, 0, 0.6));
 }
 

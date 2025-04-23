@@ -4,9 +4,8 @@ export interface Location {
   x: number;
   y: number;
   description: string;
-  iconType?: 'default' | 'restaurant' | 'shop' | 'attraction' | 'siopao';
+  iconType?: 'default' | 'restaurant' | 'shop' | 'attraction';
   iconUrl?: string;
-  siopaoVariant?: 1 | 2 | 3;
   address?: string;
   openHours?: string;
   priceRange?: string;
@@ -21,8 +20,7 @@ export const dishLocations: Record<string, Location[]> = {
       x: 500,
       y: 300,
       description: 'Famous for their Siopao since 1978',
-      iconType: 'siopao',
-      siopaoVariant: 1,
+      iconType: 'restaurant',
       address: 'Rizal Street, La Paz Public Market, La Paz, Iloilo City',
       openHours: '10:00 AM - 9:00 PM',
       priceRange: '₱200-400',
@@ -38,8 +36,7 @@ export const dishLocations: Record<string, Location[]> = {
       x: 700,
       y: 400,
       description: 'Home of the King-sized Siopao',
-      iconType: 'siopao',
-      siopaoVariant: 2,
+      iconType: 'restaurant',
       address: 'Iznart Street, Iloilo City',
       openHours: '8:00 AM - 8:00 PM',
       priceRange: '₱150-300',
@@ -49,8 +46,7 @@ export const dishLocations: Record<string, Location[]> = {
       x: 500,
       y: 600,
       description: 'Traditional homemade Siopao',
-      iconType: 'siopao',
-      siopaoVariant: 3,
+      iconType: 'restaurant',
       address: 'JM Basa Street, Iloilo City',
       openHours: '9:00 AM - 7:00 PM',
       priceRange: '₱100-200',

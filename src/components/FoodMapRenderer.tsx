@@ -158,18 +158,30 @@ const FoodMapRenderer: React.FC<MapComponentProps> = ({
 
           // Add appropriate icon based on location type
           switch (location.iconType) {
-            case 'siopao':
-              const siopaoVariant = location.siopaoVariant || 1;
-              markerElement.innerHTML = `
-                <div class="marker-icon siopao-marker">
-                  <img src="/siopao-${siopaoVariant}.png" alt="${location.name} Marker" style="width: 36px; height: auto;" />
-                </div>
-              `;
-              break;
             case 'restaurant':
               markerElement.innerHTML = `
                 <div class="marker-icon restaurant-marker">
                   <img src="${location.iconUrl || '/siopao-1.png'}" alt="${
+                location.name
+              } Marker" style="width: 36px; height: auto;" />
+                </div>
+              `;
+              break;
+            case 'shop':
+              markerElement.innerHTML = `
+                <div class="marker-icon shop-marker">
+                  <img src="${location.iconUrl || '/shop-icon.png'}" alt="${
+                location.name
+              } Marker" style="width: 36px; height: auto;" />
+                </div>
+              `;
+              break;
+            case 'attraction':
+              markerElement.innerHTML = `
+                <div class="marker-icon attraction-marker">
+                  <img src="${
+                    location.iconUrl || '/attraction-icon.png'
+                  }" alt="${
                 location.name
               } Marker" style="width: 36px; height: auto;" />
                 </div>
@@ -257,7 +269,7 @@ const FoodMapRenderer: React.FC<MapComponentProps> = ({
           align-items: center;
           position: relative;
         }
-        .siopao-marker {
+        .restaurant-marker {
           transform: translateY(-50%);
         }
       `;
