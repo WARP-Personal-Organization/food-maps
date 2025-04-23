@@ -50,7 +50,6 @@
 
 .custom-marker {
   cursor: pointer;
-  transition: transform 0.2s;
 }
 
 .custom-marker:hover {
