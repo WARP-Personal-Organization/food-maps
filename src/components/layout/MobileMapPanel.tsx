@@ -2,6 +2,7 @@
 
 import React from 'react';
 import { Location } from '@/lib/locationData';
+import { FoodPrint } from '@/lib/foodPrintsData';
 import { ClientOnly, MapComponent, EmptyState } from './MapUtilComponents';
 import { useRouter } from 'next/navigation';
 
@@ -9,7 +10,9 @@ interface MobileMapPanelProps {
   filterUI?: React.ReactNode;
   hasDishes: boolean;
   locations: Location[];
+  foodPrintMarkers?: FoodPrint[];
   onLocationClick: (location: Location) => void;
+  onFoodPrintClick?: (foodPrint: FoodPrint) => void;
   showBackButton?: boolean;
   activeFilters?: string[];
   onFilterChange?: (filters: string[]) => void;
@@ -19,7 +22,9 @@ const MobileMapPanel: React.FC<MobileMapPanelProps> = ({
   filterUI,
   hasDishes,
   locations,
+  foodPrintMarkers = [],
   onLocationClick,
+  onFoodPrintClick,
   showBackButton = true,
   activeFilters = [],
   onFilterChange,
@@ -51,6 +56,7 @@ const MobileMapPanel: React.FC<MobileMapPanelProps> = ({
             <MapComponent
               key={`fixed-map-mobile-${activeFilters.sort().join('-')}`}
               locations={locations}
+              foodPrintMarkers={foodPrintMarkers}
               mapImageUrl="/Map.png"
               mapBounds={[
                 [0, 0],
@@ -58,6 +64,7 @@ const MobileMapPanel: React.FC<MobileMapPanelProps> = ({
               ]}
               defaultZoom={3}
               onLocationClick={onLocationClick}
+              onFoodPrintClick={onFoodPrintClick}
               useCustomMap={true}
             />
           </div>

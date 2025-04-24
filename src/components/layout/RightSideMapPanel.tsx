@@ -2,6 +2,7 @@
 
 import React, { useEffect, useRef } from 'react';
 import { Location } from '@/lib/locationData';
+import { FoodPrint } from '@/lib/foodPrintsData';
 import { ClientOnly, MapComponent, EmptyState } from './MapUtilComponents';
 
 interface RightSideMapPanelProps {
@@ -9,7 +10,9 @@ interface RightSideMapPanelProps {
   filterUI?: React.ReactNode;
   hasDishes: boolean;
   locations: Location[];
+  foodPrintMarkers: FoodPrint[];
   onLocationClick: (location: Location) => void;
+  onFoodPrintClick?: (foodPrint: FoodPrint) => void;
   activeFilters?: string[];
   onFilterChange?: (filters: string[]) => void;
 }
@@ -19,7 +22,9 @@ const RightSideMapPanel: React.FC<RightSideMapPanelProps> = ({
   filterUI,
   hasDishes,
   locations,
+  foodPrintMarkers,
   onLocationClick,
+  onFoodPrintClick,
   activeFilters = [],
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   onFilterChange,
@@ -67,6 +72,7 @@ const RightSideMapPanel: React.FC<RightSideMapPanelProps> = ({
                 .sort()
                 .join('-')}-${isPanelCollapsed}`}
               locations={locations}
+              foodPrintMarkers={foodPrintMarkers}
               mapImageUrl="/Map.png"
               mapBounds={[
                 [0, 0],
@@ -74,6 +80,7 @@ const RightSideMapPanel: React.FC<RightSideMapPanelProps> = ({
               ]}
               defaultZoom={3}
               onLocationClick={onLocationClick}
+              onFoodPrintClick={onFoodPrintClick}
               useCustomMap={true}
             />
           </ClientOnly>

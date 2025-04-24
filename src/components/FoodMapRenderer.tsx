@@ -5,13 +5,16 @@ import mapboxgl from 'mapbox-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
 import '../styles/map.css';
 import { Location } from '@/lib/locationData';
+import { FoodPrint } from '@/lib/foodPrintsData';
 
 interface MapComponentProps {
   locations: Location[];
+  foodPrintMarkers?: FoodPrint[];
   mapImageUrl?: string;
   mapBounds: [[number, number], [number, number]];
   defaultZoom?: number;
   onLocationClick?: (location: Location) => void;
+  onFoodPrintClick?: (foodPrint: FoodPrint) => void;
   mapboxToken?: string;
   mapStyle?: string;
   useCustomMap?: boolean;
@@ -19,6 +22,7 @@ interface MapComponentProps {
 
 const FoodMapRenderer: React.FC<MapComponentProps> = ({
   locations = [],
+  foodPrintMarkers = [],
   mapImageUrl = '/Map.png',
   mapBounds = [
     [0, 0],
@@ -26,6 +30,7 @@ const FoodMapRenderer: React.FC<MapComponentProps> = ({
   ],
   defaultZoom = 12,
   onLocationClick,
+  onFoodPrintClick,
   mapboxToken = process.env.NEXT_PUBLIC_MAPBOX_TOKEN ||
     process.env.NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN ||
     '',
@@ -92,7 +97,13 @@ const FoodMapRenderer: React.FC<MapComponentProps> = ({
     if (!mounted || !mapboxToken || !mapContainerRef.current) return;
 
     const initializeMap = () => {
-      console.log('Initializing map with', locations.length, 'locations');
+      console.log(
+        'Initializing map with',
+        locations.length,
+        'locations and',
+        foodPrintMarkers.length,
+        'food prints'
+      );
 
       // Clean up existing map if it exists
       if (mapInstanceRef.current) {
@@ -113,30 +124,41 @@ const FoodMapRenderer: React.FC<MapComponentProps> = ({
 
       // Function to add markers to the map
       const addMarkers = () => {
-        console.log(`Adding ${locations.length} markers to map`);
+        console.log(
+          `Adding ${locations.length} locations and ${foodPrintMarkers.length} food prints to map`
+        );
 
         // Clear existing markers
         markersRef.current.forEach((marker) => marker.remove());
         markersRef.current = [];
 
-        // Get valid locations for bounds calculation
-        const validLocations = locations.filter(
-          (loc) =>
-            typeof loc.x === 'number' &&
-            typeof loc.y === 'number' &&
-            !isNaN(loc.x) &&
-            !isNaN(loc.y)
-        );
+        // Combine both location and food print data for bounds calculation
+        const allPoints = [
+          ...locations.filter(
+            (loc) =>
+              typeof loc.x === 'number' &&
+              typeof loc.y === 'number' &&
+              !isNaN(loc.x) &&
+              !isNaN(loc.y)
+          ),
+          ...foodPrintMarkers.filter(
+            (fp) =>
+              typeof fp.x === 'number' &&
+              typeof fp.y === 'number' &&
+              !isNaN(fp.x) &&
+              !isNaN(fp.y)
+          ),
+        ];
 
-        if (validLocations.length === 0) {
-          console.warn('No valid locations found');
+        if (allPoints.length === 0) {
+          console.warn('No valid points found');
           return;
         }
 
-        // Pre-compute bounds from all valid locations
+        // Pre-compute bounds from all valid points
         const bounds = new mapboxgl.LngLatBounds();
-        validLocations.forEach((loc) => {
-          const [lng, lat] = xyToLngLat(loc.x, loc.y);
+        allPoints.forEach((point) => {
+          const [lng, lat] = xyToLngLat(point.x, point.y);
           bounds.extend([lng, lat]);
         });
 
@@ -150,11 +172,18 @@ const FoodMapRenderer: React.FC<MapComponentProps> = ({
           [ne.lng + lngBuffer, ne.lat + latBuffer]
         );
 
-        // Add every marker
-        validLocations.forEach((location) => {
-          // Create a DOM element for the marker
+        // Add location markers
+        locations.forEach((location) => {
+          if (
+            typeof location.x !== 'number' ||
+            typeof location.y !== 'number' ||
+            isNaN(location.x) ||
+            isNaN(location.y)
+          ) {
+            return; // Skip invalid locations
+          }
           const markerElement = document.createElement('div');
-          markerElement.className = 'custom-marker';
+          markerElement.className = 'custom-marker location-marker'; // Class for locations
 
           // Add appropriate icon based on location type
           switch (location.iconType) {
@@ -163,7 +192,7 @@ const FoodMapRenderer: React.FC<MapComponentProps> = ({
                 <div class="marker-icon restaurant-marker">
                   <img src="${location.iconUrl || '/siopao-1.png'}" alt="${
                 location.name
-              } Marker" style="width: 36px; height: auto;" />
+              } Marker" style="width: 36px; height: auto; filter: drop-shadow(0px 3px 3px rgba(0, 0, 0, 0.4));" />
                 </div>
               `;
               break;
@@ -172,7 +201,7 @@ const FoodMapRenderer: React.FC<MapComponentProps> = ({
                 <div class="marker-icon shop-marker">
                   <img src="${location.iconUrl || '/shop-icon.png'}" alt="${
                 location.name
-              } Marker" style="width: 36px; height: auto;" />
+              } Marker" style="width: 36px; height: auto; filter: drop-shadow(0px 3px 3px rgba(0, 0, 0, 0.4));" />
                 </div>
               `;
               break;
@@ -183,7 +212,7 @@ const FoodMapRenderer: React.FC<MapComponentProps> = ({
                     location.iconUrl || '/attraction-icon.png'
                   }" alt="${
                 location.name
-              } Marker" style="width: 36px; height: auto;" />
+              } Marker" style="width: 36px; height: auto; filter: drop-shadow(0px 3px 3px rgba(0, 0, 0, 0.4));" />
                 </div>
               `;
               break;
@@ -197,48 +226,89 @@ const FoodMapRenderer: React.FC<MapComponentProps> = ({
               } else {
                 markerElement.innerHTML = `
                   <div class="marker-icon default-marker">
-                    <img src="/siopao-1.png" alt="${location.name} Marker" style="width: 36px; height: auto;" />
+                    <img src="/siopao-1.png" alt="${location.name} Marker" style="width: 36px; height: auto; filter: drop-shadow(0px 3px 3px rgba(0, 0, 0, 0.4));" />
                   </div>
                 `;
               }
           }
 
-          // Convert x,y to lng,lat for Mapbox and create marker
           const [lng, lat] = xyToLngLat(location.x, location.y);
           const marker = new mapboxgl.Marker(markerElement)
             .setLngLat([lng, lat])
             .addTo(map);
 
-          console.log(`Added marker for ${location.name} at ${lng},${lat}`);
-
-          // Add popup and click handler
-          marker.getElement().addEventListener('click', () => {
+          marker.getElement().addEventListener('click', (e) => {
+            e.stopPropagation(); // Prevent map click event when clicking marker
             if (popupRef.current) {
               popupRef.current.remove();
             }
 
-            const popup = new mapboxgl.Popup({ offset: 25 })
-              .setLngLat([lng, lat])
-              .setHTML(`<b>${location.name}</b><br>${location.description}`)
-              .addTo(map);
+            // Removed popup creation
 
-            popupRef.current = popup;
-
+            // Just call the callback without showing popup
             if (onLocationClick) {
               onLocationClick(location);
             }
           });
 
-          // Store reference for cleanup
           markersRef.current.push(marker);
         });
 
-        // Ensure the map fits all markers with padding
-        console.log(
-          'Fitting to bounds with',
-          validLocations.length,
-          'locations'
-        );
+        // Add food print markers
+        foodPrintMarkers.forEach((fp) => {
+          if (
+            typeof fp.x !== 'number' ||
+            typeof fp.y !== 'number' ||
+            isNaN(fp.x) ||
+            isNaN(fp.y)
+          ) {
+            return; // Skip invalid food prints
+          }
+          const markerElement = document.createElement('div');
+          markerElement.className = 'custom-marker foodprint-marker'; // Class for food prints
+          markerElement.innerHTML = `
+            <div class="marker-icon foodprint-icon">
+              <img src="${fp.iconUrl || '/siopao-foodprint-marker.png'}" alt="${
+            fp.name
+          }" style="width: 40px; height: auto; filter: drop-shadow(0px 3px 3px rgba(0, 0, 0, 0.4));" />
+            </div>
+          `;
+
+          const [lng, lat] = xyToLngLat(fp.x, fp.y);
+          const marker = new mapboxgl.Marker(markerElement)
+            .setLngLat([lng, lat])
+            .addTo(map);
+
+          // Add popup for food print marker
+          marker.getElement().addEventListener('click', (e) => {
+            e.stopPropagation(); // Prevent map click event
+            if (popupRef.current) {
+              popupRef.current.remove();
+            }
+
+            // Just call the callback without showing popup
+            if (onFoodPrintClick) {
+              onFoodPrintClick(fp);
+            } else {
+              // Show the popup only if no callback is provided
+              const popup = new mapboxgl.Popup({
+                offset: 25,
+                closeButton: false,
+              })
+                .setLngLat([lng, lat])
+                .setHTML(
+                  `<div class="p-1"><b>${fp.name}</b><br>${fp.description}</div>`
+                )
+                .addTo(map);
+              popupRef.current = popup;
+            }
+          });
+
+          markersRef.current.push(marker);
+        });
+
+        // Ensure the map fits all points with padding
+        console.log('Fitting to bounds with', allPoints.length, 'points');
         try {
           map.fitBounds(expandedBounds, {
             padding: 100,
@@ -373,6 +443,7 @@ const FoodMapRenderer: React.FC<MapComponentProps> = ({
     useCustomMap,
     defaultZoom,
     locationsSnapshot, // Use snapshot to trigger rerenders when locations change
+    foodPrintMarkers,
   ]);
 
   return (
