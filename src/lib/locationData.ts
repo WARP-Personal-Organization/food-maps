@@ -59,7 +59,7 @@ export const dishLocations: Record<string, Location[]> = {
       y: 350,
       description: 'Original La Paz Batchoy since 1945',
       iconType: 'restaurant',
-      iconUrl: '/batchoy-1.png',
+      iconUrl: '/siopao-1.png',
       address: 'La Paz Public Market, Iloilo City',
       openHours: '7:00 AM - 8:00 PM',
       priceRange: '₱100-200',
