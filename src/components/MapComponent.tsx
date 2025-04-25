@@ -5,15 +5,7 @@ import mapboxgl from 'mapbox-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
 import '../styles/map.css';
 import { Location } from '@/lib/locationData';
-
-// Define the FoodPrint interface since the file might not exist yet
-export interface FoodPrint {
-  name: string;
-  x: number;
-  y: number;
-  description: string;
-  iconUrl?: string;
-}
+import { FoodPrint } from '@/lib/foodprintData';
 
 interface MapComponentProps {
   locations: Location[];
@@ -304,18 +296,6 @@ const MapComponent: React.FC<MapComponentProps> = ({
             // Just call the callback without showing popup
             if (onFoodPrintClick) {
               onFoodPrintClick(fp);
-            } else {
-              // Show the popup only if no callback is provided
-              const popup = new mapboxgl.Popup({
-                offset: 25,
-                closeButton: false,
-              })
-                .setLngLat([lng, lat])
-                .setHTML(
-                  `<div class="p-1"><b>${fp.name}</b><br>${fp.description}</div>`
-                )
-                .addTo(map);
-              popupRef.current = popup;
             }
           });
 

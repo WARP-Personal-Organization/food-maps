@@ -57,6 +57,16 @@ export default function FoodMapPage() {
 
   // Update the URL when filters change
   const updateUrl = (filters: string[]) => {
+    // Compare with current filters to avoid unnecessary updates
+    const currentDishParam = searchParams.get('dish');
+    const currentFiltersString = currentDishParam || '';
+    const newFiltersString = filters.join(',');
+
+    // Skip URL update if filters haven't changed
+    if (currentFiltersString === newFiltersString) {
+      return;
+    }
+
     // Preserve view parameter if it exists
     const viewParam = searchParams.get('view');
     const viewQueryString = viewParam ? `&view=${viewParam}` : '';
@@ -75,6 +85,11 @@ export default function FoodMapPage() {
 
   // Handle filter changes
   const handleFilterChange = (newFilters: string[]) => {
+    // Skip update if filters haven't changed
+    if (JSON.stringify(activeFilters) === JSON.stringify(newFilters)) {
+      return;
+    }
+
     setActiveFilters(newFilters);
     updateUrl(newFilters);
   };

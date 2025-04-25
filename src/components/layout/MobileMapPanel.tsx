@@ -3,6 +3,7 @@
 import React from 'react';
 import { Location } from '@/lib/locationData';
 import { ClientOnly, MapComponent, EmptyState } from './MapUtilComponents';
+import { foodPrintsData, FoodPrint } from '@/lib/foodprintData';
 import { useRouter } from 'next/navigation';
 
 interface MobileMapPanelProps {
@@ -13,6 +14,7 @@ interface MobileMapPanelProps {
   showBackButton?: boolean;
   activeFilters?: string[];
   onFilterChange?: (filters: string[]) => void;
+  onFoodprintClick?: (foodprint: FoodPrint) => void;
 }
 
 const MobileMapPanel: React.FC<MobileMapPanelProps> = ({
@@ -20,9 +22,10 @@ const MobileMapPanel: React.FC<MobileMapPanelProps> = ({
   hasDishes,
   locations,
   onLocationClick,
-  showBackButton = true,
+  showBackButton = false,
   activeFilters = [],
   onFilterChange,
+  onFoodprintClick,
 }) => {
   const router = useRouter();
 
@@ -36,6 +39,20 @@ const MobileMapPanel: React.FC<MobileMapPanelProps> = ({
     }
   };
 
+  // Filter foodprint markers based on active filters
+  const foodprintMarkers =
+    activeFilters.length > 0
+      ? foodPrintsData.markers.filter((marker) =>
+          activeFilters.includes(marker.dishName)
+        )
+      : foodPrintsData.markers; // Show all markers when no filters are active
+
+  console.log('Mobile - Active filters:', activeFilters);
+  console.log(
+    'Mobile - Foodprint markers to display:',
+    foodprintMarkers.length
+  );
+
   return (
     <div className="absolute inset-0 z-20 w-full">
       {/* Filter UI on mobile - top left of map */}
@@ -45,12 +62,38 @@ const MobileMapPanel: React.FC<MobileMapPanelProps> = ({
         </div>
       )}
 
+      {/* Back button (only shows when panel is collapsed) */}
+      {showBackButton && (
+        <button
+          onClick={() => router.back()}
+          className="absolute top-4 left-4 z-[100] bg-white/90 rounded-full p-2 shadow-md"
+          aria-label="Go back"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          >
+            <path d="M19 12H5M12 19l-7-7 7-7" />
+          </svg>
+        </button>
+      )}
+
       {hasDishes ? (
         <ClientOnly>
           <div className="h-full w-full" style={{ backgroundColor: '#3b3b3f' }}>
             <MapComponent
-              key={`mobile-map-${activeFilters.join('-')}-${locations.length}`}
+              key={`mobile-map-${activeFilters.join('-')}-${
+                locations.length
+              }-${showBackButton}`}
               locations={locations}
+              foodPrintMarkers={foodprintMarkers}
               mapImageUrl="/Map.png"
               mapBounds={[
                 [0, 0],
@@ -58,6 +101,7 @@ const MobileMapPanel: React.FC<MobileMapPanelProps> = ({
               ]}
               defaultZoom={3}
               onLocationClick={onLocationClick}
+              onFoodPrintClick={onFoodprintClick}
               useCustomMap={true}
             />
           </div>

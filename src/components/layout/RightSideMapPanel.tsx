@@ -3,6 +3,7 @@
 import React, { useEffect, useRef } from 'react';
 import { Location } from '@/lib/locationData';
 import { ClientOnly, MapComponent, EmptyState } from './MapUtilComponents';
+import { foodPrintsData, FoodPrint } from '@/lib/foodprintData';
 
 interface RightSideMapPanelProps {
   isPanelCollapsed: boolean;
@@ -12,6 +13,7 @@ interface RightSideMapPanelProps {
   onLocationClick: (location: Location) => void;
   activeFilters?: string[];
   onFilterChange?: (filters: string[]) => void;
+  onFoodprintClick?: (foodprint: FoodPrint) => void;
 }
 
 const RightSideMapPanel: React.FC<RightSideMapPanelProps> = ({
@@ -23,6 +25,7 @@ const RightSideMapPanel: React.FC<RightSideMapPanelProps> = ({
   activeFilters = [],
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   onFilterChange,
+  onFoodprintClick,
 }) => {
   // Track previous panel collapse state to detect changes
   const prevCollapsedStateRef = useRef(isPanelCollapsed);
@@ -47,6 +50,17 @@ const RightSideMapPanel: React.FC<RightSideMapPanelProps> = ({
     }
   }, [isPanelCollapsed]);
 
+  // Filter foodprint markers based on active filters
+  const foodprintMarkers =
+    activeFilters.length > 0
+      ? foodPrintsData.markers.filter((marker) =>
+          activeFilters.includes(marker.dishName)
+        )
+      : foodPrintsData.markers; // Show all markers when no filters are active
+
+  console.log('Active filters:', activeFilters);
+  console.log('Foodprint markers to display:', foodprintMarkers.length);
+
   return (
     <div
       className={`${
@@ -67,6 +81,7 @@ const RightSideMapPanel: React.FC<RightSideMapPanelProps> = ({
                 locations.length
               }-${isPanelCollapsed}`}
               locations={locations}
+              foodPrintMarkers={foodprintMarkers}
               mapImageUrl="/Map.png"
               mapBounds={[
                 [0, 0],
@@ -74,6 +89,7 @@ const RightSideMapPanel: React.FC<RightSideMapPanelProps> = ({
               ]}
               defaultZoom={3}
               onLocationClick={onLocationClick}
+              onFoodPrintClick={onFoodprintClick}
               useCustomMap={true}
             />
           </ClientOnly>

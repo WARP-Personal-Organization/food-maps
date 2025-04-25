@@ -7,6 +7,7 @@ import FoodPrintsNavbar from '@/components/FoooPrintsNavbar';
 import LeftSidePanel from './LeftSidePanel';
 import RightSideMapPanel from './RightSideMapPanel';
 import MobileMapPanel from './MobileMapPanel';
+import { FoodPrint } from '@/lib/foodprintData';
 
 interface FoodMapLayoutProps {
   dishes: Dish[];
@@ -38,154 +39,90 @@ const FoodMapLayout: React.FC<FoodMapLayoutProps> = ({
   toggleFilterDishesView,
   initialPanelCollapsed = false,
 }) => {
+  // State for selected location detail and panel collapse
   const [selectedLocation, setSelectedLocation] = useState<Location | null>(
     null
   );
   const [isPanelCollapsed, setIsPanelCollapsed] = useState(
     initialPanelCollapsed
   );
-  const [preventPanelCollapse, setPreventPanelCollapse] = useState(false);
+  const [selectedFoodprint, setSelectedFoodprint] = useState<FoodPrint | null>(
+    null
+  );
 
-  // Set panel collapsed state when initialPanelCollapsed changes
-  useEffect(() => {
-    setIsPanelCollapsed(initialPanelCollapsed);
-  }, [initialPanelCollapsed]);
-
-  // Add event listener for custom events
-  useEffect(() => {
-    const handleCloseFilterViewOnly = () => {
-      setPreventPanelCollapse(true);
-
-      // Reset the flag after a short delay
-      setTimeout(() => {
-        setPreventPanelCollapse(false);
-      }, 500);
-    };
-
-    const handlePreventPanelCollapse = (event: Event) => {
-      // Set the flag to prevent panel collapse
-      setPreventPanelCollapse(true);
-
-      // We can check if we're opening or closing the filter view using type assertion
-      const customEvent = event as CustomEvent<{ isOpeningFilter: boolean }>;
-      const isOpeningFilter = customEvent.detail?.isOpeningFilter;
-      console.log(
-        'Preventing panel collapse, opening filter:',
-        isOpeningFilter
-      );
-
-      // Reset the flag after a short delay
-      setTimeout(() => {
-        setPreventPanelCollapse(false);
-      }, 500);
-    };
-
-    // Handle the closeLocationDetail custom event
-    const handleCloseLocationDetail = () => {
-      console.log('Closing location detail from custom event');
-      setSelectedLocation(null);
-    };
-
-    document.addEventListener('closeLocationDetail', handleCloseLocationDetail);
-    document.addEventListener('closeFilterViewOnly', handleCloseFilterViewOnly);
-    document.addEventListener(
-      'preventPanelCollapse',
-      handlePreventPanelCollapse
-    );
-
-    return () => {
-      document.removeEventListener(
-        'closeLocationDetail',
-        handleCloseLocationDetail
-      );
-      document.removeEventListener(
-        'closeFilterViewOnly',
-        handleCloseFilterViewOnly
-      );
-      document.removeEventListener(
-        'preventPanelCollapse',
-        handlePreventPanelCollapse
-      );
-    };
-  }, []);
-
-  // Add effect to ensure panel is expanded when filter view is opened
-  useEffect(() => {
-    // When filter dishes view is opened, make sure the panel is expanded
-    if (isFilterDishesViewOpen && isPanelCollapsed) {
-      setIsPanelCollapsed(false);
+  // Get all locations
+  const allLocations = useMemo(() => {
+    const allLocs: Location[] = [];
+    if (activeFilters.length > 0) {
+      // Only include locations for active filters
+      activeFilters.forEach((filter) => {
+        if (locationsMap[filter]) {
+          allLocs.push(...locationsMap[filter]);
+        }
+      });
+    } else {
+      // Include all locations when no filters are active
+      Object.values(locationsMap).forEach((locations) => {
+        allLocs.push(...locations);
+      });
     }
-  }, [isFilterDishesViewOpen, isPanelCollapsed]);
+    return allLocs;
+  }, [locationsMap, activeFilters]);
 
+  // Helper to determine if we have dishes to display
+  const hasDishes = dishes && dishes.length > 0;
+
+  // Handler for when a location is clicked
   const handleLocationClick = (location: Location) => {
     setSelectedLocation(location);
-    setIsPanelCollapsed(false); // Expand panel when a location is clicked
-    if (toggleFilterDishesView && isFilterDishesViewOpen) {
-      handleFilterViewChange();
-    }
+    setSelectedFoodprint(null); // Clear any selected foodprint
+    setIsPanelCollapsed(false); // Ensure panel is expanded
   };
 
+  // Handler for when a foodprint marker is clicked
+  const handleFoodprintClick = (foodprint: FoodPrint) => {
+    setSelectedFoodprint(foodprint);
+    setSelectedLocation(null); // Clear any selected location
+    setIsPanelCollapsed(false); // Ensure panel is expanded
+  };
+
+  // Handler for closing location detail panel
   const closeLocationDetail = () => {
     setSelectedLocation(null);
   };
 
-  const togglePanelCollapse = () => {
-    // Only collapse the panel if preventPanelCollapse is false
-    if (!preventPanelCollapse) {
-      setIsPanelCollapsed(!isPanelCollapsed);
+  // Handler for closing foodprint detail panel
+  const closeFoodprintDetail = () => {
+    setSelectedFoodprint(null);
+  };
 
-      // If we're collapsing the panel, also close the filter view
-      if (
-        !isPanelCollapsed &&
-        toggleFilterDishesView &&
-        isFilterDishesViewOpen
-      ) {
-        toggleFilterDishesView();
+  // Toggle the panel collapse state
+  const togglePanelCollapse = () => {
+    setIsPanelCollapsed(!isPanelCollapsed);
+  };
+
+  // Check for URL parameters when component mounts
+  useEffect(() => {
+    if (!window.location.search) return;
+
+    const searchParams = new URLSearchParams(window.location.search);
+    const dishParam = searchParams.get('dish');
+    const viewParam = searchParams.get('view');
+
+    // If dish parameter exists, set it as the only active filter (if callback exists)
+    if (dishParam && onFilterChange) {
+      const newFilters = dishParam.split(',');
+      // Only update if filters are different from current activeFilters
+      if (JSON.stringify(activeFilters) !== JSON.stringify(newFilters)) {
+        onFilterChange(newFilters);
       }
     }
-  };
 
-  // Add separate function for handling filter view changes to avoid panel collapse
-  const handleFilterViewChange = () => {
-    // Set flag to prevent panel collapse when closing filter view
-    setPreventPanelCollapse(true);
-
-    // Clear the selected location when toggling filter view
-    setSelectedLocation(null);
-
-    // Toggle filter view
-    if (toggleFilterDishesView) {
-      toggleFilterDishesView();
+    // If view=map parameter is passed, make sure panel is collapsed (map-only view)
+    if (viewParam === 'map') {
+      setIsPanelCollapsed(true);
     }
-
-    // Reset flag after a short delay
-    setTimeout(() => {
-      setPreventPanelCollapse(false);
-    }, 500);
-  };
-
-  // Filter locations based on active filters inside FoodMapLayout
-  const filteredLocations = useMemo(() => {
-    return activeFilters.length === 0
-      ? locationsMap // Use the passed-in complete locationsMap
-      : Object.fromEntries(
-          Object.entries(locationsMap).filter(([dishName]) =>
-            activeFilters.includes(dishName)
-          )
-        );
-  }, [locationsMap, activeFilters]);
-
-  // Combine all locations from the *filtered* locations for the map
-  const allLocations = useMemo(() => {
-    const locations = Object.values(filteredLocations).flat();
-    console.log(
-      `Filtered to ${locations.length} locations from ${activeFilters.length} active filters`
-    );
-    return locations;
-  }, [filteredLocations, activeFilters.length]);
-
-  // Check if we have any dishes to display
-  const hasDishes = dishes.length > 0;
+  }, [onFilterChange, activeFilters]);
 
   return (
     <div className="h-screen w-full">
@@ -209,6 +146,8 @@ const FoodMapLayout: React.FC<FoodMapLayoutProps> = ({
                 onToggleCollapse={togglePanelCollapse}
                 isFilterDishesViewOpen={isFilterDishesViewOpen}
                 toggleFilterDishesView={toggleFilterDishesView}
+                selectedFoodprint={selectedFoodprint}
+                onCloseFoodprint={closeFoodprintDetail}
               />
             </div>
           )}
@@ -222,6 +161,7 @@ const FoodMapLayout: React.FC<FoodMapLayoutProps> = ({
             activeFilters={activeFilters}
             onFilterChange={onFilterChange}
             showBackButton={isPanelCollapsed}
+            onFoodprintClick={handleFoodprintClick}
           />
         </div>
       </div>
@@ -247,6 +187,8 @@ const FoodMapLayout: React.FC<FoodMapLayoutProps> = ({
                 onToggleCollapse={togglePanelCollapse}
                 isFilterDishesViewOpen={isFilterDishesViewOpen}
                 toggleFilterDishesView={toggleFilterDishesView}
+                selectedFoodprint={selectedFoodprint}
+                onCloseFoodprint={closeFoodprintDetail}
               />
             </div>
           )}
@@ -262,6 +204,7 @@ const FoodMapLayout: React.FC<FoodMapLayoutProps> = ({
             onLocationClick={handleLocationClick}
             activeFilters={activeFilters}
             onFilterChange={onFilterChange}
+            onFoodprintClick={handleFoodprintClick}
           />
         </div>
       </div>
