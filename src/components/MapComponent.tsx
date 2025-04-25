@@ -5,7 +5,15 @@ import mapboxgl from 'mapbox-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
 import '../styles/map.css';
 import { Location } from '@/lib/locationData';
-import { FoodPrint } from '@/lib/foodPrintsData';
+
+// Define the FoodPrint interface since the file might not exist yet
+export interface FoodPrint {
+  name: string;
+  x: number;
+  y: number;
+  description: string;
+  iconUrl?: string;
+}
 
 interface MapComponentProps {
   locations: Location[];
@@ -23,7 +31,7 @@ interface MapComponentProps {
 const MapComponent: React.FC<MapComponentProps> = ({
   locations = [],
   foodPrintMarkers = [],
-  mapImageUrl = '/Map.png',
+  mapImageUrl = '/FoodPrints-Map.png',
   mapBounds = [
     [0, 0],
     [1000, 1000],
@@ -35,7 +43,7 @@ const MapComponent: React.FC<MapComponentProps> = ({
     process.env.NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN ||
     '',
   mapStyle = 'mapbox://styles/mapbox/streets-v12',
-  useCustomMap = false,
+  useCustomMap = true,
 }) => {
   const mapContainerRef = useRef<HTMLDivElement>(null);
   const mapInstanceRef = useRef<mapboxgl.Map | null>(null);
@@ -187,6 +195,15 @@ const MapComponent: React.FC<MapComponentProps> = ({
 
           // Add appropriate icon based on location type
           switch (location.iconType) {
+            case 'siopao':
+              // Use siopao variant or default to variant 1
+              const siopaoVariant = location.siopaoVariant || 1;
+              markerElement.innerHTML = `
+                <div class="marker-icon siopao-marker">
+                  <img src="/siopao-${siopaoVariant}.png" alt="Siopao Marker" style="width: 36px; height: auto; filter: drop-shadow(0px 3px 3px rgba(0, 0, 0, 0.4));" />
+                </div>
+              `;
+              break;
             case 'restaurant':
               markerElement.innerHTML = `
                 <div class="marker-icon restaurant-marker">
@@ -243,7 +260,7 @@ const MapComponent: React.FC<MapComponentProps> = ({
               popupRef.current.remove();
             }
 
-            // Just call the callback without showing popup
+            // Call the callback without showing popup
             if (onLocationClick) {
               onLocationClick(location);
             }
@@ -353,33 +370,24 @@ const MapComponent: React.FC<MapComponentProps> = ({
 
       // Wait for map to load before adding markers and custom map
       map.on('load', () => {
-        // Set background color
-        map.addLayer({
-          id: 'background-layer',
-          type: 'background',
-          paint: {
-            'background-color': '#3b3b3f',
-          },
-        });
-
-        if (useCustomMap && mapImageUrl) {
-          // Generate a unique source ID
-          const customMapSourceId = 'custom-map-' + Date.now();
-          customMapRef.current = customMapSourceId;
-
+        if (useCustomMap) {
           // Convert bounds for custom map
           const swCoord = xyToLngLat(mapBounds[0][1], mapBounds[0][0]);
           const neCoord = xyToLngLat(mapBounds[1][1], mapBounds[1][0]);
 
-          // Load custom map image
+          // Generate unique source ID
+          const customMapSourceId = 'custom-map-' + Date.now();
+          customMapRef.current = customMapSourceId;
+
+          // Load the FoodPrints-Map.png as the only background
           const mapImage = new Image();
           mapImage.onload = () => {
             try {
-              // Add image, source and layer
+              // Add the image as the only background
               map.addImage('custom-map-image', mapImage);
               map.addSource(customMapSourceId, {
                 type: 'image',
-                url: mapImageUrl,
+                url: mapImageUrl, // Using FoodPrints-Map.png
                 coordinates: [
                   [swCoord[0], neCoord[1]], // Top left
                   [neCoord[0], neCoord[1]], // Top right
@@ -392,14 +400,14 @@ const MapComponent: React.FC<MapComponentProps> = ({
                 type: 'raster',
                 source: customMapSourceId,
                 paint: {
-                  'raster-opacity': 1,
+                  'raster-opacity': 1, // Full opacity
                 },
               });
 
               // Add markers after map is loaded
               addMarkers();
             } catch (error) {
-              console.error('Error setting up custom map:', error);
+              console.error('Error setting up map:', error);
               addMarkers(); // Still try to add markers
             }
           };
@@ -409,6 +417,7 @@ const MapComponent: React.FC<MapComponentProps> = ({
             addMarkers(); // Still try to add markers
           };
 
+          // Start loading the image
           mapImage.src = mapImageUrl;
         } else {
           // Just add markers if not using custom map
@@ -445,11 +454,7 @@ const MapComponent: React.FC<MapComponentProps> = ({
   ]);
 
   return (
-    <div
-      ref={mapContainerRef}
-      className="map-container w-full h-full"
-      style={{ backgroundColor: '#3b3b3f' }}
-    ></div>
+    <div ref={mapContainerRef} className="map-container w-full h-full"></div>
   );
 };
 

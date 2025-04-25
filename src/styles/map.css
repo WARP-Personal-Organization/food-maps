@@ -1,7 +1,7 @@
 .mapboxgl-map {
   height: 100%;
   width: 100%;
-  background-color: #3b3b3f  !important;
+  background-color: #3b3b3f !important;
   position: absolute;
   top: 0;
   left: 0;
@@ -13,7 +13,7 @@
 .map-container {
   height: 100%;
   width: 100%;
-  background-color: #3b3b3f  !important;
+  background-color: #3b3b3f !important;
   background-image: url('/FoodPrints-Map.png');
   background-size: cover;
   background-repeat: no-repeat;
@@ -22,11 +22,11 @@
 }
 
 .map-container::after {
-  content: "";
+  content: '';
   position: absolute;
   bottom: 120;
   right: 10;
-  width: 100px; 
+  width: 100px;
   height: 100px;
   background-image: url('/Compass.png');
   background-size: contain;
@@ -34,7 +34,6 @@
   background-position: bottom right;
   pointer-events: none;
 }
-
 
 .mapboxgl-canvas {
   width: 100% !important;
