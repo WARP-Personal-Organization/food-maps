@@ -1,0 +1,47 @@
+/**
+ * BACKUP OF DEPRECATED PAGE
+ * Original location: src/app/food-map/establishment/page.tsx
+ * Reason for deprecation: Used the deprecated EstablishmentDetail component
+ * Date of deprecation: [Current Date]
+ */
+
+'use client';
+
+import { useState } from 'react';
+// import EstablishmentDetail from '@/components/EstablishmentDetail';
+
+export default function EstablishmentPage() {
+  const [showDetail, setShowDetail] = useState(true);
+
+  return (
+    <div className="relative min-h-screen bg-gray-50">
+      {/* Main Content */}
+      <div className="p-6">
+        <h1 className="text-2xl font-bold mb-4">Food Establishment Demo</h1>
+        <button
+          onClick={() => setShowDetail(true)}
+          className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded"
+        >
+          Show Establishment Detail
+        </button>
+      </div>
+
+      {/* Establishment Detail Modal - Component has been deprecated */}
+      {showDetail && (
+        <div className="fixed inset-0 z-50 bg-white flex items-center justify-center">
+          <div className="p-8 text-center">
+            <h2 className="text-2xl font-bold mb-4">Component Deprecated</h2>
+            <p className="mb-4">This demo used the deprecated EstablishmentDetail component.</p>
+            <p className="mb-6">Please use LocationDetailPanel instead for similar functionality.</p>
+            <button
+              onClick={() => setShowDetail(false)}
+              className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded"
+            >
+              Close
+            </button>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+} 

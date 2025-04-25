@@ -1,3 +1,10 @@
+/**
+ * BACKUP OF DEPRECATED COMPONENT
+ * Original location: src/components/EstablishmentDetail.tsx
+ * Reason for deprecation: Replaced by LocationDetailPanel.tsx which is more integrated with the application
+ * Date of deprecation: [Current Date]
+ */
+
 import React, { useState } from 'react';
 import Image from 'next/image';
 import { FaTimes } from 'react-icons/fa';
@@ -200,4 +207,4 @@ const EstablishmentDetail: React.FC<EstablishmentDetailProps> = ({
   );
 };
 
-export default EstablishmentDetail;
+export default EstablishmentDetail; 

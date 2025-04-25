@@ -34,10 +34,10 @@ yarn dev
 
 ## Using the Map Component
 
-The `MapComponent` can be used in your pages as follows:
+The `FoodMapRenderer` can be used in your pages as follows:
 
 ```tsx
-import MapComponent from '../components/MapComponent';
+import FoodMapRenderer from '../components/FoodMapRenderer';
 
 // Example locations
 const locations = [
@@ -65,7 +65,7 @@ export default function MyPage() {
 
   return (
     <div style={{ height: '500px', width: '100%' }}>
-      <MapComponent
+      <FoodMapRenderer
         locations={locations}
         mapBounds={[
           [15.1, 10.4], // [minY, minX]
@@ -82,10 +82,10 @@ export default function MyPage() {
 
 ## Using a Custom SVG Map
 
-The `MapComponent` also supports displaying a custom SVG map image as an overlay. This is useful when you want to use your own map design or a stylized map:
+The `FoodMapRenderer` also supports displaying a custom SVG map image as an overlay. This is useful when you want to use your own map design or a stylized map:
 
 ```tsx
-<MapComponent
+<FoodMapRenderer
   locations={locations}
   mapBounds={mapBounds}
   mapImageUrl="/path/to/your/map.svg" // Path to your SVG map in the public folder
@@ -106,7 +106,7 @@ This allows you to use your own custom-designed maps while still taking advantag
 
 ## Coordinate System
 
-The MapComponent uses a custom coordinate system that is converted to Mapbox's longitude/latitude system. When you provide `x` and `y` coordinates:
+The FoodMapRenderer uses a custom coordinate system that is converted to Mapbox's longitude/latitude system. When you provide `x` and `y` coordinates:
 
 - `x` coordinates are mapped to longitude values (must be between -180 and 180 in the real world)
 - `y` coordinates are mapped to latitude values (must be between -90 and 90 in the real world)
@@ -130,7 +130,7 @@ You can use different map styles by specifying the `mapStyle` prop:
 - Satellite: `mapbox://styles/mapbox/satellite-v9`
 - Satellite Streets: `mapbox://styles/mapbox/satellite-streets-v12`
 
-## Map Component Props
+## FoodMapRenderer Props
 
 | Prop              | Type                                   | Description                                                      |
 | ----------------- | -------------------------------------- | ---------------------------------------------------------------- |

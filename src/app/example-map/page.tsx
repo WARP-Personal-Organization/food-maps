@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import MapComponent from '../../components/MapComponent';
+import FoodMapRenderer from '../../components/FoodMapRenderer';
 import { Location } from '@/lib/locationData';
 
 export default function ExampleMapPage() {
@@ -15,24 +15,24 @@ export default function ExampleMapPage() {
       x: 20,
       y: 30,
       description: 'A delicious restaurant with local cuisine',
-      iconType: 'siopao',
-      siopaoVariant: 1,
+      iconType: 'restaurant',
+      iconUrl: '/siopao-1.png',
     },
     {
       name: 'Shop B',
       x: 30,
       y: 40,
       description: 'A popular shopping destination',
-      iconType: 'siopao',
-      siopaoVariant: 2,
+      iconType: 'shop',
+      iconUrl: '/siopao-2.png',
     },
     {
       name: 'Attraction C',
       x: 25,
       y: 35,
       description: 'A must-visit tourist attraction',
-      iconType: 'siopao',
-      siopaoVariant: 3,
+      iconType: 'attraction',
+      iconUrl: '/siopao-3.png',
     },
   ];
 
@@ -52,7 +52,7 @@ export default function ExampleMapPage() {
       <h1 className="text-2xl font-bold mb-4">Example Map</h1>
 
       <div className="mb-4">
-        <p>This is an example of the MapComponent using Mapbox GL JS.</p>
+        <p>This is an example of the FoodMapRenderer using Mapbox GL JS.</p>
         <p>Click on a marker to see more information about the location.</p>
 
         {/* Toggle button for custom map */}
@@ -75,7 +75,7 @@ export default function ExampleMapPage() {
 
       {/* Map container with fixed height */}
       <div className="h-[600px] w-full border border-gray-300 rounded-lg overflow-hidden">
-        <MapComponent
+        <FoodMapRenderer
           locations={locations}
           mapBounds={mapBounds}
           defaultZoom={11}
