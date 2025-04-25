@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import { Location } from '@/lib/locationData';
 import { ilonggoDishes } from '@/lib/dishData';
+import Image from 'next/image';
 
 interface FilterDishesViewProps {
   activeFilters: string[];
@@ -286,21 +287,9 @@ const FilterDishesView: React.FC<FilterDishesViewProps> = ({
     <div className="h-full w-full flex flex-col bg-white overflow-hidden z-40 max-w-[540px] mx-auto sm:max-w-none">
       {/* Header Section */}
       <div className="relative w-full bg-white">
-        <div className="flex items-center p-3 lg:p-4">
-          <span className="font-medium text-xl lg:text-2xl flex items-center">
-            <svg
-              width="20"
-              height="20"
-              viewBox="0 0 24 24"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-              className="mr-2"
-            >
-              <path
-                d="M3 4H21V6H3V4ZM9 11H21V13H9V11ZM3 18H21V20H3V18Z"
-                fill="currentColor"
-              />
-            </svg>
+        <div className="flex items-center p-8">
+          <span className="font-bold text-xl lg:text-2xl flex items-center">
+          <Image src="/filter-icon.png" alt="Filter" width={24} height={24} className='mr-2'/>
             Filter Dishes
           </span>
           {/* Close Button */}
