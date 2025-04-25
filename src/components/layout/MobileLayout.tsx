@@ -1,9 +1,9 @@
-import React from 'react';
-import { GoArrowRight } from 'react-icons/go';
-import { Dish } from '@/lib/dishData';
-import DishImage from '../dishes/DishImage';
-import FoodPrintsNavbar from '../FoooPrintsNavbar';
-import { useRouter } from 'next/navigation';
+import React from "react";
+import { GoArrowRight } from "react-icons/go";
+import { Dish } from "@/lib/dishData";
+import DishImage from "../dishes/DishImage";
+import FoodPrintsNavbar from "../FoooPrintsNavbar";
+import { useRouter } from "next/navigation";
 
 interface MobileLayoutProps {
   dishes: Dish[];
@@ -26,7 +26,7 @@ const MobileLayout: React.FC<MobileLayoutProps> = ({
   const router = useRouter();
 
   const handleWhereToEat = () => {
-    if (activeDish.href === '/food-map') {
+    if (activeDish.href === "/food-map") {
       router.push(
         `/food-map?dish=${encodeURIComponent(activeDish.name)}&view=map`
       );
@@ -36,17 +36,17 @@ const MobileLayout: React.FC<MobileLayoutProps> = ({
   };
 
   return (
-    <div className="max-[899px]:flex hidden flex-col h-screen bg-white">
+    <div className="max-[899px]:flex hidden flex-col h-screen bg-gray-100">
       <section className="fixed top-0 z-30 w-full">
         <FoodPrintsNavbar />
       </section>
 
       {/* Top Image */}
-      <div className="relative h-[45vh] w-full">
+      <div className="relative w-full aspect-square">
         <DishImage
           dish={activeDish}
           className="relative h-full w-full"
-          imageClassName="z-10"
+          imageClassName="z-10 object-cover"
           onTouchStart={handleTouchStart}
           onTouchEnd={handleTouchEnd}
           priority
@@ -54,10 +54,10 @@ const MobileLayout: React.FC<MobileLayoutProps> = ({
       </div>
 
       {/* Bottom Content */}
-      <div className="bg-white flex flex-col h-[55vh] p-6 overflow-y-auto">
+      <div className="bg-white flex flex-col rounded-t-lg w-full p-[24px] pt-[32px] gap-[20px] overflow-y-auto -mt-[10%] z-10 relative">
         {/* Dish Name and Navigation */}
-        <div className="flex justify-between items-center mb-2">
-          <h1 className="text-3xl font-bold text-gray-900">
+        <div className="flex items-center justify-between h-10 gap-4 mb-2">
+          <h1 className="text-3xl font-bold text-[#202020]">
             {activeDish.name}
           </h1>
 
@@ -65,28 +65,30 @@ const MobileLayout: React.FC<MobileLayoutProps> = ({
           <div className="flex items-center gap-2">
             <button
               onClick={onPrev}
-              className="h-10 w-10 rounded-full bg-gray-100 flex items-center justify-center focus:outline-none cursor-pointer hover:bg-gray-200 transition-colors"
+              className="h-10 w-10 p-2 rounded-full bg-[#ebebeb] flex items-center justify-center focus:outline-none 
+              cursor-pointer hover:bg-gray-200 transition-colors"
               aria-label="Previous dish"
             >
-              <span className="text-gray-500 text-sm">❮</span>
+              <span className="text-[#c2c2c2] text-sm">❮</span>
             </button>
             <button
               onClick={onNext}
-              className="h-10 w-10 rounded-full bg-[#F9D408] flex items-center justify-center focus:outline-none cursor-pointer hover:bg-[#E6C207] transition-colors"
+              className="h-10 w-10 p-2 rounded-full bg-[#F9D408] flex items-center justify-center focus:outline-none 
+              cursor-pointer hover:bg-[#E6C207] transition-colors"
               aria-label="Next dish"
             >
-              <span className="text-black text-sm">❯</span>
+              <span className="text-[#202020] text-sm">❯</span>
             </button>
           </div>
         </div>
 
         {/* Tagline */}
-        <h3 className="italic text-gray-600 mb-4 text-lg">
+        <h3 className="italic font-semibold text-base text-[#7c7c7c]">
           {activeDish.tagline}
         </h3>
 
         {/* Description */}
-        <div className="text-gray-700 mb-6">
+        <div className="text-[#2a2a2a] mb-6">
           <p className="leading-relaxed">{activeDish.description}</p>
         </div>
 
@@ -94,17 +96,18 @@ const MobileLayout: React.FC<MobileLayoutProps> = ({
         <div className="flex-grow"></div>
 
         {/* Swipe Indicator */}
-        <div className="border-t border-gray-200 pt-4 mb-4">
-          <p className="flex items-center justify-center text-gray-600 text-sm">
-            Swipe to see other Ilonggo top dishes{' '}
-            <GoArrowRight className="ml-2" />
+        <div className="border-t border-text-[#c2c2c2] pt-4 mb-4">
+          <p className="flex items-center justify-center text-[#7c7c7c] text-sm">
+            Swipe to see other Ilonggo top dishes{" "}
+            <GoArrowRight className="ml-2 text-[#7c7c7c]" />
           </p>
         </div>
 
         {/* Button */}
         <button
           onClick={handleWhereToEat}
-          className="w-full bg-[#F9D408] text-black font-semibold py-4 rounded-lg text-center inline-block cursor-pointer hover:bg-[#E6C207] transition-colors shadow-sm"
+          className="w-full bg-[#F9D408] font-bold py-4 rounded-sm text-[#3b3b3b] text-base text-center inline-block 
+          cursor-pointer hover:bg-[#E6C207] transition-colors shadow-sm"
         >
           Where to Eat
         </button>
