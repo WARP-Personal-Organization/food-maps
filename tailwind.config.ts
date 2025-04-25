@@ -17,6 +17,10 @@ const config: ExtendedConfig = {
   safelist: ['3xl:h-96', '2xl:h-80', 'xl:h-72', 'lg:h-64', 'h-56'],
   theme: {
     extend: {
+      fontFamily: {
+        sans: ['var(--font-open-sans)'],
+        faustina: ['var(--font-faustina)'],
+      },
       screens: {
         '3xl': '1920px',
       },

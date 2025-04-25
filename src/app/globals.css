@@ -148,3 +148,7 @@
   /* Safari and Chrome */
   display: block;
 }
+
+h1 {
+  font-family: var(--font-faustina);
+}
