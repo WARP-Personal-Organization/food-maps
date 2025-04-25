@@ -5,47 +5,51 @@ import mapboxgl from 'mapbox-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
 import '../styles/map.css';
 import { Location } from '@/lib/locationData';
+import { FoodPrint } from '@/lib/foodPrintsData';
 
 interface MapComponentProps {
   locations: Location[];
-  mapImageUrl?: string; // URL to the custom map image (SVG or other formats)
-  mapBounds: [[number, number], [number, number]]; // Bounds in [y, x] format: [[minY, minX], [maxY, maxX]]
+  foodPrintMarkers?: FoodPrint[];
+  mapImageUrl?: string;
+  mapBounds: [[number, number], [number, number]];
   defaultZoom?: number;
   onLocationClick?: (location: Location) => void;
-  mapboxToken?: string; // Mapbox access token
-  mapStyle?: string; // Mapbox style URL
-  useCustomMap?: boolean; // Whether to use a custom map image
+  onFoodPrintClick?: (foodPrint: FoodPrint) => void;
+  mapboxToken?: string;
+  mapStyle?: string;
+  useCustomMap?: boolean;
 }
 
 const MapComponent: React.FC<MapComponentProps> = ({
   locations = [],
-  mapImageUrl = '/Map.png', // Change default from SVG to PNG for consistency
+  foodPrintMarkers = [],
+  mapImageUrl = '/Map.png',
   mapBounds = [
     [0, 0],
     [1000, 1000],
   ],
   defaultZoom = 12,
   onLocationClick,
+  onFoodPrintClick,
   mapboxToken = process.env.NEXT_PUBLIC_MAPBOX_TOKEN ||
     process.env.NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN ||
-    '', // Check both environment variables
-  mapStyle = 'mapbox://styles/mapbox/streets-v12', // Default to streets style
-  useCustomMap = false, // Default to using Mapbox's map
+    '',
+  mapStyle = 'mapbox://styles/mapbox/streets-v12',
+  useCustomMap = false,
 }) => {
   const mapContainerRef = useRef<HTMLDivElement>(null);
   const mapInstanceRef = useRef<mapboxgl.Map | null>(null);
   const markersRef = useRef<mapboxgl.Marker[]>([]);
   const [mounted, setMounted] = useState(false);
   const popupRef = useRef<mapboxgl.Popup | null>(null);
-  const customMapRef = useRef<string | null>(null); // Reference to custom map source ID
-  // Add a ref to track if map is already initialized to prevent re-initialization
+  const customMapRef = useRef<string | null>(null);
   const mapInitializedRef = useRef<boolean>(false);
+  const [locationsSnapshot, setLocationsSnapshot] = useState<Location[]>([]);
 
   // Set Mapbox access token
   mapboxgl.accessToken = mapboxToken;
 
   // Helper function to convert our x,y coordinates to Mapbox lng,lat
-  // Mapbox requires longitude values between -180 and 180, and latitude values between -90 and 90
   const xyToLngLat = (x: number, y: number): [number, number] => {
     // Get the min/max bounds from the mapBounds
     const minX = mapBounds[0][1];
@@ -57,10 +61,9 @@ const MapComponent: React.FC<MapComponentProps> = ({
     const normalizedX = (x - minX) / (maxX - minX);
     const normalizedY = (y - minY) / (maxY - minY);
 
-    // Convert to Mapbox coordinate ranges
-    // Using a limited range to prevent repetition
-    const lng = -30 + normalizedX * 60; // Scale to range -30 to 30
-    const lat = -30 + normalizedY * 60; // Scale to range -30 to 30
+    // Convert to Mapbox coordinate ranges - using a wider range
+    const lng = -40 + normalizedX * 80; // Scale to range -40 to 40
+    const lat = -40 + normalizedY * 80; // Scale to range -40 to 40
 
     return [lng, lat];
   };
@@ -78,158 +81,142 @@ const MapComponent: React.FC<MapComponentProps> = ({
     };
   }, []);
 
-  // Add resize handler to ensure map fills container
+  // Force render markers whenever locations change
   useEffect(() => {
-    if (!mapInstanceRef.current) return;
-
-    const handleResize = () => {
-      if (mapInstanceRef.current) {
-        // Resize the map to fit the new container size
-        mapInstanceRef.current.resize();
-
-        // Get the current bounds and maintain them during resize
-        const currentBounds = mapInstanceRef.current.getBounds();
-
-        // Apply the same bounds after resize to maintain the same view
-        mapInstanceRef.current.fitBounds(currentBounds, {
-          padding: 20,
-        });
-      }
-    };
-
-    // Handle resize when container size changes
-    const resizeObserver = new ResizeObserver(handleResize);
-    if (mapContainerRef.current) {
-      resizeObserver.observe(mapContainerRef.current);
+    const locationsDiff =
+      JSON.stringify(locations) !== JSON.stringify(locationsSnapshot);
+    if (locationsDiff) {
+      setLocationsSnapshot(locations);
+      console.log('Locations changed, will update markers');
     }
+  }, [locations]);
 
-    return () => {
-      if (mapContainerRef.current) {
-        resizeObserver.unobserve(mapContainerRef.current);
-      }
-      resizeObserver.disconnect();
-    };
-  }, [mapInstanceRef.current]);
-
-  // Add a debugging function to log map state
-  const logMapState = () => {
-    console.log('Map state:', {
-      hasMap: !!mapInstanceRef.current,
-      initialized: mapInitializedRef.current,
-      locations: locations.length,
-      customMapRef: customMapRef.current,
-      mapImageUrl,
-      useCustomMap,
-    });
-  };
-
-  // Initialize map when component mounts or when key props change
+  // Main effect to initialize map or update markers
   useEffect(() => {
-    logMapState();
-
     // Only run on client side
-    if (!mounted || !mapboxToken) return;
+    if (!mounted || !mapboxToken || !mapContainerRef.current) return;
 
-    // Initialize map only if container exists
-    if (!mapContainerRef.current) return;
-
-    // Skip initialization if the map is already initialized
-    // AND no critical props have changed
-    if (mapInstanceRef.current && mapInitializedRef.current) {
-      // If the map is already initialized, but locations have changed
-      // Just update the markers without recreating the map
-      updateMarkers();
-      return;
-    }
-
-    // Create a function to initialize the map to make it more organized
     const initializeMap = () => {
-      // Clean up existing map instance if it exists
+      console.log(
+        'Initializing map with',
+        locations.length,
+        'locations and',
+        foodPrintMarkers.length,
+        'food prints'
+      );
+
+      // Clean up existing map if it exists
       if (mapInstanceRef.current) {
         console.log('Removing existing map instance');
         mapInstanceRef.current.remove();
       }
 
-      console.log(
-        'Creating new map instance with custom map:',
-        useCustomMap,
-        mapImageUrl
-      );
-
       // Create a new map instance
       const map = new mapboxgl.Map({
         container: mapContainerRef.current!,
-        style: useCustomMap ? 'mapbox://styles/mapbox/empty-v9' : mapStyle, // Use empty style if using custom map
+        style: useCustomMap ? 'mapbox://styles/mapbox/empty-v9' : mapStyle,
         zoom: defaultZoom,
-        center: [0, 0], // Center at the coordinate system origin
-        attributionControl: false, // We'll add this manually in a better position
-        renderWorldCopies: false, // Prevent the map from repeating across the world
-        interactive: true, // Allow zooming and panning
+        center: [0, 0],
+        attributionControl: false,
+        renderWorldCopies: false,
+        interactive: true,
       });
 
       // Function to add markers to the map
       const addMarkers = () => {
-        console.log(`Adding ${locations.length} markers to map`);
+        console.log(
+          `Adding ${locations.length} locations and ${foodPrintMarkers.length} food prints to map`
+        );
+
         // Clear existing markers
         markersRef.current.forEach((marker) => marker.remove());
         markersRef.current = [];
 
-        // Add new markers for each location
+        // Combine both location and food print data for bounds calculation
+        const allPoints = [
+          ...locations.filter(
+            (loc) =>
+              typeof loc.x === 'number' &&
+              typeof loc.y === 'number' &&
+              !isNaN(loc.x) &&
+              !isNaN(loc.y)
+          ),
+          ...foodPrintMarkers.filter(
+            (fp) =>
+              typeof fp.x === 'number' &&
+              typeof fp.y === 'number' &&
+              !isNaN(fp.x) &&
+              !isNaN(fp.y)
+          ),
+        ];
+
+        if (allPoints.length === 0) {
+          console.warn('No valid points found');
+          return;
+        }
+
+        // Pre-compute bounds from all valid points
+        const bounds = new mapboxgl.LngLatBounds();
+        allPoints.forEach((point) => {
+          const [lng, lat] = xyToLngLat(point.x, point.y);
+          bounds.extend([lng, lat]);
+        });
+
+        // Add more padding to the bounds
+        const sw = bounds.getSouthWest();
+        const ne = bounds.getNorthEast();
+        const lngBuffer = Math.abs(ne.lng - sw.lng) * 0.2; // 20% buffer
+        const latBuffer = Math.abs(ne.lat - sw.lat) * 0.2; // 20% buffer
+        const expandedBounds = new mapboxgl.LngLatBounds(
+          [sw.lng - lngBuffer, sw.lat - latBuffer],
+          [ne.lng + lngBuffer, ne.lat + latBuffer]
+        );
+
+        // Add location markers
         locations.forEach((location) => {
-          // Skip invalid locations
           if (
             typeof location.x !== 'number' ||
             typeof location.y !== 'number' ||
             isNaN(location.x) ||
             isNaN(location.y)
           ) {
-            console.warn(`Skipping invalid location: ${location.name}`);
-            return;
+            return; // Skip invalid locations
           }
-
-          // Create a DOM element for the marker
           const markerElement = document.createElement('div');
-          markerElement.className = 'custom-marker';
+          markerElement.className = 'custom-marker location-marker'; // Class for locations
 
           // Add appropriate icon based on location type
           switch (location.iconType) {
-            case 'siopao':
-              // Use siopao variant or default to variant 1
-              const siopaoVariant = location.siopaoVariant || 1;
-              markerElement.innerHTML = `
-                <div class="marker-icon siopao-marker">
-                  <img src="/siopao-${siopaoVariant}.png" alt="Siopao Marker" style="width: 36px; height: auto;" />
-                </div>
-              `;
-              break;
             case 'restaurant':
-              // Instead of using the restaurant marker, use siopao-1 by default for restaurants
               markerElement.innerHTML = `
-                <div class="marker-icon siopao-marker">
-                  <img src="/siopao-1.png" alt="Siopao Marker" style="width: 36px; height: auto;" />
+                <div class="marker-icon restaurant-marker">
+                  <img src="${location.iconUrl || '/siopao-1.png'}" alt="${
+                location.name
+              } Marker" style="width: 36px; height: auto; filter: drop-shadow(0px 3px 3px rgba(0, 0, 0, 0.4));" />
                 </div>
               `;
               break;
             case 'shop':
               markerElement.innerHTML = `
                 <div class="marker-icon shop-marker">
-                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
-                    <path fill="#2196F3" d="M18 6h-2c0-2.21-1.79-4-4-4S8 3.79 8 6H6c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2zm-8 4c0 .55-.45 1-1 1s-1-.45-1-1V8h2v2zm3-4c1.1 0 2 .9 2 2H9c0-1.1.9-2 2-2zm3 4c0 .55-.45 1-1 1s-1-.45-1-1V8h2v2z"/>
-                  </svg>
+                  <img src="${location.iconUrl || '/shop-icon.png'}" alt="${
+                location.name
+              } Marker" style="width: 36px; height: auto; filter: drop-shadow(0px 3px 3px rgba(0, 0, 0, 0.4));" />
                 </div>
               `;
               break;
             case 'attraction':
               markerElement.innerHTML = `
                 <div class="marker-icon attraction-marker">
-                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
-                    <path fill="#FFC107" d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/>
-                  </svg>
+                  <img src="${
+                    location.iconUrl || '/attraction-icon.png'
+                  }" alt="${
+                location.name
+              } Marker" style="width: 36px; height: auto; filter: drop-shadow(0px 3px 3px rgba(0, 0, 0, 0.4));" />
                 </div>
               `;
               break;
             default:
-              // Default marker or custom icon URL
               if (location.iconUrl) {
                 markerElement.innerHTML = `
                   <div class="marker-icon custom-icon-marker">
@@ -237,93 +224,96 @@ const MapComponent: React.FC<MapComponentProps> = ({
                   </div>
                 `;
               } else {
-                // Use siopao-1 as default marker
                 markerElement.innerHTML = `
                   <div class="marker-icon default-marker">
-                    <img src="/siopao-1.png" alt="Siopao Marker" style="width: 36px; height: auto;" />
+                    <img src="/siopao-1.png" alt="${location.name} Marker" style="width: 36px; height: auto; filter: drop-shadow(0px 3px 3px rgba(0, 0, 0, 0.4));" />
                   </div>
                 `;
               }
           }
 
-          // Convert x,y to lng,lat for Mapbox
           const [lng, lat] = xyToLngLat(location.x, location.y);
-
-          // Create the marker and add it to the map
           const marker = new mapboxgl.Marker(markerElement)
             .setLngLat([lng, lat])
             .addTo(map);
 
-          // Add popup with location information
-          marker.getElement().addEventListener('click', () => {
-            // Remove existing popup if any
+          marker.getElement().addEventListener('click', (e) => {
+            e.stopPropagation(); // Prevent map click event when clicking marker
             if (popupRef.current) {
               popupRef.current.remove();
             }
 
-            // Create a new popup
-            const popup = new mapboxgl.Popup({ offset: 25 })
-              .setLngLat([lng, lat])
-              .setHTML(`<b>${location.name}</b><br>${location.description}`)
-              .addTo(map);
-
-            // Store reference to popup
-            popupRef.current = popup;
-
-            // Call the onLocationClick callback if provided
+            // Just call the callback without showing popup
             if (onLocationClick) {
               onLocationClick(location);
             }
           });
 
-          // Add marker to references for cleanup
           markersRef.current.push(marker);
         });
 
-        // If we have multiple locations, fit the map to show all markers
-        if (locations.length > 1) {
-          // Filter out invalid locations
-          const validLocations = locations.filter(
-            (loc) =>
-              typeof loc.x === 'number' &&
-              typeof loc.y === 'number' &&
-              !isNaN(loc.x) &&
-              !isNaN(loc.y)
-          );
-
-          if (validLocations.length > 0) {
-            // Create a bounds object that encompasses all markers
-            const bounds = new mapboxgl.LngLatBounds();
-
-            // Extend bounds with each valid location
-            validLocations.forEach((loc) => {
-              const [lng, lat] = xyToLngLat(loc.x, loc.y);
-              bounds.extend([lng, lat]);
-            });
-
-            // Fit the map to the bounds
-            try {
-              map.fitBounds(bounds, {
-                padding: 50,
-                maxZoom: Math.max(defaultZoom, 5),
-              });
-            } catch (e) {
-              console.error('Error fitting to bounds:', e);
-            }
-          }
-        } else if (locations.length === 1) {
-          // Center on the single marker if it's valid
-          const location = locations[0];
+        // Add food print markers
+        foodPrintMarkers.forEach((fp) => {
           if (
-            typeof location.x === 'number' &&
-            typeof location.y === 'number' &&
-            !isNaN(location.x) &&
-            !isNaN(location.y)
+            typeof fp.x !== 'number' ||
+            typeof fp.y !== 'number' ||
+            isNaN(fp.x) ||
+            isNaN(fp.y)
           ) {
-            const [lng, lat] = xyToLngLat(location.x, location.y);
-            map.setCenter([lng, lat]);
-            map.setZoom(defaultZoom + 1);
+            return; // Skip invalid food prints
           }
+          const markerElement = document.createElement('div');
+          markerElement.className = 'custom-marker foodprint-marker'; // Class for food prints
+          markerElement.innerHTML = `
+            <div class="marker-icon foodprint-icon">
+              <img src="${fp.iconUrl || '/siopao-foodprint-marker.png'}" alt="${
+            fp.name
+          }" style="width: 40px; height: auto; filter: drop-shadow(0px 3px 3px rgba(0, 0, 0, 0.4));" />
+            </div>
+          `;
+
+          const [lng, lat] = xyToLngLat(fp.x, fp.y);
+          const marker = new mapboxgl.Marker(markerElement)
+            .setLngLat([lng, lat])
+            .addTo(map);
+
+          // Add popup for food print marker
+          marker.getElement().addEventListener('click', (e) => {
+            e.stopPropagation(); // Prevent map click event
+            if (popupRef.current) {
+              popupRef.current.remove();
+            }
+
+            // Just call the callback without showing popup
+            if (onFoodPrintClick) {
+              onFoodPrintClick(fp);
+            } else {
+              // Show the popup only if no callback is provided
+              const popup = new mapboxgl.Popup({
+                offset: 25,
+                closeButton: false,
+              })
+                .setLngLat([lng, lat])
+                .setHTML(
+                  `<div class="p-1"><b>${fp.name}</b><br>${fp.description}</div>`
+                )
+                .addTo(map);
+              popupRef.current = popup;
+            }
+          });
+
+          markersRef.current.push(marker);
+        });
+
+        // Ensure the map fits all points with padding
+        console.log('Fitting to bounds with', allPoints.length, 'points');
+        try {
+          map.fitBounds(expandedBounds, {
+            padding: 100,
+            maxZoom: defaultZoom < 3 ? defaultZoom : 3, // Limit zoom to ensure wider view
+          });
+        } catch (e) {
+          console.error('Error fitting to bounds:', e);
         }
       };
 
@@ -333,365 +323,132 @@ const MapComponent: React.FC<MapComponentProps> = ({
         .custom-marker {
           cursor: pointer;
           transition: transform 0.2s ease;
+          width: 40px;
+          height: 40px;
         }
         .custom-marker:hover {
           transform: scale(1.2);
         }
         .marker-icon {
-          width: 36px;
-          height: 36px;
+          width: 40px;
+          height: 40px;
           display: flex;
           justify-content: center;
           align-items: center;
+          position: relative;
         }
-        .siopao-marker {
+        .restaurant-marker {
           transform: translateY(-50%);
         }
       `;
       document.head.appendChild(style);
 
-      // Add attribution control in the bottom-left corner
+      // Add controls
       map.addControl(new mapboxgl.AttributionControl(), 'bottom-left');
-
-      // Add navigation controls (zoom, rotation) to the bottom-right corner
       map.addControl(new mapboxgl.NavigationControl(), 'bottom-right');
 
-      // Save reference to map instance
+      // Save reference to map
       mapInstanceRef.current = map;
       mapInitializedRef.current = true;
 
-      // Return cleanup function for inside initializeMap
-      map.on('remove', () => {
-        style.remove();
-      });
-
-      // Wait for the map to load before adding markers
+      // Wait for map to load before adding markers and custom map
       map.on('load', () => {
-        // Convert mapBounds to Mapbox format
-        const swCoord = xyToLngLat(mapBounds[0][1], mapBounds[0][0]);
-        const neCoord = xyToLngLat(mapBounds[1][1], mapBounds[1][0]);
-        const convertedBounds = new mapboxgl.LngLatBounds(swCoord, neCoord);
+        // Set background color
+        map.addLayer({
+          id: 'background-layer',
+          type: 'background',
+          paint: {
+            'background-color': '#3b3b3f',
+          },
+        });
 
-        // If using a custom map, add it as an image layer
         if (useCustomMap && mapImageUrl) {
-          // If we already have the custom map loaded
-          if (customMapRef.current) {
+          // Generate a unique source ID
+          const customMapSourceId = 'custom-map-' + Date.now();
+          customMapRef.current = customMapSourceId;
+
+          // Convert bounds for custom map
+          const swCoord = xyToLngLat(mapBounds[0][1], mapBounds[0][0]);
+          const neCoord = xyToLngLat(mapBounds[1][1], mapBounds[1][0]);
+
+          // Load custom map image
+          const mapImage = new Image();
+          mapImage.onload = () => {
             try {
-              // Try to fit map to bounds
-              map.fitBounds(convertedBounds, {
-                padding: 20,
-                maxZoom: Math.max(defaultZoom, 5),
+              // Add image, source and layer
+              map.addImage('custom-map-image', mapImage);
+              map.addSource(customMapSourceId, {
+                type: 'image',
+                url: mapImageUrl,
+                coordinates: [
+                  [swCoord[0], neCoord[1]], // Top left
+                  [neCoord[0], neCoord[1]], // Top right
+                  [neCoord[0], swCoord[1]], // Bottom right
+                  [swCoord[0], swCoord[1]], // Bottom left
+                ],
               });
-            } catch (e) {
-              console.error('Error fitting to bounds:', e);
+              map.addLayer({
+                id: 'custom-map-layer',
+                type: 'raster',
+                source: customMapSourceId,
+                paint: {
+                  'raster-opacity': 1,
+                },
+              });
+
+              // Add markers after map is loaded
+              addMarkers();
+            } catch (error) {
+              console.error('Error setting up custom map:', error);
+              addMarkers(); // Still try to add markers
             }
+          };
 
-            // Add markers
-            addMarkers();
-          } else {
-            // Generate a unique source ID for the custom map
-            const customMapSourceId = 'custom-map-' + Date.now();
-            customMapRef.current = customMapSourceId;
+          mapImage.onerror = () => {
+            console.error('Failed to load map image');
+            addMarkers(); // Still try to add markers
+          };
 
-            // Create a new image object to load the map image
-            const mapImage = new Image();
-            mapImage.onload = () => {
-              // Once the image is loaded, add it as a source
-              console.log('Map image loaded successfully:', mapImageUrl);
-              if (!map.hasImage('custom-map-image')) {
-                try {
-                  map.addImage('custom-map-image', mapImage);
-                } catch (error) {
-                  console.error('Error adding map image:', error);
-                }
-              }
-
-              // Add the image as a source if it doesn't exist yet
-              if (!map.getSource(customMapSourceId)) {
-                try {
-                  map.addSource(customMapSourceId, {
-                    type: 'image',
-                    url: mapImageUrl,
-                    coordinates: [
-                      [swCoord[0], neCoord[1]], // Top left [lng, lat]
-                      [neCoord[0], neCoord[1]], // Top right [lng, lat]
-                      [neCoord[0], swCoord[1]], // Bottom right [lng, lat]
-                      [swCoord[0], swCoord[1]], // Bottom left [lng, lat]
-                    ],
-                  });
-                } catch (error) {
-                  console.error('Error adding map source:', error);
-                }
-              }
-
-              // Add a layer for the custom map if it doesn't exist yet
-              if (!map.getLayer('custom-map-layer')) {
-                try {
-                  map.addLayer({
-                    id: 'custom-map-layer',
-                    type: 'raster',
-                    source: customMapSourceId,
-                    paint: {
-                      'raster-opacity': 1,
-                    },
-                  });
-                } catch (error) {
-                  console.error('Error adding map layer:', error);
-                }
-              }
-
-              // Set up event handlers for map movement to keep image coordinates consistent
-              map.on('move', () => {
-                // We can log or handle map movements here if needed
-                // console.log('Map moved');
-              });
-
-              // Fit map to bounds with adjusted padding
-              map.fitBounds(convertedBounds, {
-                padding: 20,
-                maxZoom: Math.max(defaultZoom, 5),
-              });
-
-              // Add markers after the custom map is loaded
-              addMarkers();
-            };
-
-            // Handle image loading errors
-            mapImage.onerror = () => {
-              console.error('Failed to load custom map image:', mapImageUrl);
-
-              // Fallback to just showing markers
-              map.fitBounds(convertedBounds, {
-                padding: 20,
-                maxZoom: Math.max(defaultZoom, 5),
-              });
-
-              addMarkers();
-            };
-
-            // Start loading the image
-            mapImage.src = mapImageUrl;
-          }
+          mapImage.src = mapImageUrl;
         } else {
-          // If not using custom map, just fit to bounds and add markers
-          try {
-            map.fitBounds(convertedBounds, {
-              padding: 20,
-              maxZoom: Math.max(defaultZoom, 5),
-            });
-          } catch (e) {
-            console.error('Error fitting to bounds:', e);
-          }
-
-          // Add markers
+          // Just add markers if not using custom map
           addMarkers();
         }
       });
+
+      // Clean up when map is removed
+      map.on('remove', () => {
+        style.remove();
+      });
     };
 
-    // If using a custom map, preload the image first to avoid flickering
-    if (useCustomMap && mapImageUrl) {
-      console.log('Preloading custom map image:', mapImageUrl);
-      // Preload the image before initializing the map
-      const preloadImage = new Image();
-      preloadImage.onload = () => {
-        // Once the image is loaded, initialize the map
-        console.log('Custom map image preloaded successfully');
-        initializeMap();
-      };
-      preloadImage.onerror = (error) => {
-        console.error(
-          'Failed to preload custom map image:',
-          mapImageUrl,
-          error
-        );
-        // Initialize map anyway even if preloading fails
-        initializeMap();
-      };
-      preloadImage.src = mapImageUrl;
-    } else {
-      // If not using a custom map, initialize immediately
-      initializeMap();
-    }
+    // Initialize map
+    initializeMap();
 
-    // Return cleanup function
+    // Cleanup function
     return () => {
       if (mapInstanceRef.current) {
         mapInstanceRef.current.remove();
         mapInstanceRef.current = null;
         mapInitializedRef.current = false;
-        customMapRef.current = null; // Reset custom map reference
       }
     };
   }, [
-    mapboxToken,
     mounted,
-    mapStyle,
-    // Only re-create the map if these core map configuration props change
-    mapBounds,
-    defaultZoom,
+    mapboxToken,
     mapImageUrl,
+    mapStyle,
     useCustomMap,
-    // Adding a locations.length dependency to ensure map re-renders when filter changes
-    locations.length,
+    defaultZoom,
+    locationsSnapshot, // Use snapshot to trigger rerenders when locations change
+    foodPrintMarkers,
   ]);
-
-  // Create a separate effect for updating markers only (not locations.length)
-  // This prevents recreating the entire map when only marker details change
-  useEffect(() => {
-    if (mapInstanceRef.current && mapInitializedRef.current) {
-      updateMarkers();
-    }
-  }, [locations, onLocationClick]);
-
-  // Function to update markers without re-creating the map
-  const updateMarkers = () => {
-    if (!mapInstanceRef.current) return;
-
-    // Clear existing markers
-    markersRef.current.forEach((marker) => marker.remove());
-    markersRef.current = [];
-
-    // Add new markers for each location
-    locations.forEach((location) => {
-      // Skip invalid locations
-      if (
-        typeof location.x !== 'number' ||
-        typeof location.y !== 'number' ||
-        isNaN(location.x) ||
-        isNaN(location.y)
-      ) {
-        console.warn(`Skipping invalid location: ${location.name}`);
-        return;
-      }
-
-      // Create marker element and add it to the map
-      // (using the same marker creation code from the addMarkers function)
-      const markerElement = document.createElement('div');
-      markerElement.className = 'custom-marker';
-
-      // Add appropriate icon based on location type
-      switch (location.iconType) {
-        case 'siopao':
-          // Use siopao variant or default to variant 1
-          const siopaoVariant = location.siopaoVariant || 1;
-          markerElement.innerHTML = `
-            <div class="marker-icon siopao-marker">
-              <img src="/siopao-${siopaoVariant}.png" alt="Siopao Marker" style="width: 36px; height: auto;" />
-            </div>
-          `;
-          break;
-        case 'restaurant':
-          // Instead of using the restaurant marker, use siopao-1 by default for restaurants
-          markerElement.innerHTML = `
-            <div class="marker-icon siopao-marker">
-              <img src="/siopao-1.png" alt="Restaurant Marker" style="width: 36px; height: auto;" />
-            </div>
-          `;
-          break;
-        default:
-          // Check if location has a custom icon URL
-          if (location.iconUrl) {
-            markerElement.innerHTML = `
-              <div class="marker-icon custom-icon-marker">
-                <img src="${location.iconUrl}" alt="${location.name}" style="width: 36px; height: auto; filter: drop-shadow(0px 3px 3px rgba(0, 0, 0, 0.4));" />
-              </div>
-            `;
-          } else {
-            // Use siopao-1 as default marker
-            markerElement.innerHTML = `
-              <div class="marker-icon default-marker">
-                <img src="/siopao-1.png" alt="Siopao Marker" style="width: 36px; height: auto;" />
-              </div>
-            `;
-          }
-      }
-
-      // Convert x,y to lng,lat for Mapbox
-      const [lng, lat] = xyToLngLat(location.x, location.y);
-
-      // Create the marker and add it to the map
-      const marker = new mapboxgl.Marker(markerElement)
-        .setLngLat([lng, lat])
-        .addTo(mapInstanceRef.current!);
-
-      // Add popup with location information
-      marker.getElement().addEventListener('click', () => {
-        // Remove existing popup if any
-        if (popupRef.current) {
-          popupRef.current.remove();
-        }
-
-        // Create a new popup
-        const popup = new mapboxgl.Popup({ offset: 25 })
-          .setLngLat([lng, lat])
-          .setHTML(`<b>${location.name}</b><br>${location.description}`)
-          .addTo(mapInstanceRef.current!);
-
-        // Store reference to popup
-        popupRef.current = popup;
-
-        // Call the onLocationClick callback if provided
-        if (onLocationClick) {
-          onLocationClick(location);
-        }
-      });
-
-      // Add marker to references for cleanup
-      markersRef.current.push(marker);
-    });
-
-    // If we have multiple locations, fit the map to show all markers
-    if (locations.length > 1) {
-      // Filter out invalid locations
-      const validLocations = locations.filter(
-        (loc) =>
-          typeof loc.x === 'number' &&
-          typeof loc.y === 'number' &&
-          !isNaN(loc.x) &&
-          !isNaN(loc.y)
-      );
-
-      if (validLocations.length > 0) {
-        // Create a bounds object that encompasses all markers
-        const bounds = new mapboxgl.LngLatBounds();
-
-        // Extend bounds with each valid location
-        validLocations.forEach((loc) => {
-          const [lng, lat] = xyToLngLat(loc.x, loc.y);
-          bounds.extend([lng, lat]);
-        });
-
-        // Fit the map to the bounds
-        try {
-          mapInstanceRef.current.fitBounds(bounds, {
-            padding: 50,
-            maxZoom: Math.max(defaultZoom, 5),
-          });
-        } catch (e) {
-          console.error('Error fitting to bounds:', e);
-        }
-      }
-    } else if (locations.length === 1) {
-      // Center on the single marker if it's valid
-      const location = locations[0];
-      if (
-        typeof location.x === 'number' &&
-        typeof location.y === 'number' &&
-        !isNaN(location.x) &&
-        !isNaN(location.y)
-      ) {
-        const [lng, lat] = xyToLngLat(location.x, location.y);
-        mapInstanceRef.current.setCenter([lng, lat]);
-        mapInstanceRef.current.setZoom(defaultZoom + 1);
-      }
-    }
-  };
 
   return (
     <div
       ref={mapContainerRef}
       className="map-container w-full h-full"
+      style={{ backgroundColor: '#3b3b3f' }}
     ></div>
   );
 };
