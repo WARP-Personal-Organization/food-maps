@@ -84,7 +84,7 @@ const LocationDetailPanel: React.FC<LocationDetailPanelProps> = ({
                 <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zM12 11.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z" />
               </svg>
             </div>
-            <p className="text-sm text-gray-500 leading-tight md:text-xs lg:text-[10px] xl:text-sm 2xl:text-lg">
+            <p className="text-sm text-gray-500 leading-tight md:text-xs lg:text-[10px] xl:text-sm 2xl:text-lg font-medium">
               {address}
             </p>
           </div>
@@ -103,7 +103,7 @@ const LocationDetailPanel: React.FC<LocationDetailPanelProps> = ({
                 <path d="M12.5 7H11v6l5.25 3.15.75-1.23-4.5-2.67z" />
               </svg>
             </div>
-            <p className="text-sm text-gray-500 md:text-xs lg:text-xs xl:text-sm 2xl:text-lg">
+            <p className="text-sm text-gray-500 md:text-xs lg:text-xs xl:text-sm 2xl:text-lg font-medium">
               {openHours}
             </p>
           </div>
@@ -121,7 +121,7 @@ const LocationDetailPanel: React.FC<LocationDetailPanelProps> = ({
                 <path d="M11.8 10.9c-2.27-.59-3-1.2-3-2.15 0-1.09 1.01-1.85 2.7-1.85 1.78 0 2.44.85 2.5 2.1h2.21c-.07-1.72-1.12-3.3-3.21-3.81V3h-3v2.16c-1.94.42-3.5 1.68-3.5 3.61 0 2.31 1.91 3.46 4.7 4.13 2.5.6 3 1.48 3 2.41 0 .69-.49 1.79-2.7 1.79-2.06 0-2.87-.92-2.98-2.1h-2.2c.12 2.19 1.76 3.42 3.68 3.83V21h3v-2.15c1.95-.37 3.5-1.5 3.5-3.55 0-2.84-2.43-3.81-4.7-4.4z" />
               </svg>
             </div>
-            <p className="text-sm text-gray-500 md:text-xs lg:text-xs xl:text-sm 2xl:text-lg">
+            <p className="text-sm text-gray-500 md:text-xs lg:text-xs xl:text-sm 2xl:text-lg font-medium">
               {priceRange}
             </p>
           </div>
@@ -135,8 +135,8 @@ const LocationDetailPanel: React.FC<LocationDetailPanelProps> = ({
           <button
             className={`flex-1 text-center py-3 text-base relative cursor-pointer ${
               activeTab === 'photos'
-                ? 'text-gray-800 font-medium'
-                : 'text-gray-400'
+                ? 'text-gray-800 font-bold'
+                : 'text-gray-400 font bold'
             } md:py-2 md:text-sm lg:py-2 lg:text-sm xl:py-3 xl:text-base 2xl:py-5 2xl:text-xl`}
             onClick={() => setActiveTab('photos')}
           >
@@ -148,8 +148,8 @@ const LocationDetailPanel: React.FC<LocationDetailPanelProps> = ({
           <button
             className={`flex-1 text-center py-3 text-base relative cursor-pointer ${
               activeTab === 'menu'
-                ? 'text-gray-800 font-medium'
-                : 'text-gray-400'
+                ? 'text-gray-800 font-bold'
+                : 'text-gray-400 font-bold'
             } md:py-2 md:text-sm lg:py-2 lg:text-sm xl:py-3 xl:text-base 2xl:py-5 2xl:text-xl`}
             onClick={() => setActiveTab('menu')}
           >

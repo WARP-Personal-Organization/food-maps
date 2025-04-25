@@ -99,9 +99,9 @@ const DishDetailsView: React.FC<DishDetailsViewProps> = ({
         {/* Dish header with title and navigation - Part of scrollable content */}
         <div className="px-4 lg:px-5 xl:px-6 pt-4 lg:pt-5 pb-3 bg-white">
           <div className="flex items-center">
-            <h1 className="text-2xl lg:text-3xl xl:text-4xl font-bold text-gray-900">
-              {dish.name}
-            </h1>
+          <h1 className="text-2xl lg:text-3xl xl:text-4xl font-extrabold text-gray-900 font-serif">
+            {dish.name}
+          </h1>
             <div className="flex ml-auto space-x-2 lg:space-x-3">
               <button
                 onClick={onPrevDish}
@@ -122,15 +122,15 @@ const DishDetailsView: React.FC<DishDetailsViewProps> = ({
               </button>
             </div>
           </div>
-          <p className="text-gray-500 mt-1 text-sm lg:text-base italic">
-            {dish.tagline}
-          </p>
         </div>
 
         {/* Main content - Description and locations */}
         <div className="px-4 lg:px-5 xl:px-6 pt-3">
           {/* Description */}
-          <div className="mt-1 lg:mt-2">
+          <div className="mt-1 lg:mt-2 space-y-2">
+            <p className="text-gray-500 mt-1 text-sm lg:text-base italic font-medium">
+              {dish.tagline}
+            </p>
             <p className="text-gray-700 leading-relaxed text-sm lg:text-base">
               {dish.description}
             </p>
