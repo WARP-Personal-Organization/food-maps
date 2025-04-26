@@ -89,6 +89,14 @@ const FoodMapLayout: React.FC<FoodMapLayoutProps> = ({
   // Handler for closing location detail panel
   const closeLocationDetail = () => {
     setSelectedLocation(null);
+
+    // Clear filters if provided and collapse panel
+    if (onFilterChange && activeFilters.length > 0) {
+      onFilterChange([]);
+    } else if (activeFilters.length === 0) {
+      // If no filters are active, collapse the panel
+      setIsPanelCollapsed(true);
+    }
   };
 
   // Handler for closing foodprint detail panel
@@ -134,7 +142,7 @@ const FoodMapLayout: React.FC<FoodMapLayoutProps> = ({
 
         <div className="h-full w-full pt-16 relative">
           {/* Panel layer - absolute positioned with higher z-index */}
-          {!isPanelCollapsed && (
+          {(isFilterDishesViewOpen || !isPanelCollapsed) && (
             <div className="absolute inset-0 z-30 pt-16">
               <LeftSidePanel
                 selectedLocation={selectedLocation}
@@ -160,7 +168,7 @@ const FoodMapLayout: React.FC<FoodMapLayoutProps> = ({
             onLocationClick={handleLocationClick}
             activeFilters={activeFilters}
             onFilterChange={onFilterChange}
-            showBackButton={isPanelCollapsed}
+            showBackButton={isPanelCollapsed && !isFilterDishesViewOpen}
             onFoodprintClick={handleFoodprintClick}
           />
         </div>
@@ -171,12 +179,12 @@ const FoodMapLayout: React.FC<FoodMapLayoutProps> = ({
         {/* Left Side - Text Content (responsive width based on screen size) */}
         <div
           className={`${
-            isPanelCollapsed
+            isPanelCollapsed && !isFilterDishesViewOpen
               ? 'w-0 opacity-0'
               : 'min-[900px]:w-[260px] lg:w-[300px] xl:w-[360px] 2xl:w-[450px] 3xl:w-[520px] opacity-100'
           } h-full overflow-hidden transition-all duration-300 ease-in-out flex-shrink-0 border-r border-gray-200`}
         >
-          {!isPanelCollapsed && (
+          {(isFilterDishesViewOpen || !isPanelCollapsed) && (
             <div className="w-full h-full">
               <LeftSidePanel
                 selectedLocation={selectedLocation}
@@ -197,7 +205,7 @@ const FoodMapLayout: React.FC<FoodMapLayoutProps> = ({
         {/* Right Side - Map (fills remaining space) */}
         <div className="flex-grow h-full">
           <RightSideMapPanel
-            isPanelCollapsed={isPanelCollapsed}
+            isPanelCollapsed={isPanelCollapsed && !isFilterDishesViewOpen}
             filterUI={filterUI}
             hasDishes={hasDishes}
             locations={allLocations}

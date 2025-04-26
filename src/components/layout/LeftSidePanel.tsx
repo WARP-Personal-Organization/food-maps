@@ -255,16 +255,6 @@ const LeftSidePanel: React.FC<LeftSidePanelProps> = ({
     }
   };
 
-  // If there's nothing to display, return null to allow the panel to collapse
-  if (
-    !selectedLocation &&
-    !isFilterDishesViewOpen &&
-    activeFilters.length === 0 &&
-    !selectedFoodprint
-  ) {
-    return null;
-  }
-
   // Special case for FilterDishesView on mobile
   if (isMobile && isFilterDishesViewOpen) {
     return (
@@ -276,6 +266,26 @@ const LeftSidePanel: React.FC<LeftSidePanelProps> = ({
         isMobile={true}
       />
     );
+  }
+
+  // Return FilterDishesView if it should be open, regardless of panel collapse state
+  if (isFilterDishesViewOpen) {
+    return (
+      <div className="w-full h-full overflow-hidden flex flex-col">
+        <FilterDishesView
+          activeFilters={activeFilters}
+          onFilterChange={onFilterChange}
+          locationsMap={locationsMap}
+          onClose={handleCloseFilterDishesView}
+          isMobile={isMobile}
+        />
+      </div>
+    );
+  }
+
+  // If there's nothing to display, return null to allow the panel to collapse
+  if (!selectedLocation && activeFilters.length === 0 && !selectedFoodprint) {
+    return null;
   }
 
   // Mobile rendering for other panels
@@ -305,15 +315,7 @@ const LeftSidePanel: React.FC<LeftSidePanelProps> = ({
     return (
       <div className="absolute inset-0 z-40 bg-white overflow-y-auto">
         <div className="p-4">
-          {isFilterDishesViewOpen ? (
-            <FilterDishesView
-              activeFilters={activeFilters}
-              onFilterChange={onFilterChange}
-              locationsMap={locationsMap}
-              onClose={handleCloseFilterDishesView}
-              isMobile={true}
-            />
-          ) : singleFilterMode ? (
+          {singleFilterMode ? (
             <FilteredDishPanel
               dishes={ilonggoDishes}
               activeFilter={activeDishFilter}
@@ -335,15 +337,7 @@ const LeftSidePanel: React.FC<LeftSidePanelProps> = ({
   // Desktop rendering
   return (
     <div className="w-full h-full overflow-hidden flex flex-col">
-      {isFilterDishesViewOpen ? (
-        <FilterDishesView
-          activeFilters={activeFilters}
-          onFilterChange={onFilterChange}
-          locationsMap={locationsMap}
-          onClose={handleCloseFilterDishesView}
-          isMobile={false}
-        />
-      ) : selectedFoodprint && onCloseFoodprint ? (
+      {selectedFoodprint && onCloseFoodprint ? (
         <FoodPrintDetailsPanel
           selectedFoodPrint={selectedFoodprint}
           onClose={onCloseFoodprint}
