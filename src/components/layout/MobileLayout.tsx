@@ -42,7 +42,7 @@ const MobileLayout: React.FC<MobileLayoutProps> = ({
       </section>
 
       {/* Top Image */}
-      <div className="relative w-full aspect-square">
+      <div className="relative w-full aspect-square" >
         <DishImage
           dish={activeDish}
           className="relative h-full w-full"
@@ -54,9 +54,9 @@ const MobileLayout: React.FC<MobileLayoutProps> = ({
       </div>
 
       {/* Bottom Content */}
-      <div className="bg-white flex flex-col rounded-t-lg w-full p-[24px] pt-[32px] gap-[20px] overflow-y-auto -mt-[10%] z-10 relative">
+      <div className="bg-white flex flex-col rounded-t-lg w-full p-[24px] pt-[32px] gap-[20px] overflow-y-auto flex-1 z-10 relative -mt-[10%]">
         {/* Dish Name and Navigation */}
-        <div className="flex items-center justify-between h-10 gap-4 mb-2">
+        <div className="flex items-center justify-between h-10 gap-4">
           <h1 className="text-3xl font-bold text-[#202020]">
             {activeDish.name}
           </h1>
@@ -81,14 +81,15 @@ const MobileLayout: React.FC<MobileLayoutProps> = ({
             </button>
           </div>
         </div>
-
+        
+        <div className="flex flex-col flex-1">
         {/* Tagline */}
         <h3 className="italic font-semibold text-base text-[#7c7c7c]">
           {activeDish.tagline}
         </h3>
 
         {/* Description */}
-        <div className="text-[#2a2a2a] mb-6">
+        <div className="text-[#2a2a2a] mt-2 mb-6">
           <p className="leading-relaxed">{activeDish.description}</p>
         </div>
 
@@ -96,7 +97,7 @@ const MobileLayout: React.FC<MobileLayoutProps> = ({
         <div className="flex-grow"></div>
 
         {/* Swipe Indicator */}
-        <div className="border-t border-text-[#c2c2c2] pt-4 mb-4">
+        <div className="border-t border-text-[#c2c2c2] pt-4 mb-7">
           <p className="flex items-center justify-center text-[#7c7c7c] text-sm">
             Swipe to see other Ilonggo top dishes{" "}
             <GoArrowRight className="ml-2 text-[#7c7c7c]" />
@@ -106,11 +107,12 @@ const MobileLayout: React.FC<MobileLayoutProps> = ({
         {/* Button */}
         <button
           onClick={handleWhereToEat}
-          className="w-full bg-[#F9D408] font-bold py-4 rounded-sm text-[#3b3b3b] text-base text-center inline-block 
+          className="w-full bg-[#F9D408] font-bold py-2 rounded-sm text-[#3b3b3b] text-base text-center inline-block 
           cursor-pointer hover:bg-[#E6C207] transition-colors shadow-sm"
         >
           Where to Eat
         </button>
+        </div>
       </div>
     </div>
   );
