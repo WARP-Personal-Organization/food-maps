@@ -1,14 +1,15 @@
-'use client';
+"use client";
 
-import React, { useState, useEffect, useRef } from 'react';
-import { Location } from '@/lib/locationData';
-import LocationDetailPanel from '@/components/LocationDetailPanel';
-import FilteredDishPanel from '@/components/food-map/FilteredDishPanel';
-import FilterDishesView from '@/components/food-map/FilterDishesView';
-import { ilonggoDishes } from '@/lib/dishData';
-import LocationCard from '@/components/dishes/LocationCard';
-import FoodPrintDetailsPanel from '@/components/FoodprintDetailsPanel';
-import { FoodPrint } from '@/lib/foodprintData';
+import React, { useState, useEffect, useRef } from "react";
+import { Location } from "@/lib/locationData";
+import LocationDetailPanel from "@/components/LocationDetailPanel";
+import FilteredDishPanel from "@/components/food-map/FilteredDishPanel";
+import FilterDishesView from "@/components/food-map/FilterDishesView";
+import { ilonggoDishes } from "@/lib/dishData";
+import LocationCard from "@/components/dishes/LocationCard";
+import FoodPrintDetailsPanel from "@/components/FoodprintDetailsPanel";
+import { FoodPrint } from "@/lib/foodprintData";
+import LocationDetailSummaryPanel from "@/components/LocationDetailSummaryPanel";
 
 // Add a new ExplorePanel component to display the Explore UI
 const ExplorePanel = ({
@@ -116,11 +117,11 @@ const ExplorePanel = ({
             <LocationCard
               key={`${location.name}-${index}`}
               name={location.name}
-              image={location.iconUrl || '/images/filter-dish/siopao.png'}
+              image={location.iconUrl || "/images/filter-dish/siopao.png"}
               location={
                 location.address
-                  ? location.address.split(',')[0]
-                  : 'Iloilo City Proper'
+                  ? location.address.split(",")[0]
+                  : "Iloilo City Proper"
               }
               duration="8 min"
               rating={4.2}
@@ -188,11 +189,11 @@ const LeftSidePanel: React.FC<LeftSidePanelProps> = ({
       }, 500);
     };
 
-    document.addEventListener('closeFilterViewOnly', handleCloseFilterViewOnly);
+    document.addEventListener("closeFilterViewOnly", handleCloseFilterViewOnly);
 
     return () => {
       document.removeEventListener(
-        'closeFilterViewOnly',
+        "closeFilterViewOnly",
         handleCloseFilterViewOnly
       );
     };
@@ -233,7 +234,7 @@ const LeftSidePanel: React.FC<LeftSidePanelProps> = ({
   // Handler for when "X" is clicked to close the panel
   const handleClosePanel = () => {
     if (onToggleCollapse && !shouldPreventCollapse) {
-      console.log('Collapsing panel from handleClosePanel');
+      console.log("Collapsing panel from handleClosePanel");
       // Call immediately without timeout since this is directly triggered by user action
       onToggleCollapse();
     }
@@ -241,16 +242,16 @@ const LeftSidePanel: React.FC<LeftSidePanelProps> = ({
 
   // Handler for closing the filter dishes view
   const handleCloseFilterDishesView = () => {
-    console.log('handleCloseFilterDishesView triggered');
+    console.log("handleCloseFilterDishesView triggered");
     // Toggle the filter view state
     if (toggleFilterDishesView) {
-      console.log('Calling toggleFilterDishesView');
+      console.log("Calling toggleFilterDishesView");
       toggleFilterDishesView();
     }
 
     // Collapse the panel if there's no filters active
     if (onToggleCollapse && activeFilters.length === 0) {
-      console.log('Calling onToggleCollapse');
+      console.log("Calling onToggleCollapse");
       onToggleCollapse();
     }
   };
@@ -303,18 +304,26 @@ const LeftSidePanel: React.FC<LeftSidePanelProps> = ({
 
     if (selectedLocation) {
       return (
-        <div className="absolute inset-0 z-40 bg-white overflow-hidden h-screen">
-          <LocationDetailPanel
-            location={selectedLocation}
-            onClose={closeLocationDetail}
-          />
-        </div>
+        <>
+          {/* Background overlay to catch taps outside panel */}
+          <div className="fixed inset-0 z-30" onClick={closeLocationDetail} />
+
+          {/* Bottom sheet panel */}
+          <div className="fixed bottom-0 left-0 w-full h-[65vh] bg-white z-40 rounded-t-sm shadow-lg overflow-y-auto touch-pan-y">
+            <LocationDetailSummaryPanel
+              location={selectedLocation}
+              onClose={closeLocationDetail}
+            />
+          </div>
+        </>
       );
     }
 
     return (
-      <div className="absolute inset-0 z-40 bg-white overflow-y-auto">
-        <div className="p-4">
+      <div>
+        {/* Background overlay to catch taps outside panel */}
+        <div className="fixed inset-0 z-30" onClick={closeLocationDetail} />
+        <div className="fixed bottom-0 left-0 w-full h-[60vh] bg-white z-40 rounded-t-2xl shadow-lg overflow-y-auto touch-pan-y">
           {singleFilterMode ? (
             <FilteredDishPanel
               dishes={ilonggoDishes}
