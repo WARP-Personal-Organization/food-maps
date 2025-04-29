@@ -4,8 +4,9 @@ export interface Location {
   x: number;
   y: number;
   description: string;
-  iconType?: 'default' | 'restaurant' | 'shop' | 'attraction';
+  iconType?: 'default' | 'restaurant' | 'shop' | 'attraction' | 'siopao';
   iconUrl?: string;
+  siopaoVariant?: 1 | 2 | 3;
   address?: string;
   openHours?: string;
   priceRange?: string;
@@ -20,7 +21,8 @@ export const dishLocations: Record<string, Location[]> = {
       x: 500,
       y: 300,
       description: 'Famous for their Siopao since 1978',
-      iconType: 'restaurant',
+      iconType: 'siopao',
+      siopaoVariant: 1,
       address: 'Rizal Street, La Paz Public Market, La Paz, Iloilo City',
       openHours: '10:00 AM - 9:00 PM',
       priceRange: '₱200-400',
@@ -36,8 +38,8 @@ export const dishLocations: Record<string, Location[]> = {
       x: 700,
       y: 400,
       description: 'Home of the King-sized Siopao',
-      iconUrl: '/siopao-1.png',
-      iconType: 'restaurant',
+      iconType: 'siopao',
+      siopaoVariant: 2,
       address: 'Iznart Street, Iloilo City',
       openHours: '8:00 AM - 8:00 PM',
       priceRange: '₱150-300',
@@ -47,7 +49,8 @@ export const dishLocations: Record<string, Location[]> = {
       x: 500,
       y: 600,
       description: 'Traditional homemade Siopao',
-      iconType: 'restaurant',
+      iconType: 'siopao',
+      siopaoVariant: 3,
       address: 'JM Basa Street, Iloilo City',
       openHours: '9:00 AM - 7:00 PM',
       priceRange: '₱100-200',
@@ -60,7 +63,7 @@ export const dishLocations: Record<string, Location[]> = {
       y: 350,
       description: 'Original La Paz Batchoy since 1945',
       iconType: 'restaurant',
-      iconUrl: '/siopao-1.png',
+      iconUrl: '/location-markers/batchoy-marker-1.png',
       address: 'La Paz Public Market, Iloilo City',
       openHours: '7:00 AM - 8:00 PM',
       priceRange: '₱100-200',
@@ -71,7 +74,7 @@ export const dishLocations: Record<string, Location[]> = {
       y: 450,
       description: 'Famous for their special batchoy recipe',
       iconType: 'restaurant',
-      iconUrl: '/siopao-1.png',
+      iconUrl: '/location-markers/batchoy-marker-2.png',
       address: 'Rizal Street, La Paz, Iloilo City',
       openHours: '8:00 AM - 9:00 PM',
       priceRange: '₱120-220',
@@ -84,7 +87,7 @@ export const dishLocations: Record<string, Location[]> = {
       y: 500,
       description: 'Authentic Ilonggo Cansi since 1990',
       iconType: 'restaurant',
-      iconUrl: '/siopao-1.png',
+      iconUrl: '/cansi-1.png',
       address: 'Molo, Iloilo City',
       openHours: '10:00 AM - 8:00 PM',
       priceRange: '₱250-450',
@@ -97,7 +100,7 @@ export const dishLocations: Record<string, Location[]> = {
       y: 320,
       description: 'Famous chicken inasal stalls',
       iconType: 'restaurant',
-      iconUrl: '/siopao-1.png',
+      iconUrl: '/inasal-1.png',
       address: 'Reclamation Area, Bacolod City',
       openHours: '10:00 AM - 10:00 PM',
       priceRange: '₱150-300',
@@ -108,7 +111,7 @@ export const dishLocations: Record<string, Location[]> = {
       y: 380,
       description: 'Authentic Bacolod-style Chicken Inasal',
       iconType: 'restaurant',
-      iconUrl: '/siopao-1.png',
+      iconUrl: '/inasal-2.png',
       address: 'Lacson Street, Bacolod City',
       openHours: '10:00 AM - 9:00 PM',
       priceRange: '₱180-350',
@@ -121,7 +124,7 @@ export const dishLocations: Record<string, Location[]> = {
       y: 420,
       description: 'Famous for traditional Ilonggo dishes including KBL',
       iconType: 'restaurant',
-      iconUrl: '/siopao-1.png',
+      iconUrl: '/kbl-1.png',
       address: 'Villa Beach, Iloilo City',
       openHours: '10:00 AM - 9:00 PM',
       priceRange: '₱200-500',
@@ -134,7 +137,7 @@ export const dishLocations: Record<string, Location[]> = {
       y: 340,
       description: 'Home of authentic Pancit Molo',
       iconType: 'restaurant',
-      iconUrl: '/siopao-1.png',
+      iconUrl: '/molo-1.png',
       address: 'Molo Plaza, Iloilo City',
       openHours: '9:00 AM - 8:00 PM',
       priceRange: '₱120-250',
@@ -145,7 +148,7 @@ export const dishLocations: Record<string, Location[]> = {
       y: 470,
       description: 'Serving traditional Ilonggo Pancit Molo',
       iconType: 'restaurant',
-      iconUrl: '/siopao-1.png',
+      iconUrl: '/molo-2.png',
       address: 'Molo District, Iloilo City',
       openHours: '10:00 AM - 7:00 PM',
       priceRange: '₱100-200',

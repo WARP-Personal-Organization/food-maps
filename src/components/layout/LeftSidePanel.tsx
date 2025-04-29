@@ -7,6 +7,8 @@ import FilteredDishPanel from '@/components/food-map/FilteredDishPanel';
 import FilterDishesView from '@/components/food-map/FilterDishesView';
 import { ilonggoDishes } from '@/lib/dishData';
 import LocationCard from '@/components/dishes/LocationCard';
+import FoodPrintDetailsPanel from '@/components/FoodprintDetailsPanel';
+import { FoodPrint } from '@/lib/foodprintData';
 
 // Add a new ExplorePanel component to display the Explore UI
 const ExplorePanel = ({
@@ -149,6 +151,8 @@ interface LeftSidePanelProps {
   onToggleCollapse?: () => void;
   isFilterDishesViewOpen?: boolean;
   toggleFilterDishesView?: () => void;
+  selectedFoodprint?: FoodPrint | null;
+  onCloseFoodprint?: () => void;
 }
 
 const LeftSidePanel: React.FC<LeftSidePanelProps> = ({
@@ -161,6 +165,8 @@ const LeftSidePanel: React.FC<LeftSidePanelProps> = ({
   onToggleCollapse,
   isFilterDishesViewOpen = false,
   toggleFilterDishesView,
+  selectedFoodprint = null,
+  onCloseFoodprint,
 }) => {
   // Check if we have a single active filter (single dish selected)
   const singleFilterMode = activeFilters.length === 1;
@@ -197,11 +203,12 @@ const LeftSidePanel: React.FC<LeftSidePanelProps> = ({
     // Reset the ref when dependencies change
     hasTriggeredCollapseRef.current = false;
 
-    // If there's no location, no filter dishes view, and no filters, collapse the panel
+    // If there's no location, no filter dishes view, no filters, and no foodprint, collapse the panel
     if (
       !selectedLocation &&
       !isFilterDishesViewOpen &&
       activeFilters.length === 0 &&
+      !selectedFoodprint &&
       onToggleCollapse &&
       !hasTriggeredCollapseRef.current &&
       !shouldPreventCollapse
@@ -218,6 +225,7 @@ const LeftSidePanel: React.FC<LeftSidePanelProps> = ({
     selectedLocation,
     isFilterDishesViewOpen,
     activeFilters.length,
+    selectedFoodprint,
     onToggleCollapse,
     shouldPreventCollapse,
   ]);
@@ -247,15 +255,6 @@ const LeftSidePanel: React.FC<LeftSidePanelProps> = ({
     }
   };
 
-  // If there's nothing to display, return null to allow the panel to collapse
-  if (
-    !selectedLocation &&
-    !isFilterDishesViewOpen &&
-    activeFilters.length === 0
-  ) {
-    return null;
-  }
-
   // Special case for FilterDishesView on mobile
   if (isMobile && isFilterDishesViewOpen) {
     return (
@@ -269,8 +268,39 @@ const LeftSidePanel: React.FC<LeftSidePanelProps> = ({
     );
   }
 
+  // Return FilterDishesView if it should be open, regardless of panel collapse state
+  if (isFilterDishesViewOpen) {
+    return (
+      <div className="w-full h-full overflow-hidden flex flex-col">
+        <FilterDishesView
+          activeFilters={activeFilters}
+          onFilterChange={onFilterChange}
+          locationsMap={locationsMap}
+          onClose={handleCloseFilterDishesView}
+          isMobile={isMobile}
+        />
+      </div>
+    );
+  }
+
+  // If there's nothing to display, return null to allow the panel to collapse
+  if (!selectedLocation && activeFilters.length === 0 && !selectedFoodprint) {
+    return null;
+  }
+
   // Mobile rendering for other panels
   if (isMobile) {
+    if (selectedFoodprint && onCloseFoodprint) {
+      return (
+        <div className="absolute inset-0 z-40 bg-white overflow-hidden h-screen">
+          <FoodPrintDetailsPanel
+            selectedFoodPrint={selectedFoodprint}
+            onClose={onCloseFoodprint}
+          />
+        </div>
+      );
+    }
+
     if (selectedLocation) {
       return (
         <div className="absolute inset-0 z-40 bg-white overflow-hidden h-screen">
@@ -285,15 +315,7 @@ const LeftSidePanel: React.FC<LeftSidePanelProps> = ({
     return (
       <div className="absolute inset-0 z-40 bg-white overflow-y-auto">
         <div className="p-4">
-          {isFilterDishesViewOpen ? (
-            <FilterDishesView
-              activeFilters={activeFilters}
-              onFilterChange={onFilterChange}
-              locationsMap={locationsMap}
-              onClose={handleCloseFilterDishesView}
-              isMobile={true}
-            />
-          ) : singleFilterMode ? (
+          {singleFilterMode ? (
             <FilteredDishPanel
               dishes={ilonggoDishes}
               activeFilter={activeDishFilter}
@@ -315,13 +337,10 @@ const LeftSidePanel: React.FC<LeftSidePanelProps> = ({
   // Desktop rendering
   return (
     <div className="w-full h-full overflow-hidden flex flex-col">
-      {isFilterDishesViewOpen ? (
-        <FilterDishesView
-          activeFilters={activeFilters}
-          onFilterChange={onFilterChange}
-          locationsMap={locationsMap}
-          onClose={handleCloseFilterDishesView}
-          isMobile={false}
+      {selectedFoodprint && onCloseFoodprint ? (
+        <FoodPrintDetailsPanel
+          selectedFoodPrint={selectedFoodprint}
+          onClose={onCloseFoodprint}
         />
       ) : selectedLocation ? (
         <LocationDetailPanel

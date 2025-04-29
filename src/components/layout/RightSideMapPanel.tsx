@@ -2,19 +2,18 @@
 
 import React, { useEffect, useRef } from 'react';
 import { Location } from '@/lib/locationData';
-import { FoodPrint } from '@/lib/foodPrintsData';
 import { ClientOnly, MapComponent, EmptyState } from './MapUtilComponents';
+import { foodPrintsData, FoodPrint } from '@/lib/foodprintData';
 
 interface RightSideMapPanelProps {
   isPanelCollapsed: boolean;
   filterUI?: React.ReactNode;
   hasDishes: boolean;
   locations: Location[];
-  foodPrintMarkers: FoodPrint[];
   onLocationClick: (location: Location) => void;
-  onFoodPrintClick?: (foodPrint: FoodPrint) => void;
   activeFilters?: string[];
   onFilterChange?: (filters: string[]) => void;
+  onFoodprintClick?: (foodprint: FoodPrint) => void;
 }
 
 const RightSideMapPanel: React.FC<RightSideMapPanelProps> = ({
@@ -22,12 +21,11 @@ const RightSideMapPanel: React.FC<RightSideMapPanelProps> = ({
   filterUI,
   hasDishes,
   locations,
-  foodPrintMarkers,
   onLocationClick,
-  onFoodPrintClick,
   activeFilters = [],
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   onFilterChange,
+  onFoodprintClick,
 }) => {
   // Track previous panel collapse state to detect changes
   const prevCollapsedStateRef = useRef(isPanelCollapsed);
@@ -52,6 +50,17 @@ const RightSideMapPanel: React.FC<RightSideMapPanelProps> = ({
     }
   }, [isPanelCollapsed]);
 
+  // Filter foodprint markers based on active filters
+  const foodprintMarkers =
+    activeFilters.length > 0
+      ? foodPrintsData.markers.filter((marker) =>
+          activeFilters.includes(marker.dishName)
+        )
+      : foodPrintsData.markers; // Show all markers when no filters are active
+
+  console.log('Active filters:', activeFilters);
+  console.log('Foodprint markers to display:', foodprintMarkers.length);
+
   return (
     <div
       className={`${
@@ -68,11 +77,11 @@ const RightSideMapPanel: React.FC<RightSideMapPanelProps> = ({
         {hasDishes ? (
           <ClientOnly>
             <MapComponent
-              key={`fixed-map-desktop-${activeFilters
-                .sort()
-                .join('-')}-${isPanelCollapsed}`}
+              key={`right-side-map-${activeFilters.join('-')}-${
+                locations.length
+              }-${isPanelCollapsed}`}
               locations={locations}
-              foodPrintMarkers={foodPrintMarkers}
+              foodPrintMarkers={foodprintMarkers}
               mapImageUrl="/Map.png"
               mapBounds={[
                 [0, 0],
@@ -80,7 +89,7 @@ const RightSideMapPanel: React.FC<RightSideMapPanelProps> = ({
               ]}
               defaultZoom={3}
               onLocationClick={onLocationClick}
-              onFoodPrintClick={onFoodPrintClick}
+              onFoodPrintClick={onFoodprintClick}
               useCustomMap={true}
             />
           </ClientOnly>

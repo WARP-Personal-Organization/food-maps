@@ -1,13 +1,14 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, Suspense } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import FoodMapLayout from '@/components/layout/FoodMapLayout';
 import { ilonggoDishes } from '@/lib/dishData';
 import { dishLocations } from '@/lib/locationData';
 import DishFilter from '@/components/food-map/DishFilter';
 
-export default function FoodMapPage() {
+// Create a client component to handle search params
+function FoodMapContent() {
   const searchParams = useSearchParams();
   const router = useRouter();
   const [mounted, setMounted] = useState(false);
@@ -57,6 +58,16 @@ export default function FoodMapPage() {
 
   // Update the URL when filters change
   const updateUrl = (filters: string[]) => {
+    // Compare with current filters to avoid unnecessary updates
+    const currentDishParam = searchParams.get('dish');
+    const currentFiltersString = currentDishParam || '';
+    const newFiltersString = filters.join(',');
+
+    // Skip URL update if filters haven't changed
+    if (currentFiltersString === newFiltersString) {
+      return;
+    }
+
     // Preserve view parameter if it exists
     const viewParam = searchParams.get('view');
     const viewQueryString = viewParam ? `&view=${viewParam}` : '';
@@ -75,6 +86,11 @@ export default function FoodMapPage() {
 
   // Handle filter changes
   const handleFilterChange = (newFilters: string[]) => {
+    // Skip update if filters haven't changed
+    if (JSON.stringify(activeFilters) === JSON.stringify(newFilters)) {
+      return;
+    }
+
     setActiveFilters(newFilters);
     updateUrl(newFilters);
   };
@@ -141,5 +157,16 @@ export default function FoodMapPage() {
         }
       />
     </div>
+  );
+}
+
+// Main page component with Suspense boundary
+export default function FoodMapPage() {
+  return (
+    <Suspense
+      fallback={<div className="flex flex-col h-screen overflow-hidden"></div>}
+    >
+      <FoodMapContent />
+    </Suspense>
   );
 }
