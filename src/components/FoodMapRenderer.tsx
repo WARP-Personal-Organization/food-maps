@@ -355,14 +355,6 @@ const FoodMapRenderer: React.FC<MapComponentProps> = ({
 
       // Wait for map to load before adding markers and custom map
       map.on('load', () => {
-        // Set background color
-        map.addLayer({
-          id: 'background-layer',
-          type: 'background',
-          paint: {
-            'background-color': '#3b3b3f',
-          },
-        });
 
         if (useCustomMap && mapImageUrl) {
           // Generate a unique source ID
