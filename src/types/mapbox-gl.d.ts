@@ -44,18 +44,18 @@ declare module 'mapbox-gl' {
     getContainer(): HTMLElement;
     getCanvas(): HTMLCanvasElement;
     getCanvasContainer(): HTMLElement;
-    getStyle(): any;
-    setStyle(style: string | any): this;
+    getStyle(): Record<string, unknown>;
+    setStyle(style: string | Record<string, unknown>): this;
     isStyleLoaded(): boolean;
-    addSource(id: string, source: any): this;
+    addSource(id: string, source: Record<string, unknown>): this;
     removeSource(id: string): this;
-    getSource(id: string): any;
-    addLayer(layer: any, before?: string): this;
+    getSource(id: string): Record<string, unknown>;
+    addLayer(layer: Record<string, unknown>, before?: string): this;
     removeLayer(id: string): this;
-    getLayer(id: string): any;
-    setFilter(layerId: string, filter: any): this;
-    setPaintProperty(layerId: string, name: string, value: any): this;
-    setLayoutProperty(layerId: string, name: string, value: any): this;
+    getLayer(id: string): Record<string, unknown>;
+    setFilter(layerId: string, filter: unknown[]): this;
+    setPaintProperty(layerId: string, name: string, value: unknown): this;
+    setLayoutProperty(layerId: string, name: string, value: unknown): this;
     getCenter(): LngLat;
     setCenter(center: LngLatLike): this;
     getZoom(): number;
@@ -116,9 +116,18 @@ declare module 'mapbox-gl' {
           },
       options?: { pixelRatio?: number; sdf?: boolean }
     ): this;
-    on(type: string, listener: (e?: any) => void): this;
-    off(type: string, listener: (e?: any) => void): this;
-    once(type: string, listener: (e?: any) => void): this;
+    on(
+      type: string,
+      listener: (e?: Event | Record<string, unknown>) => void
+    ): this;
+    off(
+      type: string,
+      listener: (e?: Event | Record<string, unknown>) => void
+    ): this;
+    once(
+      type: string,
+      listener: (e?: Event | Record<string, unknown>) => void
+    ): this;
     remove(): void;
   }
 

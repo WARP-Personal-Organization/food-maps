@@ -26,27 +26,7 @@ export const FoodprintMarker = ({
   };
 
   const getMarkerSize = () => {
-    switch (foodprint.footprintSize) {
-      case 'small':
-        return 'w-8 h-8';
-      case 'large':
-        return 'w-12 h-12';
-      case 'medium':
-      default:
-        return 'w-10 h-10';
-    }
-  };
-
-  const getMarkerColor = () => {
-    switch (foodprint.impactLevel) {
-      case 'low':
-        return 'bg-green-500 border-green-700';
-      case 'high':
-        return 'bg-red-500 border-red-700';
-      case 'medium':
-      default:
-        return 'bg-yellow-500 border-yellow-700';
-    }
+    return 'w-10 h-10';
   };
 
   return (

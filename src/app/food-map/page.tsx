@@ -1,13 +1,14 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, Suspense } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import FoodMapLayout from '@/components/layout/FoodMapLayout';
 import { ilonggoDishes } from '@/lib/dishData';
 import { dishLocations } from '@/lib/locationData';
 import DishFilter from '@/components/food-map/DishFilter';
 
-export default function FoodMapPage() {
+// Create a client component to handle search params
+function FoodMapContent() {
   const searchParams = useSearchParams();
   const router = useRouter();
   const [mounted, setMounted] = useState(false);
@@ -156,5 +157,16 @@ export default function FoodMapPage() {
         }
       />
     </div>
+  );
+}
+
+// Main page component with Suspense boundary
+export default function FoodMapPage() {
+  return (
+    <Suspense
+      fallback={<div className="flex flex-col h-screen overflow-hidden"></div>}
+    >
+      <FoodMapContent />
+    </Suspense>
   );
 }
