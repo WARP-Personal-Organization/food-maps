@@ -136,7 +136,7 @@ const FoodMapLayout: React.FC<FoodMapLayoutProps> = ({
     <div className="h-screen w-full">
       {/* MOBILE VIEW - now only visible on screens below 900px */}
       <div className="hidden max-[899px]:flex flex-col h-screen">
-        <section className="fixed top-0 z-30 w-full">
+        <section className="fixed top-50 z-30 w-full">
           <FoodPrintsNavbar />
         </section>
 

@@ -34,7 +34,7 @@ export default function RootLayout({
         />
         {/* Mapbox CSS is imported in the component directly */}
       </head>
-      <body className="font-sans">
+      <body className="font-open-sans">
         <div>{children}</div>
       </body>
     </html>

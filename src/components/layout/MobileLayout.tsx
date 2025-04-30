@@ -57,7 +57,7 @@ const MobileLayout: React.FC<MobileLayoutProps> = ({
       <div className="bg-white flex flex-col rounded-t-lg w-full p-[24px] pt-[32px] gap-[20px] overflow-y-auto flex-1 z-10 relative -mt-[10%]">
         {/* Dish Name and Navigation */}
         <div className="flex items-center justify-between h-10 gap-4">
-          <h1 className="text-3xl font-bold text-[#202020]">
+          <h1 className="text-3xl font-bold font-faustina text-[#202020]">
             {activeDish.name}
           </h1>
 
@@ -84,12 +84,12 @@ const MobileLayout: React.FC<MobileLayoutProps> = ({
         
         <div className="flex flex-col flex-1">
         {/* Tagline */}
-        <h3 className="italic font-semibold text-base text-[#7c7c7c]">
+        <h3 className="font-bold italic text-base text-[#7c7c7c]">
           {activeDish.tagline}
         </h3>
 
         {/* Description */}
-        <div className="text-[#2a2a2a] mt-2 mb-6">
+        <div className="mt-2 mb-6 text-[#2a2a2a] text-base ">
           <p className="leading-relaxed">{activeDish.description}</p>
         </div>
 
@@ -98,7 +98,7 @@ const MobileLayout: React.FC<MobileLayoutProps> = ({
 
         {/* Swipe Indicator */}
         <div className="border-t border-text-[#c2c2c2] pt-4 mb-7">
-          <p className="flex items-center justify-center text-[#7c7c7c] text-sm">
+        <p className="flex items-center justify-center text-[#7c7c7c] text-sm">
             Swipe to see other Ilonggo top dishes{" "}
             <GoArrowRight className="ml-2 text-[#7c7c7c]" />
           </p>
@@ -107,8 +107,8 @@ const MobileLayout: React.FC<MobileLayoutProps> = ({
         {/* Button */}
         <button
           onClick={handleWhereToEat}
-          className="w-full bg-[#F9D408] font-bold py-2 rounded-sm text-[#3b3b3b] text-base text-center inline-block 
-          cursor-pointer hover:bg-[#E6C207] transition-colors shadow-sm"
+          className="w-full bg-[#F9D408] text-[#3b3b3b] font-bold text-base
+          py-2 rounded-[3px] text-center inline-block cursor-pointer hover:bg-[#E6C207] transition-colors shadow-sm"
         >
           Where to Eat
         </button>

@@ -6,7 +6,6 @@ import { LuUtensils } from 'react-icons/lu';
 import { FiMenu, FiX } from 'react-icons/fi';
 import Image from 'next/image';
 import About from './About'; // Import the About component
-import Link from 'next/link';
 
 const dishes = [
   { name: 'Siopao', locations: 5, image: '/images/filter-dish/siopao.jpg' },
@@ -92,25 +91,8 @@ export default function FoodPrintsNavbar() {
         />
       )}
 
-      <div className="flex justify-between items-center bg-none text-white py-4 px-6 relative z-50">
-        {/* Left - Filter Button */}
-        <Link
-          href="/"
-          className={`text-2xl flex items-center gap-2 text-blacktransition-all ${
-            isMenuOpen || isFilterOpen ? 'blur-sm' : 'blur-0'
-          }`}
-        >
-          <Image
-            src={'/images/foodprints-logo.png'}
-            alt="Logo"
-            width={100}
-            height={110}
-          />
-        </Link>
-
-        {/* Right - Menu Button */}
         <button
-          className={`text-2xl text-black bg-white rounded p-2 shadow-lg transition-all ${
+          className={`fixed top-20 left-83 z-50 text-2xl text-black bg-white rounded p-2 shadow-lg transition-all ${
             isMenuOpen || isFilterOpen ? 'blur-sm' : 'blur-0'
           }`}
           onClick={() => setIsMenuOpen(true)}
@@ -118,7 +100,6 @@ export default function FoodPrintsNavbar() {
         >
           {isMenuOpen ? <FiX /> : <FiMenu />}
         </button>
-      </div>
 
       {/* Dish Filter Slide-in Menu (Left to Right) */}
       <div
@@ -230,7 +211,7 @@ export default function FoodPrintsNavbar() {
             </li>
           </ul>
             <section className='text-sm font-medium'>
-            <div className="flex flex-col justify-center mt-8">
+            <div className="flex flex-col justify-center gap-y-3">
               <h2 className='text-amber-300 font-bold'>WEBSITE</h2>
               <a
               href="https://dailyguardian.com.ph/"
@@ -241,7 +222,7 @@ export default function FoodPrintsNavbar() {
               dailyguardian.com.ph
               </a>
             </div>
-            <div className="flex flex-col justify-center my-8">
+            <div className="flex flex-col justify-center my-8 gap-y-3">
               <h2 className='text-amber-300 font-bold'>EXPLORE</h2>
               <div className=' flex flex-row gap-4'>
               <a

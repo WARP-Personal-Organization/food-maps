@@ -99,7 +99,7 @@ const DishFilter: React.FC<DishFilterProps> = ({
       {/* Filter Dishes Button */}
       <button
         onClick={toggleFilter}
-        className="bg-white rounded-md shadow-md px-3 py-2 text-gray-900 font-medium flex items-center gap-2 cursor-pointer"
+        className="text-2xl text-black bg-white rounded p-2 shadow-lg transition-all w-10 h-10"
       >
         <Image src="/filter-icon.png" alt="Filter" width={20} height={20} />
         <span className="sm:inline hidden">Filter Dishes</span>
