@@ -3,7 +3,7 @@
 import React from 'react';
 import { ilonggoDishes } from '@/lib/dishData';
 import useCarousel from '@/hooks/useCarousel';
-import MobileLayout from './layout/MobileLayout';
+import MobileLayout from '@/mobile/MobileLayout';
 import DesktopLayout from './layout/DesktopLayout';
 
 export default function HomePage() {

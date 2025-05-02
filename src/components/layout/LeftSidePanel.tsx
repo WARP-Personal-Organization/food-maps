@@ -292,13 +292,20 @@ const LeftSidePanel: React.FC<LeftSidePanelProps> = ({
   // Mobile rendering for other panels
   if (isMobile) {
     if (selectedFoodprint && onCloseFoodprint) {
+
       return (
-        <div className="absolute inset-0 z-40 bg-white overflow-hidden h-screen">
-          <FoodPrintDetailsPanel
+        <>
+          {/* Background overlay to catch taps outside panel */}
+          <div className="fixed inset-0 z-30" onClick={closeLocationDetail} />
+
+          {/* Bottom sheet panel */}
+          <div className="fixed bottom-0 left-0 w-full h-[65vh] bg-white z-40 rounded-t-sm shadow-lg overflow-y-auto touch-pan-y">
+            <FoodPrintDetailsPanel
             selectedFoodPrint={selectedFoodprint}
             onClose={onCloseFoodprint}
           />
-        </div>
+          </div>
+        </>
       );
     }
 
