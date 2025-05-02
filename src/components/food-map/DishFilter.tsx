@@ -99,12 +99,11 @@ const DishFilter: React.FC<DishFilterProps> = ({
       {/* Filter Dishes Button */}
       <button
         onClick={toggleFilter}
-        className="fixed top-10 left-5 bg-white rounded-md shadow-md px-3 py-2 text-gray-900 font-medium flex items-center gap-2 cursor-pointer h-10"
+        className="fixed top-10 left-5 z-50 text-2xl text-black bg-white rounded p-2 shadow-lg transition-all h-10 flex items-center gap-2"
       >
         <Image src="/filter-icon.png" alt="Filter" width={20} height={20} />
-        <span className="sm:inline hidden">Filter Dishes</span>
+        <span className="sm:inline hidden text-base">Filter Dishes</span>
       </button>
-
       {/* Active Filter Pills - Wrap to next line on mobile */}
       {!hidePills && (
         <div className="flex flex-wrap gap-2 max-w-[250px] sm:max-w-[500px]">
