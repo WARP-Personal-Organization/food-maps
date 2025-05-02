@@ -92,7 +92,7 @@ export default function FoodPrintsNavbar() {
       )}
 
         <button
-          className={`fixed top-20 left-83 z-50 text-2xl text-black bg-white rounded p-2 shadow-lg transition-all ${
+           className={`fixed top-10 right-5 z-50 text-2xl text-black bg-white rounded p-2 shadow-lg transition-all h-10 ${
             isMenuOpen || isFilterOpen ? 'blur-sm' : 'blur-0'
           }`}
           onClick={() => setIsMenuOpen(true)}
