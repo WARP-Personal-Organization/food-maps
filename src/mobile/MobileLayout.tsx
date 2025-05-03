@@ -1,12 +1,12 @@
 'use client';
 
-import React, { useRef, useState } from 'react';
-import { FiMenu, FiX } from 'react-icons/fi';
+import React, { useRef } from 'react';
 import { GoArrowRight } from "react-icons/go";
 import { Dish } from "@/lib/dishData";
 import DishImage from "@/components/dishes/DishImage";
 import { useRouter } from "next/navigation";
-import PanelManager from "@/mobile/components/PanelManager";
+import PanelManager, { PanelManagerRef } from './components/PanelManager'
+import MenuButton from './components/buttons/MenuButton';
 
 interface MobileLayoutProps {
   dishes: Dish[];
@@ -27,8 +27,7 @@ const MobileLayout: React.FC<MobileLayoutProps> = ({
 }) => {
   const activeDish = dishes[activeIndex];
   const router = useRouter();
-  const panelRef = useRef<any>(null);
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const panelRef = useRef<PanelManagerRef | null>(null);
 
   const handleWhereToEat = () => {
     if (activeDish.href === "/food-map") {
@@ -41,24 +40,10 @@ const MobileLayout: React.FC<MobileLayoutProps> = ({
   };
 
   return (
-    <div className="relative">
-      {/* PanelManager with menu modal */}
+    <div className="max-[899px]:flex hidden flex-col h-screen ">
       <PanelManager ref={panelRef} />
-
       {/* Button to open the menu */}
-      <button
-        className={`fixed top-10 right-5 z-50 text-2xl text-black bg-white rounded p-2 shadow-lg transition-all h-10 ${
-          isMenuOpen ? 'blur-sm' : 'blur-0'
-        }`}
-        onClick={() => {
-          // Toggle the state for opening/closing the menu
-          setIsMenuOpen(!isMenuOpen);
-          panelRef.current?.openPanel('menu'); // Open menu panel
-        }}
-        aria-label="Open Menu"
-      >
-        {isMenuOpen ? <FiX /> : <FiMenu />}
-      </button>
+      <MenuButton onClick={() => panelRef.current?.openMenu()} />
 
       {/* Top Image */}
       <div className="relative w-full aspect-square" >
