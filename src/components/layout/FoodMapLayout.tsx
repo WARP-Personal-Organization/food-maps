@@ -3,11 +3,10 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { Dish } from '@/lib/dishData';
 import { Location } from '@/lib/locationData';
-import FoodPrintsNavbar from '@/components/FoooPrintsNavbar';
 import LeftSidePanel from './LeftSidePanel';
 import RightSideMapPanel from './RightSideMapPanel';
-import MobileMapPanel from './MobileMapPanel';
 import { FoodPrint } from '@/lib/foodprintData';
+import MobileMapLayout from '@/mobile/MobileMapLayout';
 
 interface FoodMapLayoutProps {
   dishes: Dish[];
@@ -136,11 +135,6 @@ const FoodMapLayout: React.FC<FoodMapLayoutProps> = ({
     <div className="h-screen w-full">
       {/* MOBILE VIEW - now only visible on screens below 900px */}
       <div className="hidden max-[899px]:flex flex-col h-screen">
-        <section className="fixed top-50 z-30 w-full">
-          <FoodPrintsNavbar />
-        </section>
-
-        <div className="h-full w-full pt-16 relative">
           {/* Panel layer - absolute positioned with higher z-index */}
           {(isFilterDishesViewOpen || !isPanelCollapsed) && (
             <div className="absolute inset-0 z-30 pt-16">
@@ -161,17 +155,14 @@ const FoodMapLayout: React.FC<FoodMapLayoutProps> = ({
           )}
 
           {/* Map layer - always fills the container */}
-          <MobileMapPanel
-            filterUI={filterUI}
+          <MobileMapLayout
             hasDishes={hasDishes}
             locations={allLocations}
             onLocationClick={handleLocationClick}
             activeFilters={activeFilters}
             onFilterChange={onFilterChange}
-            showBackButton={isPanelCollapsed && !isFilterDishesViewOpen}
             onFoodprintClick={handleFoodprintClick}
           />
-        </div>
       </div>
 
       {/* DESKTOP VIEW - now visible from 900px and up */}
