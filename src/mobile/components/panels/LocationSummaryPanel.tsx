@@ -1,37 +1,35 @@
 "use client";
-import React, { useState } from "react";
-import { FaTimes } from "react-icons/fa";
+import React from "react";
 import Image from "next/image";
-import { Location } from "@/lib/locationData";
-import LocationDetailPanel from "./LocationDetailPanel";
+import { Location } from "@/types/types";
+import CloseButton from "../buttons/CloseButton";
 
-interface LocationDetailSummaryPanelProps {
+interface LocationSummaryPanelProps {
   location: Location | null;
+  isVisible: boolean;
   onClose: () => void;
+  onViewDetails: () => void;
 }
 
-const LocationDetailSummaryPanel: React.FC<LocationDetailSummaryPanelProps> = ({
+const LocationSummaryPanel: React.FC<LocationSummaryPanelProps> = ({
   location,
   onClose,
+  onViewDetails,
+  isVisible,
 }) => {
-  const [isDetailPanelOpen, setIsDetailPanelOpen] = useState(false);
   if (!location) return null;
-  // Default data if not provided
-  const address = location.address || "Molo District, Iloilo City";
-  const openHours = location.openHours || "10:00 AM - 7:00 PM";
-  const priceRange = location.priceRange || "₱100-200";
 
-  const handleViewDetails = () => {
-    console.log("open view details page");
-    setIsDetailPanelOpen(true);
-  };
-
-  const handleClose = () => {
-    setIsDetailPanelOpen(false); // Close the panel
-  };
+  const address = location.address;
+  const openHours = location.openHours;
+  const priceRange = location.priceRange;
 
   return (
-    <div className="max-[899px]:flex hidden flex-col max-h-screen overflow-y-auto bg-gray-100 rounded-t-sm">
+    <div
+      className={`fixed bottom-0  w-full h-[65vh] bg-white z-50 rounded-t-sm shadow-lg overflow-y-auto touch-pan-y 
+    transform transition-transform duration-300 ${
+      isVisible ? "translate-y-0" : "translate-y-full"
+    }`}
+    >
       {/* Main image - Adjusted height */}
       <div className="relative w-full" style={{ height: "80vw" }}>
         <Image
@@ -44,14 +42,9 @@ const LocationDetailSummaryPanel: React.FC<LocationDetailSummaryPanelProps> = ({
       </div>
 
       {/* Close button (X) at top right */}
-      <button
-        onClick={onClose}
-        className="absolute top-4 right-4 z-20 bg-white h-10 w-10 p-2 shadow-md md:top-3 md:right-3 md:p-2 2xl:p-3 
-  flex items-center justify-center rounded transition-colors hover:bg-gray-100"
-        aria-label="Close details"
-      >
-        <FaTimes size={14} className="text-[#363636]" />
-      </button>
+      <div className="absolute top-4 right-4 z-50">
+        <CloseButton onClick={onClose} />
+      </div>
 
       <div className="bg-white flex flex-col rounded-t-sm w-full gap-2 pt-9 overflow-y-auto flex-1 z-10 relative -mt-[10%]">
         <div className="flex flex-col gap-4 px-6">
@@ -62,27 +55,28 @@ const LocationDetailSummaryPanel: React.FC<LocationDetailSummaryPanelProps> = ({
 
           <div className="flex flex-col gap-2">
             {/* Info Rows */}
-            {[{
-              icon: (
-                <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zM12 11.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z" />
-              ),
-              text: address,
-            },
-            {
-              icon: (
-                <>
-                  <path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8z" />
-                  <path d="M12.5 7H11v6l5.25 3.15.75-1.23-4.5-2.67z" />
-                </>
-              ),
-              text: openHours,
-            },
-            {
-              icon: (
-                <path d="M11.8 10.9c-2.27-.59-3-1.2-3-2.15 0-1.09 1.01-1.85 2.7-1.85 1.78 0 2.44.85 2.5 2.1h2.21c-.07-1.72-1.12-3.3-3.21-3.81V3h-3v2.16c-1.94.42-3.5 1.68-3.5 3.61 0 2.31 1.91 3.46 4.7 4.13 2.5.6 3 1.48 3 2.41 0 .69-.49 1.79-2.7 1.79-2.06 0-2.87-.92-2.98-2.1h-2.2c.12 2.19 1.76 3.42 3.68 3.83V21h3v-2.15c1.95-.37 3.5-1.5 3.5-3.55 0-2.84-2.43-3.81-4.7-4.4z" />
-              ),
-              text: priceRange,
-            },
+            {[
+              {
+                icon: (
+                  <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zM12 11.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z" />
+                ),
+                text: address,
+              },
+              {
+                icon: (
+                  <>
+                    <path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8z" />
+                    <path d="M12.5 7H11v6l5.25 3.15.75-1.23-4.5-2.67z" />
+                  </>
+                ),
+                text: openHours,
+              },
+              {
+                icon: (
+                  <path d="M11.8 10.9c-2.27-.59-3-1.2-3-2.15 0-1.09 1.01-1.85 2.7-1.85 1.78 0 2.44.85 2.5 2.1h2.21c-.07-1.72-1.12-3.3-3.21-3.81V3h-3v2.16c-1.94.42-3.5 1.68-3.5 3.61 0 2.31 1.91 3.46 4.7 4.13 2.5.6 3 1.48 3 2.41 0 .69-.49 1.79-2.7 1.79-2.06 0-2.87-.92-2.98-2.1h-2.2c.12 2.19 1.76 3.42 3.68 3.83V21h3v-2.15c1.95-.37 3.5-1.5 3.5-3.55 0-2.84-2.43-3.81-4.7-4.4z" />
+                ),
+                text: priceRange,
+              },
             ].map(({ icon, text }, index) => (
               <div
                 key={index}
@@ -125,7 +119,7 @@ const LocationDetailSummaryPanel: React.FC<LocationDetailSummaryPanelProps> = ({
             </button>
 
             <button
-              onClick={handleViewDetails}
+              onClick={onViewDetails}
               className="w-full bg-[#F9D408] font-bold rounded-sm bg-[#ebebeb] flex items-center justify-center focus:outline-none 
                 cursor-pointer hover:bg-[#E6C207] transition-colors py-2"
             >
@@ -134,15 +128,8 @@ const LocationDetailSummaryPanel: React.FC<LocationDetailSummaryPanelProps> = ({
           </div>
         </div>
       </div>
-
-      {/* Open the LocationDetailPanel to cover the whole screen */}
-      {isDetailPanelOpen && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 z-30">
-          <LocationDetailPanel location={location} onClose={handleClose} />
-        </div>
-      )}
     </div>
   );
 };
 
-export default LocationDetailSummaryPanel;
+export default LocationSummaryPanel;

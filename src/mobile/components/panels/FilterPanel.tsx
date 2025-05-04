@@ -6,7 +6,7 @@ import { Dish } from '@/types/types';
 import CloseButton from "../buttons/CloseButton";
 
 interface FilterPanelProps {
-  dishes: Dish[];
+  dishData: Dish[];
   selectedDishes: string[];
   toggleDishSelection: (dish: string) => void;
   isVisible: boolean;
@@ -15,7 +15,7 @@ interface FilterPanelProps {
 }
 
 const FilterPanel: React.FC<FilterPanelProps> = ({
-  dishes,
+  dishData,
   selectedDishes: initialSelected,
   toggleDishSelection,
   isVisible,
@@ -42,7 +42,7 @@ const FilterPanel: React.FC<FilterPanelProps> = ({
     onClose();
   };
 
-  const filteredDishes = dishes.filter((dish) =>
+  const filteredDishes = dishData.filter((dish) =>
     dish.name.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
