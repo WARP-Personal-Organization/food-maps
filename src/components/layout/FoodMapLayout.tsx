@@ -5,8 +5,7 @@ import { Dish } from '@/lib/dishData';
 import { Location } from '@/lib/locationData';
 import LeftSidePanel from './LeftSidePanel';
 import RightSideMapPanel from './RightSideMapPanel';
-import { FoodPrint } from '@/lib/foodprintData';
-import MobileMapLayout from '@/mobile/MobileMapLayout';
+import { FoodPrint } from '@/lib/foodPrintsData';
 
 interface FoodMapLayoutProps {
   dishes: Dish[];
@@ -133,38 +132,6 @@ const FoodMapLayout: React.FC<FoodMapLayoutProps> = ({
 
   return (
     <div className="h-screen w-full">
-      {/* MOBILE VIEW - now only visible on screens below 900px */}
-      <div className="hidden max-[899px]:flex flex-col h-screen">
-          {/* Panel layer - absolute positioned with higher z-index */}
-          {(isFilterDishesViewOpen || !isPanelCollapsed) && (
-            <div className="absolute inset-0 z-30 pt-16">
-              <LeftSidePanel
-                selectedLocation={selectedLocation}
-                closeLocationDetail={closeLocationDetail}
-                activeFilters={activeFilters}
-                onFilterChange={onFilterChange}
-                locationsMap={locationsMap}
-                isMobile={true}
-                onToggleCollapse={togglePanelCollapse}
-                isFilterDishesViewOpen={isFilterDishesViewOpen}
-                toggleFilterDishesView={toggleFilterDishesView}
-                selectedFoodprint={selectedFoodprint}
-                onCloseFoodprint={closeFoodprintDetail}
-              />
-            </div>
-          )}
-
-          {/* Map layer - always fills the container */}
-          <MobileMapLayout
-            hasDishes={hasDishes}
-            locations={allLocations}
-            onLocationClick={handleLocationClick}
-            activeFilters={activeFilters}
-            onFilterChange={onFilterChange}
-            onFoodprintClick={handleFoodprintClick}
-          />
-      </div>
-
       {/* DESKTOP VIEW - now visible from 900px and up */}
       <div className="hidden min-[900px]:flex h-screen w-full bg-white overflow-hidden">
         {/* Left Side - Text Content (responsive width based on screen size) */}

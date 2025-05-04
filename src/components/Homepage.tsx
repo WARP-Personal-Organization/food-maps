@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { ilonggoDishes } from '@/lib/dishData';
+import { DishData } from '@/lib/DishData';
 import useCarousel from '@/hooks/useCarousel';
 import MobileLayout from '@/mobile/MobileLayout';
 import DesktopLayout from './layout/DesktopLayout';
@@ -9,14 +9,14 @@ import DesktopLayout from './layout/DesktopLayout';
 export default function HomePage() {
   const { activeIndex, next, prev, handleTouchStart, handleTouchEnd } =
     useCarousel({
-      itemsCount: ilonggoDishes.length,
+      itemsCount: DishData.length,
     });
 
   return (
     <div className="h-screen w-full">
       {/* Mobile layout */}
       <MobileLayout
-        dishes={ilonggoDishes}
+        dishes={DishData}
         activeIndex={activeIndex}
         handleTouchStart={handleTouchStart}
         handleTouchEnd={handleTouchEnd}
@@ -26,7 +26,7 @@ export default function HomePage() {
 
       {/* Desktop layout */}
       <DesktopLayout
-        dishes={ilonggoDishes}
+        dishes={DishData}
         activeIndex={activeIndex}
         onNext={next}
         onPrev={prev}

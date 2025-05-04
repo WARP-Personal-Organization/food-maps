@@ -9,7 +9,6 @@ import { ilonggoDishes } from "@/lib/dishData";
 import LocationCard from "@/components/dishes/LocationCard";
 import FoodPrintDetailsPanel from "@/components/FoodprintDetailsPanel";
 import { FoodPrint } from "@/lib/foodprintData";
-import LocationDetailSummaryPanel from "@/components/LocationDetailSummaryPanel";
 
 // Add a new ExplorePanel component to display the Explore UI
 const ExplorePanel = ({
@@ -287,67 +286,6 @@ const LeftSidePanel: React.FC<LeftSidePanelProps> = ({
   // If there's nothing to display, return null to allow the panel to collapse
   if (!selectedLocation && activeFilters.length === 0 && !selectedFoodprint) {
     return null;
-  }
-
-  // Mobile rendering for other panels
-  if (isMobile) {
-    if (selectedFoodprint && onCloseFoodprint) {
-
-      return (
-        <>
-          {/* Background overlay to catch taps outside panel */}
-          <div className="fixed inset-0 z-30" onClick={closeLocationDetail} />
-
-          {/* Bottom sheet panel */}
-          <div className="fixed bottom-0 left-0 w-full h-[65vh] bg-white z-40 rounded-t-sm shadow-lg overflow-y-auto touch-pan-y">
-            <FoodPrintDetailsPanel
-            selectedFoodPrint={selectedFoodprint}
-            onClose={onCloseFoodprint}
-          />
-          </div>
-        </>
-      );
-    }
-
-    if (selectedLocation) {
-      return (
-        <>
-          {/* Background overlay to catch taps outside panel */}
-          <div className="fixed inset-0 z-30" onClick={closeLocationDetail} />
-
-          {/* Bottom sheet panel */}
-          <div className="fixed bottom-0 left-0 w-full h-[65vh] bg-white z-40 rounded-t-sm shadow-lg overflow-y-auto touch-pan-y">
-            <LocationDetailSummaryPanel
-              location={selectedLocation}
-              onClose={closeLocationDetail}
-            />
-          </div>
-        </>
-      );
-    }
-
-    return (
-      <div>
-        {/* Background overlay to catch taps outside panel */}
-        <div className="fixed inset-0 z-30" onClick={closeLocationDetail} />
-        <div className="fixed bottom-0 left-0 w-full h-[60vh] bg-white z-40 rounded-t-2xl shadow-lg overflow-y-auto touch-pan-y">
-          {singleFilterMode ? (
-            <FilteredDishPanel
-              dishes={ilonggoDishes}
-              activeFilter={activeDishFilter}
-              onClose={handleClosePanel}
-            />
-          ) : hasMultipleFilters ? (
-            <ExplorePanel
-              activeFilters={activeFilters}
-              onFilterChange={onFilterChange}
-              locationsMap={locationsMap}
-              onClose={handleClosePanel}
-            />
-          ) : null}
-        </div>
-      </div>
-    );
   }
 
   // Desktop rendering

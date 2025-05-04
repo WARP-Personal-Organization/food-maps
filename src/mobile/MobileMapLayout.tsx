@@ -1,71 +1,132 @@
 "use client";
 
-import React, { useRef } from "react";
-import { Location } from "@/lib/locationData";
+import React, { useMemo, useRef, useEffect } from "react";
+import { useRouter } from "next/navigation";
+import PanelManager, { PanelManagerRef } from "./components/PanelManager";
+import { Location, FoodPrint, Dish } from "@/types/types";
 import {
   ClientOnly,
   MapComponent,
   EmptyState,
 } from "../components/layout/MapUtilComponents";
-import { foodPrintsData, FoodPrint } from "@/lib/foodprintData";
+
 import { IoClose, IoReturnUpBackSharp } from "react-icons/io5";
-import PanelManager, { PanelManagerRef } from "./components/PanelManager";
-import { useRouter } from "next/navigation";
 import FilterButton from "./components/buttons/FilterButton";
 import MenuButton from "./components/buttons/MenuButton";
-import Dishes from "@/lib/Dishes";
+import { FoodPrintData } from "@/lib/FoodPrintData";
 
 interface MobileMapLayoutProps {
-  hasDishes: boolean;
-  locations: Location[];
-  onLocationClick: (location: Location) => void;
+  dishData: Dish[];
+  foodPrintData: FoodPrintData;
+  locationsMap: {
+    [key: string]: Location[];
+  };
   activeFilters?: string[];
   onFilterChange?: (filters: string[]) => void;
-  onFoodprintClick?: (foodprint: FoodPrint) => void;
 }
 
 const MobileMapLayout: React.FC<MobileMapLayoutProps> = ({
-  hasDishes,
-  locations,
-  onLocationClick,
+  dishData,
+  foodPrintData,
+  locationsMap,
   activeFilters = [],
   onFilterChange,
-  onFoodprintClick,
 }) => {
   const router = useRouter();
   const panelRef = useRef<PanelManagerRef | null>(null);
 
+  // Filter dishes based on active filters
+  const filteredDishes =
+    activeFilters.length === 0
+      ? dishData
+      : dishData.filter((dish) => activeFilters.includes(dish.name));
+
+  // Helper to determine if we have dishes to display
+  const hasDishes = filteredDishes && filteredDishes.length > 0;
+
+  // Get all locations
+  const allLocations = useMemo(() => {
+    const allLocs: Location[] = [];
+    if (activeFilters.length > 0) {
+      // Only include locations for active filters
+      activeFilters.forEach((filter) => {
+        if (locationsMap[filter]) {
+          allLocs.push(...locationsMap[filter]);
+        }
+      });
+    } else {
+      // Include all locations when no filters are active
+      Object.values(locationsMap).forEach((locations) => {
+        allLocs.push(...locations);
+      });
+    }
+    return allLocs;
+  }, [locationsMap, activeFilters]);
+
+  // Helper to get locations based on active filters
+  const getFilteredLocations = () => {
+    // Collect all locations for the active filters
+    const allLocations: Location[] = [];
+    activeFilters.forEach((filter) => {
+      if (locationsMap[filter]) {
+        allLocations.push(...locationsMap[filter]);
+      }
+    });
+
+    // Remove duplicates (if a location appears for multiple filters)
+    return allLocations.filter(
+      (location, index, self) =>
+        index === self.findIndex((l) => l.name === location.name)
+    );
+  };
+  const filteredLocations = getFilteredLocations();
+  // Update filters
   const updateFilters = (filters: string[]) => {
     onFilterChange?.(filters);
   };
 
+  // Foodprint markers filtered by active filters
   const foodprintMarkers = activeFilters.length
-    ? foodPrintsData.markers.filter((marker) =>
+    ? foodPrintData.markers.filter((marker) =>
         activeFilters.includes(marker.dishName)
       )
-    : foodPrintsData.markers;
+    : foodPrintData.markers;
 
-  // Fetch dishes from the server
-  // This function should be called in a useEffect or similar to fetch data on component mount
-  {
-    /* const fetchDishes = async () => {
-      try {
-        const res = await fetch("/api/dishes");
-        if (!res.ok) throw new Error("Failed to fetch dishes");
-        const data = await res.json();
-        return data.dishes; 
-      } catch (err) {
-        console.error(err);
-        return [];
+  // Location click handler
+  const handleLocationClick = (location: Location) => {
+    if (window.innerWidth <= 899) {
+      panelRef.current?.openLocationSummary(location);
+    }
+  };
+
+  // Foodprint click handler
+  const handleFoodprintClick = (foodprint: FoodPrint) => {
+    if (window.innerWidth <= 899) {
+      panelRef.current?.openFoodPrintSummary(foodprint);
+    }
+  };
+
+  // Update filters based on search params
+  useEffect(() => {
+    if (!window.location.search) return;
+
+    const searchParams = new URLSearchParams(window.location.search);
+    const dishParam = searchParams.get("dish");
+
+    if (dishParam && onFilterChange) {
+      const newFilters = dishParam.split(",");
+      if (JSON.stringify(activeFilters) !== JSON.stringify(newFilters)) {
+        onFilterChange(newFilters);
       }
-    };*/
-  }
+    }
+  }, [onFilterChange, activeFilters]);
 
   return (
-    <div className="absolute inset-0 w-full">
+    <div className="hidden max-[899px]:flex flex-col h-screen">
       <PanelManager
         ref={panelRef}
-        dishes={Dishes}
+        dishData={dishData}
+        selectedDishes={activeFilters}
         onFilterApply={updateFilters}
       />
 
@@ -80,8 +141,10 @@ const MobileMapLayout: React.FC<MobileMapLayoutProps> = ({
         <ClientOnly>
           <div className="h-full w-full bg-[#3b3b3f]">
             <MapComponent
-              key={`mobile-map-${activeFilters.join("-")}-${locations.length}`}
-              locations={locations}
+              key={`mobile-map-${activeFilters.join("-")}-${
+                allLocations.length
+              }`}
+              locations={filteredLocations}
               foodPrintMarkers={foodprintMarkers}
               mapImageUrl="/Map.png"
               mapBounds={[
@@ -89,8 +152,8 @@ const MobileMapLayout: React.FC<MobileMapLayoutProps> = ({
                 [1000, 1000],
               ]}
               defaultZoom={3}
-              onLocationClick={onLocationClick}
-              onFoodPrintClick={onFoodprintClick}
+              onLocationClick={handleLocationClick}
+              onFoodPrintClick={handleFoodprintClick}
               useCustomMap
             />
           </div>
