@@ -100,14 +100,6 @@ const MobileLayout: React.FC<MobileLayoutProps> = ({
         {/* Spacer */}
         <div className="flex-grow"></div>
 
-        {/* Swipe Indicator */}
-        <div className="border-t border-text-[#c2c2c2] pt-4 mb-7">
-        <p className="flex items-center justify-center text-[#7c7c7c] text-sm">
-            Swipe to see other Ilonggo top dishes{" "}
-            <GoArrowRight className="ml-2 text-[#7c7c7c]" />
-          </p>
-        </div>
-
         {/* Button */}
         <button
           onClick={handleWhereToEat}

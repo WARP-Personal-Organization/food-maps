@@ -15,6 +15,10 @@ const AboutPanel: React.FC<AboutPanelProps> = ({ onClose, isVisible }) => {
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-white bg-opacity-60 backdrop-blur-sm overflow-y-auto">
       <div className="pb-10">
+        {/* <Image
+          src="/images/DGLogo.png"
+          alt="Daily Guardian Logo"
+        /> */}
         {/* Close Button */}
         <CloseButton
           onClick={onClose}
@@ -23,7 +27,7 @@ const AboutPanel: React.FC<AboutPanelProps> = ({ onClose, isVisible }) => {
         />
         {/* Your exact design below */}
         <section className="m-0 pt-13">
-          <div className="w-max pb-8 pt-18">
+          <div className="pb-8 pt-18">
             <Image
               src="/images/about-image.png"
               alt="About Us Cover Photo"
