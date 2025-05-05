@@ -2,7 +2,7 @@
 
 import React, { useMemo, useRef, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import PanelManager, { PanelManagerRef } from "@/desktop/components/PanelManager";
+import PanelManager, { PanelManagerRef } from "./components/PanelManager";
 import { Location, FoodPrint, Dish } from "@/types/types";
 import {
   ClientOnly,
@@ -11,8 +11,8 @@ import {
 } from "../components/layout/MapUtilComponents";
 
 import { IoClose, IoReturnUpBackSharp } from "react-icons/io5";
-import FilterButton from "@/desktop/components/buttons/FilterButton";
-import MenuButton from "@/desktop/components/buttons/MenuButton";
+import MenuButton from "@/mobile/components/buttons/MenuButton";
+import FilterButton from "@/mobile/components/buttons/FilterButton";
 import { FoodPrintData } from "@/lib/FoodPrintData";
 
 
@@ -132,7 +132,7 @@ const DesktopMapLayout: React.FC<DesktopMapLayoutProps> = ({
       />
 
       {/* Filter Button */}
-      <FilterButton onClick={() => panelRef.current?.openFilter()} />
+      <FilterButton isDesktop={true} onClick={() => panelRef.current?.openFilter()} />
 
       {/* Menu Button */}
       <MenuButton onClick={() => panelRef.current?.openMenu()} />
