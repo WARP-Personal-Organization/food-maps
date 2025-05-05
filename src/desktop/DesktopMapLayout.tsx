@@ -1,8 +1,8 @@
-"use client";
+'use client';
 
 import React, { useMemo, useRef, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import PanelManager, { PanelManagerRef } from "./components/PanelManager";
+import PanelManager, { PanelManagerRef } from "@/desktop/components/PanelManager";
 import { Location, FoodPrint, Dish } from "@/types/types";
 import {
   ClientOnly,
@@ -11,21 +11,22 @@ import {
 } from "../components/layout/MapUtilComponents";
 
 import { IoClose, IoReturnUpBackSharp } from "react-icons/io5";
-import FilterButton from "./components/buttons/FilterButton";
-import MenuButton from "./components/buttons/MenuButton";
+import FilterButton from "@/desktop/components/buttons/FilterButton";
+import MenuButton from "@/desktop/components/buttons/MenuButton";
 import { FoodPrintData } from "@/lib/FoodPrintData";
 
-interface MobileMapLayoutProps {
-  dishData: Dish[];
-  foodPrintData: FoodPrintData;
-  locationsMap: {
-    [key: string]: Location[];
-  };
-  activeFilters?: string[];
-  onFilterChange?: (filters: string[]) => void;
-}
 
-const MobileMapLayout: React.FC<MobileMapLayoutProps> = ({
+interface DesktopMapLayoutProps {
+  dishData: Dish[];
+    foodPrintData: FoodPrintData;
+    locationsMap: {
+      [key: string]: Location[];
+    };
+    activeFilters?: string[];
+    onFilterChange?: (filters: string[]) => void;
+  }
+
+const DesktopMapLayout: React.FC<DesktopMapLayoutProps> = ({
   dishData,
   foodPrintData,
   locationsMap,
@@ -122,7 +123,7 @@ const MobileMapLayout: React.FC<MobileMapLayoutProps> = ({
   }, [onFilterChange, activeFilters]);
 
   return (
-    <div className="hidden max-[899px]:flex flex-col h-screen">
+    <div className="hidden min-[900px]:flex h-screen w-full bg-white overflow-hidden">
       <PanelManager
         ref={panelRef}
         dishData={dishData}
@@ -186,20 +187,10 @@ const MobileMapLayout: React.FC<MobileMapLayoutProps> = ({
               ))}
             </div>
           </div>
-
-          <div className="w-full mt-2">
-            <button
-              onClick={() => router.push("/")}
-              className="w-full bg-white py-3 px-4 rounded-lg shadow text-gray-800 font-semibold flex items-center justify-center"
-            >
-              <IoReturnUpBackSharp className="w-5 h-5 mr-2" />
-              Back to Dishes
-            </button>
-          </div>
         </div>
       )}
     </div>
   );
 };
 
-export default MobileMapLayout;
+export default DesktopMapLayout;
