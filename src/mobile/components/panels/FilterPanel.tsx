@@ -1,14 +1,13 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import { Dish } from '@/types/types';
 import CloseButton from "../buttons/CloseButton";
 
 interface FilterPanelProps {
   dishData: Dish[];
-  selectedDishes: string[];
-  toggleDishSelection: (dish: string) => void;
+  initialSelectedDishes: string[];
   isVisible: boolean;
   onClose: () => void;
   onFilterApply: (filters: string[]) => void;
@@ -16,16 +15,26 @@ interface FilterPanelProps {
 
 const FilterPanel: React.FC<FilterPanelProps> = ({
   dishData,
-  selectedDishes,
-  toggleDishSelection,
   isVisible,
+  initialSelectedDishes,
   onClose,
   onFilterApply,
 }) => {
   const [searchTerm, setSearchTerm] = useState("");
+  const [selectedDishes, setSelectedDishes] = useState<string[]>([]);
 
-  const handleToggle = (dish: string) => {
-    toggleDishSelection(dish);
+  useEffect(() => {
+    if (isVisible) {
+      setSelectedDishes(initialSelectedDishes);
+    }
+  }, [isVisible, initialSelectedDishes]);
+
+  const handleToggleDishSelection = (dish: string) => {
+    setSelectedDishes((prev) =>
+      prev.includes(dish)
+        ? prev.filter((item) => item !== dish)
+        : [...prev, dish]
+    );
   };
 
   const applyFilters = () => {
@@ -33,15 +42,15 @@ const FilterPanel: React.FC<FilterPanelProps> = ({
     onClose();
   };
 
+
   const filteredDishes = dishData.filter((dish) =>
     dish.name.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   return (
     <div
-      className={`fixed top-0 left-0 w-5/6 md:w-1/3 h-full bg-white shadow-lg z-50 transform transition-transform duration-300 ${
-        isVisible ? "translate-x-0" : "-translate-x-full"
-      } flex flex-col`}
+      className={`fixed top-0 left-0 w-5/6 md:w-1/3 h-full bg-white shadow-lg z-50 transform transition-transform duration-300 ${isVisible ? "translate-x-0" : "-translate-x-full"
+        } flex flex-col`}
     >
       {/* Header */}
       <div className="flex items-center justify-between p-4 border-b">
@@ -81,10 +90,9 @@ const FilterPanel: React.FC<FilterPanelProps> = ({
             return (
               <div
                 key={dish.name}
-                className={`relative border rounded-md overflow-hidden cursor-pointer ${
-                  isSelected ? "border-yellow-400" : "border-gray-200"
-                }`}
-                onClick={() => handleToggle(dish.name)}
+                className={`relative border rounded-md overflow-hidden cursor-pointer ${isSelected ? "border-yellow-400" : "border-gray-200"
+                  }`}
+                onClick={() => handleToggleDishSelection(dish.name)}
               >
                 <div className="relative w-full h-24">
                   <Image
