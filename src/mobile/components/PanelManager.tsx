@@ -1,6 +1,12 @@
 "use client";
 
-import React, { useState, useImperativeHandle, forwardRef, useEffect } from "react";
+import React, {
+  useState,
+  useImperativeHandle,
+  forwardRef,
+  useEffect,
+  useRef,
+} from "react";
 import MenuPanel from "./panels/MenuPanel";
 import FilterPanel from "./panels/FilterPanel";
 import AboutPanel from "./panels/AboutPanel";
@@ -40,7 +46,10 @@ export interface PanelManagerRef {
 const PanelManager: React.ForwardRefRenderFunction<
   PanelManagerRef,
   PanelManagerProps
-> = ({ dishData = [], selectedDishes: selectedDishesProp = [], onFilterApply, }, ref) => {
+> = (
+  { dishData = [], selectedDishes: selectedDishesProp = [], onFilterApply },
+  ref
+) => {
   const [currentPanel, setCurrentPanel] = useState<PanelType>(null);
   const [selectedDishes, setSelectedDishes] = useState<string[]>([]);
   const [selectedLocation, setSelectedLocation] = useState<Location | null>(
@@ -49,11 +58,20 @@ const PanelManager: React.ForwardRefRenderFunction<
   const [selectedFoodPrint, setSelectedFoodPrint] = useState<FoodPrint | null>(
     null
   );
+  const prevSelectedDishesRef = useRef<string[]>([]);
 
   useEffect(() => {
-    setSelectedDishes(selectedDishesProp);
-  }, [selectedDishesProp]);
+    const prevSelectedDishes = prevSelectedDishesRef.current;
 
+    const hasChanged =
+      selectedDishesProp.length !== prevSelectedDishes.length ||
+      !selectedDishesProp.every((dish, i) => dish === prevSelectedDishes[i]);
+
+    if (hasChanged) {
+      setSelectedDishes(selectedDishesProp);
+      prevSelectedDishesRef.current = selectedDishesProp;
+    }
+  }, [selectedDishesProp]);
 
   const toggleDishSelection = (dish: string) => {
     setSelectedDishes((prevSelected) =>

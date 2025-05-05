@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import Image from "next/image";
 import { Dish } from '@/types/types';
 import CloseButton from "../buttons/CloseButton";
@@ -16,28 +16,19 @@ interface FilterPanelProps {
 
 const FilterPanel: React.FC<FilterPanelProps> = ({
   dishData,
-  selectedDishes: initialSelected,
+  selectedDishes,
   toggleDishSelection,
   isVisible,
   onClose,
   onFilterApply,
 }) => {
   const [searchTerm, setSearchTerm] = useState("");
-  const [selectedDishes, setSelectedDishes] =
-    useState<string[]>(initialSelected);
-
-  useEffect(() => {
-    setSelectedDishes(initialSelected);
-  }, [initialSelected]);
 
   const handleToggle = (dish: string) => {
-    setSelectedDishes((prev) =>
-      prev.includes(dish) ? prev.filter((d) => d !== dish) : [...prev, dish]
-    );
+    toggleDishSelection(dish);
   };
 
   const applyFilters = () => {
-    selectedDishes.forEach((dish) => toggleDishSelection(dish));
     onFilterApply(selectedDishes);
     onClose();
   };
@@ -82,9 +73,8 @@ const FilterPanel: React.FC<FilterPanelProps> = ({
         </div>
       </div>
 
-      {/* Scrollable Content */}
+      {/* Dish List */}
       <div className="flex-1 overflow-y-auto">
-        {/* Dish List */}
         <div className="px-4 grid grid-cols-2 gap-3 pb-4">
           {filteredDishes.map((dish) => {
             const isSelected = selectedDishes.includes(dish.name);
