@@ -1,11 +1,11 @@
 "use client";
 
 import React, { useState } from "react";
-import { FaTimes } from "react-icons/fa";
 import Image from "next/image";
 import { Location } from "@/lib/locationData";
 import LocationActionButtons from "@/components/LocationActionButtons";
 import { MapPin, Tag } from "lucide-react";
+import CloseButton from "../buttons/CloseButton";
 
 interface LocationDetailPanelProps {
   location: Location | null;
@@ -55,16 +55,10 @@ const LocationDetailPanel: React.FC<LocationDetailPanelProps> = ({
         </div>
 
         {/* Close button (X) at top right */}
-        <button
+        <CloseButton
           onClick={onClose}
-          className="absolute top-4 right-4 z-20 bg-white rounded-full p-2 shadow-md md:top-3 md:right-3 md:p-1.5 2xl:p-3"
-          aria-label="Close details"
-        >
-          <FaTimes
-            size={16}
-            className="text-gray-700 md:text-sm 2xl:scale-125"
-          />
-        </button>
+          className="absolute top-2 right-2 z-20 p-1.5 shadow-md"
+        />
 
         {/* Image indicator dots */}
         <div className="absolute bottom-6 left-0 right-0 flex justify-center gap-1 md:bottom-4 2xl:gap-2 2xl:bottom-8">
