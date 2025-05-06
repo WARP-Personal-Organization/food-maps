@@ -441,7 +441,6 @@ const FoodMapRenderer: React.FC<MapComponentProps> = ({
     <div
       ref={mapContainerRef}
       className="map-container w-full h-full"
-      style={{ backgroundColor: '#3b3b3f' }}
     ></div>
   );
 };

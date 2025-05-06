@@ -1,8 +1,8 @@
 import React from 'react';
-import { Dish } from '@/lib/dishData';
 import DishContent from '../components/dishes/DishContent';
 import DishImage from '../components/dishes/DishImage';
 import CarouselControls from '../components/carousel/CarouselControls';
+import { Dish } from '@/types/types';
 
 interface DesktopLayoutProps {
   dishes: Dish[];

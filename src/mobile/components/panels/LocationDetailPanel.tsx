@@ -2,8 +2,8 @@
 
 import React, { useState } from "react";
 import { FaTimes } from "react-icons/fa";
+import { Location } from "@/types/types";
 import Image from "next/image";
-import { Location } from "@/lib/locationData";
 import LocationActionButtons from "@/components/buttons/LocationActionButtons";
 
 interface LocationDetailPanelProps {

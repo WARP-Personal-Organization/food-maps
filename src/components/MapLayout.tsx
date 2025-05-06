@@ -1,4 +1,6 @@
-import React, { useState, useEffect } from "react";
+"use client";
+
+import React, { useState, useEffect, useCallback } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import DesktopMapLayout from "@/desktop/DesktopMapLayout";
 import { DishData } from "@/lib/DishData";
@@ -6,21 +8,42 @@ import { LocationData } from "@/lib/LocationData";
 import MobileMapLayout from "@/mobile/MobileMapLayout";
 import { FoodPrintData } from "@/lib/FoodPrintData";
 
-// Create a client component to handle search params
 function MapLayout() {
     const searchParams = useSearchParams();
     const router = useRouter();
     const [activeFilters, setActiveFilters] = useState<string[]>([]);
 
+    // Memoized function to update the URL
+    const updateUrl = useCallback(
+        (filters: string[]) => {
+            const currentDishParam = searchParams.get("dish");
+            const currentFiltersString = currentDishParam || "";
+            const newFiltersString = filters.join(",");
+
+            if (currentFiltersString === newFiltersString) {
+                return;
+            }
+
+            const viewParam = searchParams.get("view");
+            const viewQueryString = viewParam ? `&view=${viewParam}` : "";
+
+            const newUrl =
+                filters.length > 0
+                    ? `/food-map?dish=${filters.map(encodeURIComponent).join(",")}${viewQueryString}`
+                    : viewParam
+                        ? `/food-map?view=${viewParam}`
+                        : "/food-map";
+
+            router.push(newUrl, { scroll: false });
+        },
+        [searchParams, router]
+    );
+
     // Initialize client-side state
     useEffect(() => {
-        // Get the dish parameter from the URL
         const dishParam = searchParams.get("dish");
         if (dishParam) {
-            // Support multiple dishes separated by commas
             const dishNames = dishParam.split(",");
-
-            // Filter out dishes that don't exist in our data
             const validDishes = dishNames.filter((dishName) =>
                 DishData.some((dish) => dish.name === dishName)
             );
@@ -30,50 +53,18 @@ function MapLayout() {
             }
         }
 
-        // Listen for clearFilters event from FilteredDishPanel
         const handleClearFilters = () => {
             setActiveFilters([]);
             updateUrl([]);
         };
 
         window.addEventListener("clearFilters", handleClearFilters);
-
         return () => {
             window.removeEventListener("clearFilters", handleClearFilters);
         };
-    }, [searchParams]);
+    }, [searchParams, updateUrl]);
 
-    // Update the URL when filters change
-    const updateUrl = (filters: string[]) => {
-        // Compare with current filters to avoid unnecessary updates
-        const currentDishParam = searchParams.get("dish");
-        const currentFiltersString = currentDishParam || "";
-        const newFiltersString = filters.join(",");
-
-        // Skip URL update if filters haven't changed
-        if (currentFiltersString === newFiltersString) {
-            return;
-        }
-
-        // Preserve view parameter if it exists
-        const viewParam = searchParams.get("view");
-        const viewQueryString = viewParam ? `&view=${viewParam}` : "";
-
-        const newUrl =
-            filters.length > 0
-                ? `/food-map?dish=${filters
-                    .map((f) => encodeURIComponent(f))
-                    .join(",")}${viewQueryString}`
-                : viewParam
-                    ? `/food-map?view=${viewParam}`
-                    : "/food-map";
-
-        router.push(newUrl, { scroll: false });
-    };
-
-    // Handle filter changes
     const handleFilterChange = (newFilters: string[]) => {
-        // Skip update if filters haven't changed
         if (JSON.stringify(activeFilters) === JSON.stringify(newFilters)) {
             return;
         }

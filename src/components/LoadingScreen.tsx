@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import Image from 'next/image';
 
 export default function LoadingScreen() {
   const [loadingProgress, setLoadingProgress] = useState(0);
@@ -16,7 +17,6 @@ export default function LoadingScreen() {
     return () => clearTimeout(timer);
   }, [loadingProgress]);
 
-  // Define text sequences for the loading counter
   useEffect(() => {
     const textSequences = [
       'Serving in 3, 2, 1...',
@@ -26,12 +26,8 @@ export default function LoadingScreen() {
     ];
 
     const textInterval = setInterval(() => {
-      const textIndex = Math.floor(
-        (loadingProgress / 100) * textSequences.length
-      );
-      setLoadingText(
-        textSequences[Math.min(textIndex, textSequences.length - 1)]
-      );
+      const textIndex = Math.floor((loadingProgress / 100) * textSequences.length);
+      setLoadingText(textSequences[Math.min(textIndex, textSequences.length - 1)]);
     }, 1000);
 
     return () => clearInterval(textInterval);
@@ -51,11 +47,15 @@ export default function LoadingScreen() {
 
       {/* DailyGuardian logo */}
       <div className="absolute top-[7%] flex justify-center w-full z-10">
-        <div className="w-45 h-auto">
-          <img
+        <div className="w-45 h-auto relative" style={{ width: '180px', height: 'auto' }}>
+          <Image
             src="/images/DGLogo.png"
             alt="Daily Guardian Logo"
-            className="w-full h-full object-contain"
+            layout="responsive"
+            width={180}
+            height={60}
+            objectFit="contain"
+            priority
           />
         </div>
       </div>
@@ -64,11 +64,15 @@ export default function LoadingScreen() {
       <div className="flex flex-col items-center justify-center z-10 px-4 space-y-4">
         <div className="flex flex-col items-center">
           <div className="text-center">
-            <div className="w-80 md:w-[500px] lg:w-[600px] h-auto">
-              <img
+            <div className="w-80 md:w-[500px] lg:w-[600px] h-auto relative">
+              <Image
                 src="/images/food-prints.png"
                 alt="Foodprints Logo"
-                className="w-full h-full object-contain"
+                layout="responsive"
+                width={600}
+                height={200}
+                objectFit="contain"
+                priority
               />
             </div>
           </div>

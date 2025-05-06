@@ -1,7 +1,7 @@
 import React from 'react';
 import Link from 'next/link';
-import { Dish } from '@/lib/dishData';
 import { useSearchParams } from 'next/navigation';
+import { Dish } from '@/types/types';
 
 interface DishContentProps {
   dish: Dish;

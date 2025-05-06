@@ -1,7 +1,7 @@
 'use client';
 
 import { Suspense, useEffect } from 'react';
-import LoadingScreen from '@/components/loading-screen';
+import LoadingScreen from '@/components/LoadingScreen';
 import DelayedComponent, { resetCache } from '@/components/map/delayed-component';
 import HomePage from '@/components/Homepage';
 

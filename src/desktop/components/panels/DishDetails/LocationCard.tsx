@@ -1,6 +1,7 @@
 'use client';
 
-import React from 'react';
+import Image from 'next/image';
+import React, { useState } from 'react';
 
 interface LocationCardProps {
   name: string;
@@ -19,19 +20,19 @@ const LocationCard: React.FC<LocationCardProps> = ({
   rating,
   tags,
 }) => {
+  const [imgSrc, setImgSrc] = useState(image);
+
   return (
     <div className="mb-4 mx-6 bg-gray-50 rounded-xl shadow-sm border border-gray-100 cursor-pointer">
       <div className="p-4">
         <div className="flex">
           <div className="h-16 w-16 relative rounded-md overflow-hidden bg-gray-100 flex-shrink-0">
-            <img
-              src={image}
+            <Image
+              src={imgSrc}
               alt={name}
-              className="w-full h-full object-cover"
-              onError={(e) => {
-                const target = e.target as HTMLImageElement;
-                target.src = '/images/filter-dish/siopao.png'; // Fallback image
-              }}
+              fill
+              className="object-cover"
+              onError={() => setImgSrc('/images/filter-dish/siopao.png')}
             />
           </div>
           <div className="ml-4 flex-grow">
