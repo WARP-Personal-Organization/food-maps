@@ -122,6 +122,7 @@ const FoodPrintDetailsPanel: React.FC<FoodPrintDetailsPanelProps> = ({
       <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-white via-white to-transparent pt-20 pb-0 p-5 z-10">
         <LocationActionButtons />
       </div>
+      <div className="pb-10"></div>
     </div>
   );
 };

@@ -1,7 +1,7 @@
 
 import React, { useState, useEffect } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
-import FoodMapLayout from "@/desktop/FoodMapLayout";
+import FoodMapLayout from "../layout/FoodMapLayout";
 import { DishData } from "@/lib/DishData";
 import { LocationData } from "@/lib/LocationData";
 import DishFilter from "@/components/food-map/DishFilter";
