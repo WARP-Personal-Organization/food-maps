@@ -1,12 +1,11 @@
 'use client';
 
 import React, { useRef } from 'react';
-import { GoArrowRight } from "react-icons/go";
-import { Dish } from "@/lib/dishData";
 import DishImage from "@/components/dishes/DishImage";
 import { useRouter } from "next/navigation";
 import PanelManager, { PanelManagerRef } from './components/PanelManager'
-import MenuButton from './components/buttons/MenuButton';
+import MenuButton from "@/components/buttons/MenuButton";
+import { Dish } from '@/types/types';
 
 interface MobileLayoutProps {
   dishes: Dish[];

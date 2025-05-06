@@ -2,7 +2,7 @@
 import React from "react";
 import Image from "next/image";
 import { Location } from "@/types/types";
-import CloseButton from "../buttons/CloseButton";
+import CloseButton from "@/components/buttons/CloseButton";
 
 interface LocationSummaryPanelProps {
   location: Location | null;

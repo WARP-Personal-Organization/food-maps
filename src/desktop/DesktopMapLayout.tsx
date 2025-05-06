@@ -10,8 +10,8 @@ import {
 } from "../components/layout/MapUtilComponents";
 
 import { IoClose } from "react-icons/io5";
-import MenuButton from "@/mobile/components/buttons/MenuButton";
-import FilterButton from "@/mobile/components/buttons/FilterButton";
+import MenuButton from "@/components/buttons/MenuButton";
+import FilterButton from "@/components/buttons/FilterButton";
 import { FoodPrintData } from "@/lib/FoodPrintData";
 
 interface DesktopMapLayoutProps {

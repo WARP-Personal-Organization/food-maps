@@ -2,7 +2,7 @@ import React from "react";
 import { Location } from "@/types/types";
 import LocationCard from "@/desktop/components/panels/DishDetails/LocationCard"
 import { LocationData } from "@/lib/LocationData";
-import CloseButton from "@/mobile/components/buttons/CloseButton";
+import CloseButton from "@/components/buttons/CloseButton";
 
 interface ExplorePanelProps {
   activeFilters: string[];

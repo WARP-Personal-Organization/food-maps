@@ -11,8 +11,8 @@ import {
 } from "../components/layout/MapUtilComponents";
 
 import { IoClose, IoReturnUpBackSharp } from "react-icons/io5";
-import FilterButton from "./components/buttons/FilterButton";
-import MenuButton from "./components/buttons/MenuButton";
+import MenuButton from "@/components/buttons/MenuButton";
+import FilterButton from "@/components/buttons/FilterButton";
 import { FoodPrintData } from "@/lib/FoodPrintData";
 
 interface MobileMapLayoutProps {
@@ -130,7 +130,7 @@ const MobileMapLayout: React.FC<MobileMapLayoutProps> = ({
       />
 
       {/* Filter Button */}
-      <FilterButton className="z-20" onClick={() => panelRef.current?.openFilter()} />
+      <FilterButton className="z-20 absolute" onClick={() => panelRef.current?.openFilter()} />
 
       {/* Menu Button */}
       <MenuButton onClick={() => panelRef.current?.openMenu()} />

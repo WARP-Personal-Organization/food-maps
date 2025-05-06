@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import { Dish } from '@/types/types';
-import CloseButton from "../buttons/CloseButton";
+import CloseButton from "@/components/buttons/CloseButton";
 
 interface FilterPanelProps {
   dishData: Dish[];

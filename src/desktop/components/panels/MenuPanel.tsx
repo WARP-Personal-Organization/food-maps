@@ -3,7 +3,7 @@
 import React from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import CloseButton from "../buttons/CloseButton";
+import CloseButton from "@/components/buttons/CloseButton";
 
 interface MenuPanelProps {
   onClose: () => void;

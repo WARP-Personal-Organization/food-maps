@@ -1,8 +1,8 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { Dish } from "@/lib/dishData";
-import CloseButton from "../../buttons/CloseButton";
+import CloseButton from "@/components/buttons/CloseButton";
+import { Dish } from "@/types/types";
 import DishDetails from "@/desktop/components/panels/DishDetails/DishDetails";
 
 interface DishDetailsPanelProps {
