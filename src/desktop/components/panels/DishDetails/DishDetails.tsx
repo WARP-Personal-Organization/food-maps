@@ -2,8 +2,6 @@
 
 import React, { useRef, useEffect } from 'react';
 import Image from 'next/image';
-import { Dish } from '@/lib/dishData';
-import { dishLocations } from '@/lib/locationData';
 import LocationCard from './LocationCard';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 // Import Swiper components and styles
@@ -17,6 +15,8 @@ import 'swiper/css/autoplay';
 
 // Custom styles for Swiper pagination
 import './dish-details-swiper.css';
+import { LocationData } from '@/lib/LocationData';
+import { Dish } from '@/types/types';
 
 interface DishDetailsProps {
   dish: Dish;
@@ -40,8 +40,8 @@ const DishDetails: React.FC<DishDetailsProps> = ({
     }
   }, [dish.name]); // Dependency on dish.name to trigger when dish changes
 
-  // Get actual locations for this dish from dishLocations
-  const locations = dishLocations[dish.name] || [];
+  // Get actual locations for this dish from LocationData
+  const locations = LocationData[dish.name] || [];
 
   // Convert location data to the format expected by LocationCard
   const locationCards = locations.map((location) => ({

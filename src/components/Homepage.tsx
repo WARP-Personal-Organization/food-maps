@@ -4,7 +4,7 @@ import React from 'react';
 import { DishData } from '@/lib/DishData';
 import useCarousel from '@/hooks/useCarousel';
 import MobileLayout from '@/mobile/MobileLayout';
-import DesktopLayout from './layout/DesktopLayout';
+import DesktopLayout from '../desktop/DesktopLayout';
 
 export default function HomePage() {
   const { activeIndex, next, prev, handleTouchStart, handleTouchEnd } =
