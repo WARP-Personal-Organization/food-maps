@@ -6,7 +6,7 @@ import LocationDetailPanel from "@/components/LocationDetailPanel";
 import FilteredDishPanel from "@/components/food-map/FilteredDishPanel";
 import FilterDishesView from "@/components/food-map/FilterDishesView";
 import { ilonggoDishes } from "@/lib/dishData";
-import LocationCard from "@/components/dishes/LocationCard";
+import LocationCard from "@/desktop/components/panels/DishDetails/LocationCard";
 import FoodPrintDetailsPanel from "@/components/FoodprintDetailsPanel";
 import { FoodPrint } from "@/lib/foodprintData";
 

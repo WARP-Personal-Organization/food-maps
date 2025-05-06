@@ -18,16 +18,16 @@ import 'swiper/css/autoplay';
 // Custom styles for Swiper pagination
 import './dish-details-swiper.css';
 
-interface DishDetailsViewProps {
+interface DishDetailsProps {
   dish: Dish;
   onPrevDish: () => void;
   onNextDish: () => void;
 }
 
-const DishDetailsView: React.FC<DishDetailsViewProps> = ({
+const DishDetails: React.FC<DishDetailsProps> = ({
   dish,
   onPrevDish,
-  onNextDish,
+  onNextDish
 }) => {
   // Reference to the Swiper instance
   const swiperRef = useRef<SwiperRef>(null);
@@ -60,9 +60,9 @@ const DishDetailsView: React.FC<DishDetailsViewProps> = ({
     dish.images && dish.images.length > 0 ? dish.images : [dish.image]; // Fallback to single image if no images array
 
   return (
-    <div className="bg-white flex flex-col h-full w-full">
+    <div>
       {/* Header with image slider */}
-      <div className="relative w-full aspect-[4/3] bg-amber-50 flex-shrink-0">
+      <div className="relative ">
         <Swiper
           ref={swiperRef}
           modules={[Pagination, Autoplay]}
@@ -78,7 +78,7 @@ const DishDetailsView: React.FC<DishDetailsViewProps> = ({
         >
           {dishImages.map((imgSrc, index) => (
             <SwiperSlide key={index}>
-              <div className="relative w-full h-full">
+              <div className="relative w-full h-[30vh]">
                 <Image
                   src={imgSrc}
                   alt={`${dish.name} - image ${index + 1}`}
@@ -174,4 +174,4 @@ const DishDetailsView: React.FC<DishDetailsViewProps> = ({
   );
 };
 
-export default DishDetailsView;
+export default DishDetails;

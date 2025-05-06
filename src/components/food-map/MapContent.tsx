@@ -11,22 +11,10 @@ import { FoodPrintData } from "@/lib/FoodPrintData";
 function MapLayout() {
     const searchParams = useSearchParams();
     const router = useRouter();
-    const [mounted, setMounted] = useState(false);
     const [activeFilters, setActiveFilters] = useState<string[]>([]);
-    const [isFilterDishesViewOpen, setIsFilterDishesViewOpen] = useState(false);
-    const [initialPanelCollapsed, setInitialPanelCollapsed] = useState(false);
 
     // Initialize client-side state
     useEffect(() => {
-        setMounted(true);
-
-        // Get the view parameter from the URL
-        const viewParam = searchParams.get("view");
-        // If view=map, set the panel to be initially collapsed
-        if (viewParam === "map") {
-            setInitialPanelCollapsed(true);
-        }
-
         // Get the dish parameter from the URL
         const dishParam = searchParams.get("dish");
         if (dishParam) {
@@ -94,44 +82,6 @@ function MapLayout() {
         setActiveFilters(newFilters);
         updateUrl(newFilters);
     };
-
-    // Toggle the filter dishes view
-    const toggleFilterDishesView = () => {
-        console.log(
-            "toggleFilterDishesView called, current state:",
-            isFilterDishesViewOpen
-        );
-
-        // Create a custom event to signal we're changing the filter view
-        // without wanting to collapse the panel
-        const preventCollapseEvent = new CustomEvent("preventPanelCollapse", {
-            bubbles: true,
-            detail: { isOpeningFilter: !isFilterDishesViewOpen },
-        });
-        document.dispatchEvent(preventCollapseEvent);
-
-        // Create a custom event to signal to close any open location detail
-        // when opening the filter dishes view
-        const closeLocationEvent = new CustomEvent("closeLocationDetail", {
-            bubbles: true,
-        });
-        document.dispatchEvent(closeLocationEvent);
-
-        // Toggle the filter view state
-        setIsFilterDishesViewOpen(!isFilterDishesViewOpen);
-        console.log("Filter view state toggled to:", !isFilterDishesViewOpen);
-    };
-
-    // Filter dishes based on active filters
-    const filteredDishes =
-        activeFilters.length === 0
-            ? DishData
-            : DishData.filter((dish) => activeFilters.includes(dish.name));
-
-    // If not mounted yet, render a minimal placeholder to avoid hydration mismatch
-    if (!mounted) {
-        return <div className="flex flex-col h-screen overflow-hidden"></div>;
-    }
 
     return (
         <div className="h-screen w-full">

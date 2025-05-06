@@ -49,8 +49,9 @@ const FilterPanel: React.FC<FilterPanelProps> = ({
 
   return (
     <div
-      className={`fixed top-0 left-0 w-5/6 md:w-1/3 h-full bg-white shadow-lg z-50 transform transition-transform duration-300 ${isVisible ? "translate-x-0" : "-translate-x-full"
-        } flex flex-col`}
+      className={`fixed top-0 left-0 w-[35vh] h-full bg-white shadow-lg z-50 transform transition-transform duration-300 
+        ${isVisible ? "translate-x-0" : "-translate-x-full"
+        }`}
     >
       {/* Header */}
       <div className="flex items-center justify-between p-4 border-b">

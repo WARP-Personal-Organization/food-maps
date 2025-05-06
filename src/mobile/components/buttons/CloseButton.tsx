@@ -13,7 +13,7 @@ const CloseButton: React.FC<CloseButtonProps> = ({ onClick, className = "", aria
   return (
     <button
       onClick={onClick}
-      className={`text-2xl rounded p-2 text-black ${className}`}
+      className={`${className} text-2xl bg-gray-200 rounded p-2 text-black`}
       aria-label={ariaLabel}
     >
       <FiX />

@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useMemo, useRef, useEffect } from "react";
+import React, {useRef, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import PanelManager, { PanelManagerRef } from "./components/PanelManager";
 import { Location, FoodPrint, Dish } from "@/types/types";
@@ -43,25 +43,6 @@ const MobileMapLayout: React.FC<MobileMapLayoutProps> = ({
 
   // Helper to determine if we have dishes to display
   const hasDishes = filteredDishes && filteredDishes.length > 0;
-
-  // Get all locations
-  const allLocations = useMemo(() => {
-    const allLocs: Location[] = [];
-    if (activeFilters.length > 0) {
-      // Only include locations for active filters
-      activeFilters.forEach((filter) => {
-        if (locationsMap[filter]) {
-          allLocs.push(...locationsMap[filter]);
-        }
-      });
-    } else {
-      // Include all locations when no filters are active
-      Object.values(locationsMap).forEach((locations) => {
-        allLocs.push(...locations);
-      });
-    }
-    return allLocs;
-  }, [locationsMap, activeFilters]);
 
   // Helper to get locations based on active filters
   const getFilteredLocations = () => {
@@ -131,7 +112,7 @@ const MobileMapLayout: React.FC<MobileMapLayoutProps> = ({
       />
 
       {/* Filter Button */}
-      <FilterButton onClick={() => panelRef.current?.openFilter()} />
+      <FilterButton className="z-20" onClick={() => panelRef.current?.openFilter()} />
 
       {/* Menu Button */}
       <MenuButton onClick={() => panelRef.current?.openMenu()} />
@@ -161,7 +142,7 @@ const MobileMapLayout: React.FC<MobileMapLayoutProps> = ({
 
       {/* Active Filters + Back Button UI */}
       {activeFilters.length > 0 && (
-        <div className="absolute bottom-0 left-0 w-full max-h-[35vh] z-20 flex flex-col justify-start gap-4 px-4 pt-6 pb-4 bg-gradient-to-t from-[#202020] to-transparent overflow-hidden">
+        <div className="absolute bottom-0 left-0 w-full max-h-[35vh] z-10 flex flex-col justify-start gap-4 px-4 pt-6 pb-4 bg-gradient-to-t from-[#202020] to-transparent overflow-hidden">
           <div className="flex flex-col gap-2 overflow-y-auto pr-1">
             <span className="text-xs font-bold text-white">
               Filters ({activeFilters.length})

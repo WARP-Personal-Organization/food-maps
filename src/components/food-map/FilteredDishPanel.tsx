@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { Dish } from '@/lib/dishData';
-import DishDetailsView from '../dishes/DishDetailsView';
+import DishDetailsView from '../../desktop/components/panels/DishDetails/DishDetails';
 
 interface FilteredDishPanelProps {
   dishes: Dish[];

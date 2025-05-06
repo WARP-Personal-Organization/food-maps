@@ -16,7 +16,7 @@ const FilterButton: React.FC<FilterButtonProps> = ({
     <button
       onClick={onClick}
       aria-label="Open Filter"
-      className={`fixed top-10 left-5 z-20 bg-white rounded shadow-lg p-2 h-10 flex items-center justify-center gap-2 ${className} ${
+      className={`${className} fixed top-10 left-5 bg-white rounded shadow-lg p-2 h-10 flex items-center justify-center gap-2 ${
         isDesktop ? "px-4" : "w-10"
       }`}
     >

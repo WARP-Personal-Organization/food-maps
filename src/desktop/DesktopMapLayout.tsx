@@ -1,6 +1,6 @@
-'use client';
+"use client";
 
-import React, { useMemo, useRef, useEffect } from "react";
+import React, { useRef, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import PanelManager, { PanelManagerRef } from "./components/PanelManager";
 import { Location, FoodPrint, Dish } from "@/types/types";
@@ -10,21 +10,20 @@ import {
   EmptyState,
 } from "../components/layout/MapUtilComponents";
 
-import { IoClose, IoReturnUpBackSharp } from "react-icons/io5";
+import { IoClose } from "react-icons/io5";
 import MenuButton from "@/mobile/components/buttons/MenuButton";
 import FilterButton from "@/mobile/components/buttons/FilterButton";
 import { FoodPrintData } from "@/lib/FoodPrintData";
 
-
 interface DesktopMapLayoutProps {
   dishData: Dish[];
-    foodPrintData: FoodPrintData;
-    locationsMap: {
-      [key: string]: Location[];
-    };
-    activeFilters?: string[];
-    onFilterChange?: (filters: string[]) => void;
-  }
+  foodPrintData: FoodPrintData;
+  locationsMap: {
+    [key: string]: Location[];
+  };
+  activeFilters?: string[];
+  onFilterChange?: (filters: string[]) => void;
+}
 
 const DesktopMapLayout: React.FC<DesktopMapLayoutProps> = ({
   dishData,
@@ -35,6 +34,7 @@ const DesktopMapLayout: React.FC<DesktopMapLayoutProps> = ({
 }) => {
   const router = useRouter();
   const panelRef = useRef<PanelManagerRef | null>(null);
+  const [panelOpen, setPanelOpen] = useState(false);
 
   // Filter dishes based on active filters
   const filteredDishes =
@@ -44,25 +44,6 @@ const DesktopMapLayout: React.FC<DesktopMapLayoutProps> = ({
 
   // Helper to determine if we have dishes to display
   const hasDishes = filteredDishes && filteredDishes.length > 0;
-
-  // Get all locations
-  const allLocations = useMemo(() => {
-    const allLocs: Location[] = [];
-    if (activeFilters.length > 0) {
-      // Only include locations for active filters
-      activeFilters.forEach((filter) => {
-        if (locationsMap[filter]) {
-          allLocs.push(...locationsMap[filter]);
-        }
-      });
-    } else {
-      // Include all locations when no filters are active
-      Object.values(locationsMap).forEach((locations) => {
-        allLocs.push(...locations);
-      });
-    }
-    return allLocs;
-  }, [locationsMap, activeFilters]);
 
   // Helper to get locations based on active filters
   const getFilteredLocations = () => {
@@ -95,16 +76,16 @@ const DesktopMapLayout: React.FC<DesktopMapLayoutProps> = ({
 
   // Location click handler
   const handleLocationClick = (location: Location) => {
-    if (window.innerWidth <= 899) {
-      panelRef.current?.openLocationSummary(location);
-    }
+    // if (window.innerWidth <= 899) {
+      panelRef.current?.openLocationDetail(location);
+    // }
   };
 
   // Foodprint click handler
   const handleFoodprintClick = (foodprint: FoodPrint) => {
-    if (window.innerWidth <= 899) {
-      panelRef.current?.openFoodPrintSummary(foodprint);
-    }
+    // if (window.innerWidth <= 899) {
+      panelRef.current?.openFoodPrintDetail(foodprint);
+    // }
   };
 
   // Update filters based on search params
@@ -124,16 +105,37 @@ const DesktopMapLayout: React.FC<DesktopMapLayoutProps> = ({
 
   return (
     <div className="hidden min-[900px]:flex h-screen w-full bg-white overflow-hidden">
-      <PanelManager
-        ref={panelRef}
-        dishData={dishData}
-        selectedDishes={activeFilters}
-        onFilterApply={updateFilters}
-      />
+      <div className="absolute top-0 left-0 w-full h-full flex flex-col gap-4 overflow-hidden">
+        <PanelManager
+          ref={panelRef}
+          dishData={dishData}
+          selectedDishes={activeFilters}
+          onFilterApply={updateFilters}
+          onClose={() => setPanelOpen(false)}
+        />
+        {/* Open Dish Detail */}
+        <div
+          className={`relative z-30 transition-transform duration-300 ease-in-out ${
+            panelOpen ? "translate-x-110" : "translate-x-0"
+          }`}
+        >
+          <FilterButton
+            className="z-10"
+            onClick={() => {
+              panelRef.current?.openDishDetails();
+              setPanelOpen(true);
+            }}
+          />
 
-      {/* Filter Button */}
-      <FilterButton isDesktop={true} onClick={() => panelRef.current?.openFilter()} />
-
+          <FilterButton
+            isDesktop={true}
+            onClick={() => {
+              panelRef.current?.openFilter();
+              setPanelOpen(true);
+            }}
+          />
+        </div>
+      </div>
       {/* Menu Button */}
       <MenuButton onClick={() => panelRef.current?.openMenu()} />
 
