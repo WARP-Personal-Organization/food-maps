@@ -74,7 +74,7 @@ const FoodPrintSummaryPanel: React.FC<FoodPrintSummaryPanelProps> = ({
 
         <div className="px-6">
           <div className="grid grid-cols-2 gap-2">
-            <GetDirectionsButton/>
+            <GetDirectionsButton className="bg-gray-200"/>
 
             <ReadArticleButton
               onClick={onReadArticle}

@@ -3,7 +3,8 @@
 import React from 'react';
 import Image from 'next/image';
 import { FoodPrint } from '@/types/types';
-import { X, MapPin } from 'lucide-react';
+import { MapPin } from 'lucide-react';
+import CloseButton from '../buttons/CloseButton';
 import LocationActionButtons from '@/components/LocationActionButtons';
 
 interface FoodPrintDetailsPanelProps {
@@ -52,22 +53,17 @@ const FoodPrintDetailsPanel: React.FC<FoodPrintDetailsPanelProps> = ({
         </div>
 
         {/* Close button in the top-right corner */}
-        <button
+        <CloseButton
           onClick={onClose}
-          className="absolute top-2 right-2 z-20 bg-white rounded-full p-1.5 shadow-md"
-          aria-label="Close details"
-          tabIndex={0}
-          onKeyDown={(e) => e.key === 'Enter' && onClose()}
-        >
-          <X className="h-4 w-4 text-gray-700" />
-        </button>
+          className="absolute top-2 right-2 z-20 p-1.5 shadow-md"
+        />
       </div>
 
       {/* Content wrapper with rounded top and negative margin - matching reference */}
       <div className="rounded-t-sm -mt-2 relative z-10 bg-white flex-1 overflow-y-auto pb-32">
         {/* Label - FOODPRINT */}
         <div className="pt-3 pb-2 px-6">
-          <span className="inline-block bg-yellow-400 px-4 py-1.5 text-sm font-bold uppercase">
+          <span className="inline-block bg-yellow-300 px-4 py-1.5 text-sm font-bold uppercase">
             FOODPRINT
           </span>
         </div>
