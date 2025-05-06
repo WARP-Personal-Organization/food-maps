@@ -32,8 +32,9 @@ const LocationActionButtons: React.FC = () => {
 
       {/* Get Directions button */}
       <div>
-        <GetDirectionsButton className="w-full bg-yellow-300"/>
+        <GetDirectionsButton className="w-full bg-yellow-300 p-2"/>
       </div>
+      <div className='pb-3'></div>
     </div>
   );
 };

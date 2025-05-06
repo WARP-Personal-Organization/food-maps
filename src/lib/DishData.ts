@@ -1,6 +1,5 @@
 import { Dish } from "@/types/types";
-
-import { LocationData } from "@/lib/LocationData";
+import { LocationData } from "./LocationData";
 
 export const DishData: Dish[] = [
   {
