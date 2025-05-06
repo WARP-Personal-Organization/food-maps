@@ -16,9 +16,7 @@ export default function Home() {
       <Suspense fallback={<LoadingScreen />}>
         <DelayedComponent delayTime={3500}>
           {/* Main content will appear after loading */}
-          <div className="">
             <HomePage/>
-          </div>
         </DelayedComponent>
       </Suspense>
     </main>

@@ -5,18 +5,17 @@ import Image from 'next/image';
 import { FoodPrint } from '@/types/types';
 import { X, MapPin } from 'lucide-react';
 import LocationActionButtons from '@/components/LocationActionButtons';
+import CloseButton from '../buttons/CloseButton';
 
 interface FoodPrintDetailsPanelProps {
   selectedFoodPrint: FoodPrint | null;
   isVisible: boolean;
-  isMobile: boolean;
   onClose: () => void;
 }
 
 const FoodPrintDetailsPanel: React.FC<FoodPrintDetailsPanelProps> = ({
   selectedFoodPrint,
   isVisible,
-  isMobile,
   onClose,
 }) => {
   if (!selectedFoodPrint) {
@@ -28,19 +27,12 @@ const FoodPrintDetailsPanel: React.FC<FoodPrintDetailsPanelProps> = ({
 
   return (
     <div
-      className={`${
-        isMobile
-          ? `fixed bottom-0  w-full h-full bg-white z-50 rounded-t-sm shadow-lg overflow-y-auto touch-pan-y 
-    transform transition-transform duration-300 ${
-      isVisible ? "translate-y-0" : "translate-y-full"
-    }`
-          : `bg-white overflow-hidden w-full max-w-md mx-auto flex flex-col h-full relative md:max-w-sm lg:max-w-full transform transition-transform duration-300 ${
-              isVisible ? "translate-x-0" : "translate-x-full"
-            }`
-      }`}
+      className={`fixed top-0 left-0 w-[35vh] h-full bg-white shadow-lg z-50 transform transition-transform duration-300 
+        ${isVisible ? "translate-x-0" : "-translate-x-full"
+        }`}
     >
       {/* Main image - matching the reference image */}
-      <div className="relative h-40 w-full md:h-48 lg:h-52 xl:h-56 2xl:h-60 flex-shrink-0">
+      <div className="relative h-[30vh] w-full">
         <div className="overflow-hidden h-full w-full">
           <Image
             src={imageUrl}
@@ -52,15 +44,7 @@ const FoodPrintDetailsPanel: React.FC<FoodPrintDetailsPanelProps> = ({
         </div>
 
         {/* Close button in the top-right corner */}
-        <button
-          onClick={onClose}
-          className="absolute top-2 right-2 z-20 bg-white rounded-full p-1.5 shadow-md"
-          aria-label="Close details"
-          tabIndex={0}
-          onKeyDown={(e) => e.key === 'Enter' && onClose()}
-        >
-          <X className="h-4 w-4 text-gray-700" />
-        </button>
+        <CloseButton onClick={onClose} className="absolute top-4 right-4" />
       </div>
 
       {/* Content wrapper with rounded top and negative margin - matching reference */}

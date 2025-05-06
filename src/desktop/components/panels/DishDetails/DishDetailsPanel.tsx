@@ -2,8 +2,8 @@
 
 import React, { useEffect, useState } from "react";
 import { Dish } from "@/lib/dishData";
-import DishDetailsView from "@/desktop/components/panels/DishDetails/DishDetails";
 import CloseButton from "../../buttons/CloseButton";
+import DishDetails from "@/desktop/components/panels/DishDetails/DishDetails";
 
 interface DishDetailsPanelProps {
   dishes: Dish[];
@@ -51,7 +51,7 @@ const DishDetailsPanel: React.FC<DishDetailsPanelProps> = ({
         <CloseButton onClick={onClose} />
       </div>
       <CloseButton onClick={onClose} className="absolute top-5 right-5 z-40" />
-      <DishDetailsView
+      <DishDetails
         dish={currentDish}
         onPrevDish={handlePrevDish}
         onNextDish={handleNextDish}

@@ -37,3 +37,15 @@ export type FoodPrint = {
   extendedDescription?: string[];
   title?: string;
 };
+
+export type PanelType =
+| "dishDetails"
+| "menu"
+| "filter"
+| "about"
+| "locationSummary"
+| "locationDetail"
+| "foodPrintSummary"
+| "foodPrintDetail"
+| "explore"
+| null;

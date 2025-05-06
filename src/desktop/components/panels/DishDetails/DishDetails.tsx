@@ -59,8 +59,13 @@ const DishDetails: React.FC<DishDetailsProps> = ({
   const dishImages =
     dish.images && dish.images.length > 0 ? dish.images : [dish.image]; // Fallback to single image if no images array
 
+    const isVisible = true; // This should be controlled by the parent component
   return (
-    <div>
+    <div
+      className={`fixed top-0 left-0 w-[35vh] h-full bg-white shadow-lg z-50 transform transition-transform duration-300 
+        ${isVisible ? "translate-x-0" : "-translate-x-full"
+        }`}
+    >
       {/* Header with image slider */}
       <div className="relative ">
         <Swiper

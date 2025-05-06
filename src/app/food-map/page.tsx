@@ -1,7 +1,7 @@
 "use client";
 
 import { Suspense } from "react";
-import MapLayout from "@/components/food-map/MapContent";
+import MapLayout from "@/components/food-map/MapLayout";
 
 // Main page component with Suspense boundary
 export default function FoodMapPage() {

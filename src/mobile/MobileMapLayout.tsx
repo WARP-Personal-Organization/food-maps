@@ -1,6 +1,6 @@
 "use client";
 
-import React, {useRef, useEffect } from "react";
+import React, { useRef, useEffect, useMemo } from "react";
 import { useRouter } from "next/navigation";
 import PanelManager, { PanelManagerRef } from "./components/PanelManager";
 import { Location, FoodPrint, Dish } from "@/types/types";
@@ -69,10 +69,28 @@ const MobileMapLayout: React.FC<MobileMapLayoutProps> = ({
   // Foodprint markers filtered by active filters
   const foodprintMarkers = activeFilters.length
     ? foodPrintData.markers.filter((marker) =>
-        activeFilters.includes(marker.dishName)
-      )
+      activeFilters.includes(marker.dishName)
+    )
     : foodPrintData.markers;
 
+  // Get all locations
+  const allLocations = useMemo(() => {
+    const allLocs: Location[] = [];
+    if (activeFilters.length > 0) {
+      // Only include locations for active filters
+      activeFilters.forEach((filter) => {
+        if (locationsMap[filter]) {
+          allLocs.push(...locationsMap[filter]);
+        }
+      });
+    } else {
+      // Include all locations when no filters are active
+      Object.values(locationsMap).forEach((locations) => {
+        allLocs.push(...locations);
+      });
+    }
+    return allLocs;
+  }, [locationsMap, activeFilters]);
   // Location click handler
   const handleLocationClick = (location: Location) => {
     if (window.innerWidth <= 899) {
@@ -122,6 +140,8 @@ const MobileMapLayout: React.FC<MobileMapLayoutProps> = ({
         <ClientOnly>
           <div className="h-full w-full bg-[#3b3b3f]">
             <MapComponent
+              key={`mobile-map-${activeFilters.join("-")}-${allLocations.length
+                }`}
               locations={filteredLocations}
               foodPrintMarkers={foodprintMarkers}
               mapImageUrl="/Map.png"

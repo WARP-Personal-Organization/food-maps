@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import DesktopMapLayout from "@/desktop/DesktopMapLayout";
@@ -84,7 +83,7 @@ function MapLayout() {
     };
 
     return (
-        <div className="h-screen w-full">
+        <div className="h-screen w-screen">
             <MobileMapLayout
                 dishData={DishData}
                 foodPrintData={FoodPrintData}
@@ -94,7 +93,7 @@ function MapLayout() {
             />
 
             {/* Desktop layout: visible on screens >= 900px */}
-            <div className="hidden min-[900px]:flex h-screen w-full bg-white overflow-hidden">
+            <div className="hidden min-[900px]:flex overflow-hidden">
                 <DesktopMapLayout
                     dishData={DishData}
                     foodPrintData={FoodPrintData}

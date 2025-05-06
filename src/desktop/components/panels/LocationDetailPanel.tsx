@@ -5,18 +5,17 @@ import { FaTimes } from "react-icons/fa";
 import Image from "next/image";
 import { Location } from "@/lib/locationData";
 import LocationActionButtons from "@/components/LocationActionButtons";
+import CloseButton from "../buttons/CloseButton";
 
 interface LocationDetailPanelProps {
   location: Location | null;
   isVisible: boolean;
-  isMobile: boolean;
   onClose: () => void;
 }
 
 const LocationDetailPanel: React.FC<LocationDetailPanelProps> = ({
   location,
   isVisible,
-  isMobile,
   onClose,
 }) => {
   const [activeTab, setActiveTab] = useState("photos");
@@ -30,19 +29,12 @@ const LocationDetailPanel: React.FC<LocationDetailPanelProps> = ({
 
   return (
     <div
-      className={`${
-        isMobile
-          ? `fixed bottom-0  w-full h-full bg-white z-50 rounded-t-sm shadow-lg overflow-y-auto touch-pan-y 
-    transform transition-transform duration-300 ${
-      isVisible ? "translate-y-0" : "translate-y-full"
-    }`
-          : `bg-white overflow-hidden w-full max-w-md mx-auto flex flex-col h-full relative md:max-w-sm lg:max-w-full transform transition-transform duration-300 ${
-              isVisible ? "translate-x-0" : "translate-x-full"
-            }`
-      }`}
+      className={`fixed top-0 left-0 w-[35vh] h-full bg-white shadow-lg z-50 transform transition-transform duration-300 
+        ${isVisible ? "translate-x-0" : "-translate-x-full"
+        }`}
     >
       {/* Main image - Adjusted height */}
-      <div className="relative h-56 w-full md:h-48 lg:h-54 xl:h-68 2xl:h-80 3xl:h-96">
+      <div className="relative h-[30vh] w-full">
         <div className="rounded-t-xl overflow-hidden h-full w-full">
           <Image
             src={location.photos?.[0] || "/images/robertos/r5.jpg"}
@@ -54,25 +46,15 @@ const LocationDetailPanel: React.FC<LocationDetailPanelProps> = ({
         </div>
 
         {/* Close button (X) at top right */}
-        <button
-          onClick={onClose}
-          className="absolute top-4 right-4 z-20 bg-white rounded-full p-2 shadow-md md:top-3 md:right-3 md:p-1.5 2xl:p-3"
-          aria-label="Close details"
-        >
-          <FaTimes
-            size={16}
-            className="text-gray-700 md:text-sm 2xl:scale-125"
-          />
-        </button>
+        <CloseButton onClick={onClose} className="absolute top-4 right-4" />
 
         {/* Image indicator dots */}
         <div className="absolute bottom-6 left-0 right-0 flex justify-center gap-1 md:bottom-4 2xl:gap-2 2xl:bottom-8">
           {[0, 1, 2, 3, 4].map((index) => (
             <div
               key={index}
-              className={`h-1 w-1 rounded-full ${
-                index === 0 ? "bg-white" : "bg-white/40"
-              } md:h-1 md:w-1 2xl:h-2 2xl:w-2`}
+              className={`h-1 w-1 rounded-full ${index === 0 ? "bg-white" : "bg-white/40"
+                } md:h-1 md:w-1 2xl:h-2 2xl:w-2`}
             />
           ))}
         </div>
@@ -148,11 +130,10 @@ const LocationDetailPanel: React.FC<LocationDetailPanelProps> = ({
       <div className="border-b border-gray-200">
         <div className="flex">
           <button
-            className={`flex-1 text-center py-3 text-base relative cursor-pointer ${
-              activeTab === "photos"
+            className={`flex-1 text-center py-3 text-base relative cursor-pointer ${activeTab === "photos"
                 ? "text-gray-800 font-bold"
                 : "text-gray-400 font bold"
-            } md:py-2 md:text-sm lg:py-2 lg:text-sm xl:py-3 xl:text-base 2xl:py-5 2xl:text-xl`}
+              } md:py-2 md:text-sm lg:py-2 lg:text-sm xl:py-3 xl:text-base 2xl:py-5 2xl:text-xl`}
             onClick={() => setActiveTab("photos")}
           >
             Photos
@@ -161,11 +142,10 @@ const LocationDetailPanel: React.FC<LocationDetailPanelProps> = ({
             )}
           </button>
           <button
-            className={`flex-1 text-center py-3 text-base relative cursor-pointer ${
-              activeTab === "menu"
+            className={`flex-1 text-center py-3 text-base relative cursor-pointer ${activeTab === "menu"
                 ? "text-gray-800 font-bold"
                 : "text-gray-400 font-bold"
-            } md:py-2 md:text-sm lg:py-2 lg:text-sm xl:py-3 xl:text-base 2xl:py-5 2xl:text-xl`}
+              } md:py-2 md:text-sm lg:py-2 lg:text-sm xl:py-3 xl:text-base 2xl:py-5 2xl:text-xl`}
             onClick={() => setActiveTab("menu")}
           >
             Menu

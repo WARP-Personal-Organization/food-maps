@@ -1,9 +1,8 @@
 "use client";
 
-import React, { useRef, useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
+import React, { useRef, useEffect, useState, useMemo } from "react";
 import PanelManager, { PanelManagerRef } from "./components/PanelManager";
-import { Location, FoodPrint, Dish } from "@/types/types";
+import { Location, FoodPrint, Dish, PanelType } from "@/types/types";
 import {
   ClientOnly,
   MapComponent,
@@ -32,9 +31,9 @@ const DesktopMapLayout: React.FC<DesktopMapLayoutProps> = ({
   activeFilters = [],
   onFilterChange,
 }) => {
-  const router = useRouter();
   const panelRef = useRef<PanelManagerRef | null>(null);
   const [panelOpen, setPanelOpen] = useState(false);
+  const [currentPanel, setCurrentPanel] = useState<PanelType | null>(null);
 
   // Filter dishes based on active filters
   const filteredDishes =
@@ -70,22 +69,39 @@ const DesktopMapLayout: React.FC<DesktopMapLayoutProps> = ({
   // Foodprint markers filtered by active filters
   const foodprintMarkers = activeFilters.length
     ? foodPrintData.markers.filter((marker) =>
-        activeFilters.includes(marker.dishName)
-      )
+      activeFilters.includes(marker.dishName)
+    )
     : foodPrintData.markers;
+
+  // Get all locations
+  const allLocations = useMemo(() => {
+    const allLocs: Location[] = [];
+    if (activeFilters.length > 0) {
+      // Only include locations for active filters
+      activeFilters.forEach((filter) => {
+        if (locationsMap[filter]) {
+          allLocs.push(...locationsMap[filter]);
+        }
+      });
+    } else {
+      // Include all locations when no filters are active
+      Object.values(locationsMap).forEach((locations) => {
+        allLocs.push(...locations);
+      });
+    }
+    return allLocs;
+  }, [locationsMap, activeFilters]);
 
   // Location click handler
   const handleLocationClick = (location: Location) => {
-    // if (window.innerWidth <= 899) {
-      panelRef.current?.openLocationDetail(location);
-    // }
+    setPanelOpen(true);
+    panelRef.current?.openLocationDetail(location);
   };
 
   // Foodprint click handler
   const handleFoodprintClick = (foodprint: FoodPrint) => {
-    // if (window.innerWidth <= 899) {
-      panelRef.current?.openFoodPrintDetail(foodprint);
-    // }
+    setPanelOpen(true);
+    panelRef.current?.openFoodPrintDetail(foodprint);
   };
 
   // Update filters based on search params
@@ -105,45 +121,79 @@ const DesktopMapLayout: React.FC<DesktopMapLayoutProps> = ({
 
   return (
     <div className="hidden min-[900px]:flex h-screen w-full bg-white overflow-hidden">
-      <div className="absolute top-0 left-0 w-full h-full flex flex-col gap-4 overflow-hidden">
+      <div className="absolute top-0 left-0 w-full h-full gap-4 overflow-hidden">
         <PanelManager
           ref={panelRef}
           dishData={dishData}
           selectedDishes={activeFilters}
           onFilterApply={updateFilters}
           onClose={() => setPanelOpen(false)}
+          onPanelChange={setCurrentPanel}
         />
-        {/* Open Dish Detail */}
-        <div
-          className={`relative z-30 transition-transform duration-300 ease-in-out ${
-            panelOpen ? "translate-x-110" : "translate-x-0"
+      </div>
+      {(!currentPanel || !['explore', 'filter'].includes(currentPanel)) && (
+      <div
+        className={`absolute z-30 w-full transition-transform duration-300 ease-in-out ${panelOpen ? "translate-x-[35vh]" : "translate-x-0"
           }`}
-        >
-          <FilterButton
-            className="z-10"
-            onClick={() => {
-              panelRef.current?.openDishDetails();
-              setPanelOpen(true);
-            }}
-          />
+      >
+        <div className="flex items-center gap-4 px-4 py-3 overflow-x-auto">
+          {/* Filter Buttons */}
+          <div className="flex items-center gap-2 shrink-0">
+            <FilterButton
+              className="z-10"
+              onClick={() => {
+                panelRef.current?.openDishDetails();
+                setPanelOpen(true);
+              }}
+            />
+            <FilterButton
+              isDesktop={true}
+              onClick={() => {
+                panelRef.current?.openFilter();
+                setPanelOpen(true);
+              }}
+            />
+          </div>
 
-          <FilterButton
-            isDesktop={true}
-            onClick={() => {
-              panelRef.current?.openFilter();
-              setPanelOpen(true);
-            }}
-          />
+          {/* Filter Label + Tags */}
+          <div className="flex items-center gap-2 flex-wrap text-white">
+            <span className="text-xs font-bold whitespace-nowrap">
+              Filters ({activeFilters.length})
+            </span>
+
+            {activeFilters.map((filter) => (
+              <div
+                key={filter}
+                className="bg-yellow-300 border border-blue-400 rounded-full flex items-center text-sm text-gray-900 font-medium px-3 py-1 shadow-sm"
+              >
+                <span className="pr-1">{filter}</span>
+                <button
+                  onClick={() =>
+                    updateFilters(activeFilters.filter((f) => f !== filter))
+                  }
+                  className="w-5 h-5 flex items-center justify-center text-gray-800"
+                  aria-label={`Remove ${filter} filter`}
+                >
+                  <IoClose />
+                </button>
+              </div>
+            ))}
+          </div>
         </div>
       </div>
+      )}
+
+
       {/* Menu Button */}
-      <MenuButton onClick={() => panelRef.current?.openMenu()} />
+      <MenuButton className="z-30" onClick={() => panelRef.current?.openMenu()} />
 
       {/* Map or Empty State */}
       {hasDishes ? (
         <ClientOnly>
           <div className="h-full w-full bg-[#3b3b3f]">
             <MapComponent
+              key={`mobile-map-${activeFilters.join("-")}-${allLocations.length
+                }`}
               locations={filteredLocations}
               foodPrintMarkers={foodprintMarkers}
               mapImageUrl="/Map.png"
@@ -160,36 +210,6 @@ const DesktopMapLayout: React.FC<DesktopMapLayoutProps> = ({
         </ClientOnly>
       ) : (
         <EmptyState />
-      )}
-
-      {/* Active Filters + Back Button UI */}
-      {activeFilters.length > 0 && (
-        <div className="absolute bottom-0 left-0 w-full max-h-[35vh] z-20 flex flex-col justify-start gap-4 px-4 pt-6 pb-4 bg-gradient-to-t from-[#202020] to-transparent overflow-hidden">
-          <div className="flex flex-col gap-2 overflow-y-auto pr-1">
-            <span className="text-xs font-bold text-white">
-              Filters ({activeFilters.length})
-            </span>
-            <div className="flex flex-wrap gap-2">
-              {activeFilters.map((filter) => (
-                <div
-                  key={filter}
-                  className="bg-yellow-300 border border-blue-400 rounded-full flex items-center text-sm text-gray-900 font-medium px-2 py-2 shadow-sm"
-                >
-                  <span className="pl-2 pr-1">{filter}</span>
-                  <button
-                    onClick={() =>
-                      updateFilters(activeFilters.filter((f) => f !== filter))
-                    }
-                    className="w-5 h-5 flex items-center justify-center text-gray-800"
-                    aria-label={`Remove ${filter} filter`}
-                  >
-                    <IoClose />
-                  </button>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
       )}
     </div>
   );
