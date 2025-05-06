@@ -65,7 +65,7 @@ export const ClientOnly = ({ children }: { children: React.ReactNode }) => {
 // Dynamically import the Map component to avoid SSR issues with Mapbox
 // Using a stable key and memoization to prevent re-renders
 const DynamicMapComponent = dynamic(
-  () => import('@/components/FoodMapRenderer'),
+  () => import('@/components/map/FoodMapRenderer'),
   {
     ssr: false,
     loading: () => (

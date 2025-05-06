@@ -4,7 +4,7 @@ import React from 'react';
 import Image from 'next/image';
 import { FoodPrint } from '@/types/types';
 import { MapPin } from 'lucide-react';
-import LocationActionButtons from '@/components/LocationActionButtons';
+import LocationActionButtons from '@/components/buttons/LocationActionButtons';
 import CloseButton from "@/components/buttons/CloseButton";
 
 interface FoodPrintDetailsPanelProps {

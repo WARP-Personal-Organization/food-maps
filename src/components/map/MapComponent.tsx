@@ -4,8 +4,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import mapboxgl from 'mapbox-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
 import '../styles/map.css';
-import { Location } from '@/lib/locationData';
-import { FoodPrint } from '@/lib/foodprintData';
+import { FoodPrint, Location } from '@/types/types';
 
 interface MapComponentProps {
   locations: Location[];

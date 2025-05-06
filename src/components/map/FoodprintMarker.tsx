@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import Image from 'next/image';
-import { FoodPrint } from '@/lib/foodprintData';
+import { FoodPrint } from '@/types/types';
 
 interface FoodprintMarkerProps {
   foodprint: FoodPrint;

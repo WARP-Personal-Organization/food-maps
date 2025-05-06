@@ -8,7 +8,7 @@ import {
   ClientOnly,
   MapComponent,
   EmptyState,
-} from "../components/layout/MapUtilComponents";
+} from "../components/map/MapUtilComponents";
 
 import { IoClose, IoReturnUpBackSharp } from "react-icons/io5";
 import MenuButton from "@/components/buttons/MenuButton";

@@ -3,7 +3,7 @@
 import React, { useState } from "react";
 import Image from "next/image";
 import { Location } from "@/types/types";
-import LocationActionButtons from "@/components/LocationActionButtons";
+import LocationActionButtons from "@/components/buttons/LocationActionButtons";
 import CloseButton from "@/components/buttons/CloseButton";
 
 interface LocationDetailPanelProps {

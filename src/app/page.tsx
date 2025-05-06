@@ -2,7 +2,7 @@
 
 import { Suspense, useEffect } from 'react';
 import LoadingScreen from '@/components/loading-screen';
-import DelayedComponent, { resetCache } from '@/components/delayed-component';
+import DelayedComponent, { resetCache } from '@/components/map/delayed-component';
 import HomePage from '@/components/Homepage';
 
 export default function Home() {
