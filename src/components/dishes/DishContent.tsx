@@ -28,11 +28,9 @@ const DishContent: React.FC<DishContentProps> = ({
   const href = buttonHref || dish.href;
   const searchParams = useSearchParams();
 
-  // Add query parameter for dish name if linking to food-map
   let linkHref = href;
 
-  if (href === '/food-map') {
-    // If we're linking to the food-map page
+  if (href === '/') {
     const currentDishParam = searchParams.get('dish');
 
     if (currentDishParam && currentDishParam.includes(',')) {

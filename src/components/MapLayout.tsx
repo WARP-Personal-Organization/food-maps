@@ -29,10 +29,10 @@ function MapLayout() {
 
             const newUrl =
                 filters.length > 0
-                    ? `/food-map?dish=${filters.map(encodeURIComponent).join(",")}${viewQueryString}`
+                    ? `/?dish=${filters.map(encodeURIComponent).join(",")}${viewQueryString}`
                     : viewParam
-                        ? `/food-map?view=${viewParam}`
-                        : "/food-map";
+                        ? `/?view=${viewParam}`
+                        : "/";
 
             router.push(newUrl, { scroll: false });
         },

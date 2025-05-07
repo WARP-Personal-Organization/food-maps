@@ -10,14 +10,12 @@ import LocationActionButtons from '@/components/buttons/LocationActionButtons';
 interface FoodPrintDetailsPanelProps {
   selectedFoodPrint: FoodPrint | null;
   isVisible: boolean;
-  isMobile: boolean;
   onClose: () => void;
 }
 
 const FoodPrintDetailsPanel: React.FC<FoodPrintDetailsPanelProps> = ({
   selectedFoodPrint,
   isVisible,
-  isMobile,
   onClose,
 }) => {
   if (!selectedFoodPrint) {
@@ -29,16 +27,10 @@ const FoodPrintDetailsPanel: React.FC<FoodPrintDetailsPanelProps> = ({
 
   return (
     <div
-      className={`${
-        isMobile
-          ? `fixed bottom-0  w-full h-full bg-white z-50 rounded-t-sm shadow-lg touch-pan-y flex flex-col
-    transform transition-transform duration-300 ${
-      isVisible ? "translate-y-0" : "translate-y-full"
-    }` // Removed overflow-y-auto from the main mobile container
-          : `bg-white overflow-hidden w-full max-w-md mx-auto flex flex-col h-full relative md:max-w-sm lg:max-w-full transform transition-transform duration-300 ${
-              isVisible ? "translate-x-0" : "translate-x-full"
-            }`
-      }`}
+      className={`fixed bottom-0  w-full h-full bg-white z-50 rounded-t-sm shadow-lg overflow-y-auto touch-pan-y 
+    transform transition-transform duration-300
+        ${isVisible ? "translate-y-0" : "translate-y-full"
+        }`}
     >
       {/* Main image - matching the reference image */}
       <div className="relative h-40 w-full md:h-48 lg:h-52 xl:h-56 2xl:h-60 flex-shrink-0">

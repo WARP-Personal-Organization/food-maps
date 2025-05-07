@@ -3,7 +3,7 @@
 import React from 'react';
 import { DishData } from '@/lib/DishData';
 import useCarousel from '@/hooks/useCarousel';
-import MobileLayout from '@/mobile/MobileLayout';
+import MobileLayout from '@/mobile/components/panels/HomePanel';
 import DesktopLayout from '../desktop/DesktopLayout';
 
 export default function HomePage() {

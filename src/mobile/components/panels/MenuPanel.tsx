@@ -2,25 +2,23 @@
 
 import React from "react";
 import Image from "next/image";
-import { useRouter } from "next/navigation";
 import CloseButton from "@/components/buttons/CloseButton";
 
 interface MenuPanelProps {
   onClose: () => void;
+  onOpenHome: () => void;
   onOpenAbout: () => void;
   isVisible: boolean;
 }
 
 const MenuPanel: React.FC<MenuPanelProps> = ({
   onClose,
+  onOpenHome,
   onOpenAbout,
   isVisible,
 }) => {
-  const router = useRouter();
-
   const handleHomeClick = () => {
-    onClose();
-    router.push("/");
+    onOpenHome();
   };
 
   return (
