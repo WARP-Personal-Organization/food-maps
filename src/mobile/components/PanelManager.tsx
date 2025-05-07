@@ -30,7 +30,7 @@ export interface PanelManagerRef {
   openLocationDetail: (location: Location) => void;
   openFoodPrintSummary: (selectedFoodPrint: FoodPrint) => void;
   openFoodPrintDetail: (selectedFoodPrint: FoodPrint) => void;
-  openHomePanel: () => void;
+  openHome: () => void;
   closeAllPanels: () => void;
 }
 
@@ -70,7 +70,7 @@ const PanelManager: React.ForwardRefRenderFunction<
         setSelectedFoodPrint(selectedFoodPrint);
         setCurrentPanel("foodPrintDetail");
       },
-      openHomePanel: () => {
+      openHome: () => {
         setCurrentPanel("home");
       },
       closeAllPanels: () => {
@@ -94,11 +94,7 @@ const PanelManager: React.ForwardRefRenderFunction<
         <MenuPanel
           isVisible={currentPanel === "menu"}
           onClose={() => setCurrentPanel(null)}
-          onOpenHome={() => {
-            if (currentPanel !== "home") {
-              setCurrentPanel("home");
-            }
-          }}
+          onOpenHome={() => setCurrentPanel("home")}
           onOpenAbout={() => setCurrentPanel("about")}
         />
 

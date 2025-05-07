@@ -190,7 +190,7 @@ const MobileMapLayout: React.FC<MobileMapLayoutProps> = ({
 
           <div className="w-full mt-2">
             <button
-              onClick={() => router.push("/")}
+              onClick={() => panelRef.current?.openHome()}
               className="w-full bg-white py-3 px-4 rounded-lg shadow text-gray-800 font-semibold flex items-center justify-center"
             >
               <IoReturnUpBackSharp className="w-5 h-5 mr-2" />
