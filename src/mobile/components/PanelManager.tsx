@@ -106,6 +106,7 @@ const PanelManager: React.ForwardRefRenderFunction<
         <HomePanel
           isVisible={currentPanel === "home"}
           dishes={dishData}
+          openMenu={() => setCurrentPanel("menu")}
           onClose={() => setCurrentPanel(null)}
         />
 

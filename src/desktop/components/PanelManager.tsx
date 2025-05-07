@@ -110,7 +110,7 @@ const PanelManager: React.ForwardRefRenderFunction<
   useEffect(() => {
     setCurrentPanel("home");
     onPanelChange?.("home");
-  }, []);
+  }, [onPanelChange]);
 
   const handleClosePanel = () => {
     if (onClose) onClose();
@@ -149,6 +149,7 @@ const PanelManager: React.ForwardRefRenderFunction<
       <HomePanel
         isVisible={currentPanel === "home"}
         dishes={dishData}
+        openMenu={() => setCurrentPanel("menu")}
         onClose={() => setCurrentPanel(null)}
       />
 

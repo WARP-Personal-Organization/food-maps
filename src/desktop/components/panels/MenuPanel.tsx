@@ -2,7 +2,6 @@
 
 import React from "react";
 import Image from "next/image";
-import { useRouter } from "next/navigation";
 import CloseButton from "@/components/buttons/CloseButton";
 
 interface MenuPanelProps {
@@ -18,8 +17,6 @@ const MenuPanel: React.FC<MenuPanelProps> = ({
   onOpenAbout,
   isVisible,
 }) => {
-  const router = useRouter();
-
   const handleHomeClick = () => {
     onOpenHome();
   };

@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useRef, useEffect, useMemo } from "react";
-import { useRouter } from "next/navigation";
 import PanelManager, { PanelManagerRef } from "./components/PanelManager";
 import { Location, FoodPrint, Dish } from "@/types/types";
 import {
@@ -32,7 +31,6 @@ const MobileMapLayout: React.FC<MobileMapLayoutProps> = ({
   activeFilters = [],
   onFilterChange,
 }) => {
-  const router = useRouter();
   const panelRef = useRef<PanelManagerRef | null>(null);
 
   // Filter dishes based on active filters

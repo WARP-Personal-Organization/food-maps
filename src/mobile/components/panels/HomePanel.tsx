@@ -1,30 +1,30 @@
 'use client';
 
-import React, { useRef, useState } from 'react';
+import React, { useState } from 'react';
 import { useRouter } from "next/navigation";
 import Image from 'next/image';
-import PanelManager, { PanelManagerRef } from '../PanelManager';
 import MenuButton from "@/components/buttons/MenuButton";
 import { Dish } from '@/types/types';
 
 interface HomePanelProps {
   dishes: Dish[];
   isVisible: boolean;
+  openMenu: () => void;
   onClose: () => void;
 }
 
 const HomePanel: React.FC<HomePanelProps> = ({
   dishes,
   isVisible,
+  openMenu,
   onClose,
 }) => {
-  if (!isVisible || dishes.length === 0) return null;
-
+  // ✅ Always call hooks first
   const [activeIndex, setActiveIndex] = useState(0);
-  const [touchStartX, setTouchStartX] = useState<number | null>(null);
-
   const router = useRouter();
-  const panelRef = useRef<PanelManagerRef | null>(null);
+
+  // ✅ Now you can safely guard rendering
+  if (!isVisible || dishes.length === 0) return null;
 
   const activeDish = dishes[activeIndex] ?? dishes[0];
 
@@ -34,24 +34,6 @@ const HomePanel: React.FC<HomePanelProps> = ({
 
   const onPrev = () => {
     setActiveIndex((prev) => (prev - 1 + dishes.length) % dishes.length);
-  };
-
-  const handleTouchStart = (e: React.TouchEvent) => {
-    setTouchStartX(e.touches[0].clientX);
-  };
-
-  const handleTouchEnd = (e: React.TouchEvent) => {
-    if (touchStartX === null) return;
-    const touchEndX = e.changedTouches[0].clientX;
-    const diff = touchStartX - touchEndX;
-
-    if (diff > 50) {
-      onNext();
-    } else if (diff < -50) {
-      onPrev();
-    }
-
-    setTouchStartX(null);
   };
 
   const handleWhereToEat = () => {
@@ -70,8 +52,7 @@ const HomePanel: React.FC<HomePanelProps> = ({
   transform transition-transform duration-300
   ${isVisible ? "translate-y-0" : "translate-y-full"}`}
     >
-      <PanelManager ref={panelRef} />
-      <MenuButton onClick={() => panelRef.current?.openMenu()} />
+      <MenuButton onClick={openMenu} />
 
       {/* Top Image */}
       <div className="relative w-full aspect-square">
