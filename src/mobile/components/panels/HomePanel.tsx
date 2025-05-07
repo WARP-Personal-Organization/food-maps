@@ -47,7 +47,7 @@ const HomePanel: React.FC<HomePanelProps> = ({
 
   return (
     <div
-      className={`fixed bottom-0 w-full h-full bg-white z-60 rounded-t-sm shadow-lg 
+      className={`fixed bottom-0 w-full h-full bg-white z-30 rounded-t-sm shadow-lg 
   overflow-y-auto overflow-x-hidden
   transform transition-transform duration-300
   ${isVisible ? "translate-y-0" : "translate-y-full"}`}

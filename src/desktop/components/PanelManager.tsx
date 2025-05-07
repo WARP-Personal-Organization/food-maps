@@ -1,6 +1,11 @@
 "use client";
 
-import React, { useState, useImperativeHandle, forwardRef, useEffect } from "react";
+import React, {
+  useState,
+  useImperativeHandle,
+  forwardRef,
+  useEffect,
+} from "react";
 import MenuPanel from "./panels/MenuPanel";
 import FilterPanel from "./panels/FilterPanel";
 import AboutPanel from "./panels/AboutPanel";
@@ -40,10 +45,18 @@ export interface PanelManagerRef {
 const PanelManager: React.ForwardRefRenderFunction<
   PanelManagerRef,
   PanelManagerProps
-> = ({ dishData = [], selectedDishes = [], onFilterApply, onClose, onPanelChange }, ref) => {
+> = (
+  { dishData = [], selectedDishes = [], onFilterApply, onClose, onPanelChange },
+  ref
+) => {
   const [currentPanel, setCurrentPanel] = useState<PanelType>(null);
-  const [selectedLocation, setSelectedLocation] = useState<Location | null>(null);
-  const [selectedFoodPrint, setSelectedFoodPrint] = useState<FoodPrint | null>(null);
+  const [isMenuVisible, setIsMenuVisible] = useState(false);
+  const [selectedLocation, setSelectedLocation] = useState<Location | null>(
+    null
+  );
+  const [selectedFoodPrint, setSelectedFoodPrint] = useState<FoodPrint | null>(
+    null
+  );
 
   // Expose methods to parent using the ref
   useImperativeHandle(ref, () => ({
@@ -52,11 +65,7 @@ const PanelManager: React.ForwardRefRenderFunction<
       setCurrentPanel("dishDetails");
       onPanelChange?.("dishDetails");
     },
-    openMenu: () => {
-      handleClosePanel();
-      setCurrentPanel("menu");
-      onPanelChange?.("menu");
-    },
+    openMenu: () => setIsMenuVisible(true),
     openFilter: () => {
       handleClosePanel();
       setCurrentPanel("filter");
@@ -133,10 +142,25 @@ const PanelManager: React.ForwardRefRenderFunction<
 
   return (
     <>
-      <PanelOverlay
-        isVisible={isModalVisible}
-        onClose={handleClosePanel}
-        withBlur={currentPanel === "menu"}
+      {isMenuVisible && (
+        <PanelOverlay
+          isVisible={isModalVisible}
+          onClose={() => setCurrentPanel(null)}
+          withBlur={isMenuVisible || currentPanel === "filter"}
+        />
+      )}
+
+      <MenuPanel
+        isVisible={isMenuVisible}
+        onClose={() => setIsMenuVisible(false)}
+        onOpenHome={() => {
+          setCurrentPanel("home");
+          setIsMenuVisible(false);
+        }}
+        onOpenAbout={() => {
+          setCurrentPanel("about");
+          setIsMenuVisible(false);
+        }}
       />
 
       <DishDetailsPanel
@@ -151,13 +175,6 @@ const PanelManager: React.ForwardRefRenderFunction<
         dishes={dishData}
         openMenu={() => setCurrentPanel("menu")}
         onClose={() => setCurrentPanel(null)}
-      />
-
-      <MenuPanel
-        isVisible={currentPanel === "menu"}
-        onClose={() => setCurrentPanel(null)}
-        onOpenHome={() => setCurrentPanel("home")}
-        onOpenAbout={() => setCurrentPanel("about")}
       />
 
       <FilterPanel
