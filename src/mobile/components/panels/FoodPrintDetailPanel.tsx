@@ -3,8 +3,9 @@
 import React from 'react';
 import Image from 'next/image';
 import { FoodPrint } from '@/types/types';
-import { X, MapPin } from 'lucide-react';
-import LocationActionButtons from '@/components/buttons/LocationActionButtons';
+import { MapPin } from 'lucide-react';
+import CloseButton from '../buttons/CloseButton';
+import LocationActionButtons from '@/components/LocationActionButtons';
 
 interface FoodPrintDetailsPanelProps {
   selectedFoodPrint: FoodPrint | null;
@@ -30,10 +31,10 @@ const FoodPrintDetailsPanel: React.FC<FoodPrintDetailsPanelProps> = ({
     <div
       className={`${
         isMobile
-          ? `fixed bottom-0  w-full h-full bg-white z-50 rounded-t-sm shadow-lg overflow-y-auto touch-pan-y 
+          ? `fixed bottom-0  w-full h-full bg-white z-50 rounded-t-sm shadow-lg touch-pan-y flex flex-col
     transform transition-transform duration-300 ${
       isVisible ? "translate-y-0" : "translate-y-full"
-    }`
+    }` // Removed overflow-y-auto from the main mobile container
           : `bg-white overflow-hidden w-full max-w-md mx-auto flex flex-col h-full relative md:max-w-sm lg:max-w-full transform transition-transform duration-300 ${
               isVisible ? "translate-x-0" : "translate-x-full"
             }`
@@ -52,22 +53,17 @@ const FoodPrintDetailsPanel: React.FC<FoodPrintDetailsPanelProps> = ({
         </div>
 
         {/* Close button in the top-right corner */}
-        <button
+        <CloseButton
           onClick={onClose}
-          className="absolute top-2 right-2 z-20 bg-white rounded-full p-1.5 shadow-md"
-          aria-label="Close details"
-          tabIndex={0}
-          onKeyDown={(e) => e.key === 'Enter' && onClose()}
-        >
-          <X className="h-4 w-4 text-gray-700" />
-        </button>
+          className="absolute top-2 right-2 z-20 p-1.5 shadow-md"
+        />
       </div>
 
       {/* Content wrapper with rounded top and negative margin - matching reference */}
-      <div className="rounded-t-sm -mt-2 relative z-10 bg-white flex-1 overflow-y-auto pb-32">
+      <div className="rounded-t-sm -mt-2 relative z-10 bg-white flex-1 overflow-y-auto pb-32"> {/* Kept overflow-y-auto here */}
         {/* Label - FOODPRINT */}
         <div className="pt-3 pb-2 px-6">
-          <span className="inline-block bg-yellow-400 px-4 py-1.5 text-sm font-bold uppercase">
+          <span className="inline-block bg-yellow-300 px-4 py-1.5 text-sm font-bold uppercase rounded-sm">
             FOODPRINT
           </span>
         </div>
@@ -88,7 +84,7 @@ const FoodPrintDetailsPanel: React.FC<FoodPrintDetailsPanelProps> = ({
         </div>
 
         {/* Description paragraphs */}
-        <div className="px-6 space-y-5">
+        <div className="px-6 space-y-5"> {/* These paragraphs are within the overflow-y-auto div */}
           <p className="text-gray-800 text-base leading-relaxed">
             {selectedFoodPrint.description ||
               "Roberto's Siopao is an iconic delicacy from Iloilo City, known for its generous size, flavorful fillings, and unique, homemade taste."}
@@ -116,12 +112,14 @@ const FoodPrintDetailsPanel: React.FC<FoodPrintDetailsPanelProps> = ({
             </>
           )}
         </div>
+        <div className='pb-12'></div>
       </div>
 
       {/* Action buttons with fade-out effect - fixed at the bottom */}
       <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-white via-white to-transparent pt-20 pb-0 p-5 z-10">
         <LocationActionButtons />
       </div>
+      {/* Removed the extra pb-1 div */}
     </div>
   );
 };

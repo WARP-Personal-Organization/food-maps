@@ -1,6 +1,8 @@
 'use client';
 
 import React, { useRef } from 'react';
+// import { GoArrowRight } from "react-icons/go";
+import { Dish } from "@/lib/dishData";
 import DishImage from "@/components/dishes/DishImage";
 import { useRouter } from "next/navigation";
 import PanelManager, { PanelManagerRef } from './components/PanelManager'
