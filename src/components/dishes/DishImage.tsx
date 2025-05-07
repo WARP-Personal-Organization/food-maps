@@ -28,9 +28,10 @@ const DishImage: React.FC<DishImageProps> = ({
       <Image
         src={dish.image}
         alt={dish.name}
-        layout="fill"
-        objectFit="cover"
-        className={imageClassName}
+        fill
+        sizes="(max-width: 900px) 100vw, 50vw"
+        quality={95}
+        className={`object-cover ${imageClassName}`}
         priority={priority}
       />
     </div>
