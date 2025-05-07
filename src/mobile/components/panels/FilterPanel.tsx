@@ -108,6 +108,9 @@ const FilterPanel: React.FC<FilterPanelProps> = ({
                     </div>
                   )}
                 </div>
+                {isSelected && (
+                  <div className="absolute top-24 left-0 w-full h-full bg-yellow-300 opacity-10"></div>
+                )}
                 <div className="p-2 text-sm bg-gray-50">
                   <p className="font-semibold line-clamp-1">{dish.name}</p>
                   <p className="text-gray-600 text-xs">
