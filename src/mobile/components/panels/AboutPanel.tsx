@@ -13,7 +13,7 @@ const AboutPanel: React.FC<AboutPanelProps> = ({ onClose, isVisible }) => {
   if (!isVisible) return null; // Ensure the panel is only shown when isVisible is true
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-white bg-opacity-60 backdrop-blur-sm overflow-y-auto">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-white bg-opacity-60 backdrop-blur-sm overflow-y-auto overflow-x-hidden">
       <div className="pb-10">
         {/* <Image
           src="/images/DGLogo.png"

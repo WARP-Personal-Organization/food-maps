@@ -48,4 +48,5 @@ export type PanelType =
 | "foodPrintSummary"
 | "foodPrintDetail"
 | "explore"
+| "home"
 | null;

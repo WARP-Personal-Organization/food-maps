@@ -10,14 +10,12 @@ import CloseButton from "@/components/buttons/CloseButton";
 interface LocationDetailPanelProps {
   location: Location | null;
   isVisible: boolean;
-  isMobile: boolean;
   onClose: () => void;
 }
 
 const LocationDetailPanel: React.FC<LocationDetailPanelProps> = ({
   location,
   isVisible,
-  isMobile,
   onClose,
 }) => {
   const [activeTab, setActiveTab] = useState("photos");
@@ -31,16 +29,10 @@ const LocationDetailPanel: React.FC<LocationDetailPanelProps> = ({
 
   return (
     <div
-      className={`${
-        isMobile
-          ? `fixed bottom-0  w-full h-full bg-white z-50 rounded-t-sm shadow-lg overflow-y-auto touch-pan-y 
-    transform transition-transform duration-300 ${
-      isVisible ? "translate-y-0" : "translate-y-full"
-    }`
-          : `bg-white overflow-hidden w-full max-w-md mx-auto flex flex-col h-full relative md:max-w-sm lg:max-w-full transform transition-transform duration-300 ${
-              isVisible ? "translate-x-0" : "translate-x-full"
-            }`
-      }`}
+      className={`fixed bottom-0  w-full h-full bg-white z-50 rounded-t-sm shadow-lg overflow-y-auto touch-pan-y 
+    transform transition-transform duration-300
+        ${isVisible ? "translate-y-0" : "translate-y-full"
+        }`}
     >
       {/* Main image - Adjusted height */}
       <div className="relative h-56 w-full md:h-48 lg:h-54 xl:h-68 2xl:h-80 3xl:h-96">
@@ -65,9 +57,8 @@ const LocationDetailPanel: React.FC<LocationDetailPanelProps> = ({
           {[0, 1, 2, 3, 4].map((index) => (
             <div
               key={index}
-              className={`h-1 w-1 rounded-full ${
-                index === 0 ? "bg-white" : "bg-white/40"
-              } md:h-1 md:w-1 2xl:h-2 2xl:w-2`}
+              className={`h-1 w-1 rounded-full ${index === 0 ? "bg-white" : "bg-white/40"
+                } md:h-1 md:w-1 2xl:h-2 2xl:w-2`}
             />
           ))}
         </div>
@@ -84,7 +75,7 @@ const LocationDetailPanel: React.FC<LocationDetailPanelProps> = ({
           {/* Location address */}
           <div className="flex items-start gap-3 mb-2 md:gap-2 md:mb-1.5 lg:gap-2 lg:mb-1.5 xl:gap-3 xl:mb-2.5 2xl:mb-4 2xl:gap-4">
             <div className="text-yellow-500 flex-shrink-0">
-            <MapPin className="h-5 w-5 text-yellow-500 mt-0.5 flex-shrink-0" />
+              <MapPin className="h-5 w-5 text-yellow-500 mt-0.5 flex-shrink-0" />
             </div>
             <p className="text-sm text-gray-500 leading-tight md:text-xs lg:text-[10px] xl:text-sm 2xl:text-lg font-medium">
               {address}
@@ -113,7 +104,7 @@ const LocationDetailPanel: React.FC<LocationDetailPanelProps> = ({
           {/* Price range */}
           <div className="flex items-center gap-3 md:gap-2 lg:gap-2 xl:gap-3 2xl:gap-4">
             <div className="text-yellow-500 flex-shrink-0">
-              <Tag className="h-5 w-5"/>
+              <Tag className="h-5 w-5" />
             </div>
             <p className="text-sm text-gray-500 md:text-xs lg:text-xs xl:text-sm 2xl:text-lg font-medium">
               {priceRange}
@@ -127,11 +118,10 @@ const LocationDetailPanel: React.FC<LocationDetailPanelProps> = ({
       <div className="border-b border-gray-200">
         <div className="flex">
           <button
-            className={`flex-1 text-center py-3 text-base relative cursor-pointer ${
-              activeTab === "photos"
+            className={`flex-1 text-center py-3 text-base relative cursor-pointer ${activeTab === "photos"
                 ? "text-gray-800 font-bold"
                 : "text-gray-400 font bold"
-            } md:py-2 md:text-sm lg:py-2 lg:text-sm xl:py-3 xl:text-base 2xl:py-5 2xl:text-xl`}
+              } md:py-2 md:text-sm lg:py-2 lg:text-sm xl:py-3 xl:text-base 2xl:py-5 2xl:text-xl`}
             onClick={() => setActiveTab("photos")}
           >
             Photos
@@ -140,11 +130,10 @@ const LocationDetailPanel: React.FC<LocationDetailPanelProps> = ({
             )}
           </button>
           <button
-            className={`flex-1 text-center py-3 text-base relative cursor-pointer ${
-              activeTab === "menu"
+            className={`flex-1 text-center py-3 text-base relative cursor-pointer ${activeTab === "menu"
                 ? "text-gray-800 font-bold"
                 : "text-gray-400 font-bold"
-            } md:py-2 md:text-sm lg:py-2 lg:text-sm xl:py-3 xl:text-base 2xl:py-5 2xl:text-xl`}
+              } md:py-2 md:text-sm lg:py-2 lg:text-sm xl:py-3 xl:text-base 2xl:py-5 2xl:text-xl`}
             onClick={() => setActiveTab("menu")}
           >
             Menu

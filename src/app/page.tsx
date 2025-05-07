@@ -3,7 +3,7 @@
 import { Suspense, useEffect } from 'react';
 import LoadingScreen from '@/components/LoadingScreen';
 import DelayedComponent, { resetCache } from '@/components/map/delayed-component';
-import HomePage from '@/components/Homepage';
+import MapLayout from "@/components/MapLayout";
 
 export default function Home() {
   // Reset the cache when the component mounts
@@ -16,7 +16,7 @@ export default function Home() {
       <Suspense fallback={<LoadingScreen />}>
         <DelayedComponent delayTime={3500}>
           {/* Main content will appear after loading */}
-            <HomePage/>
+            <MapLayout />
         </DelayedComponent>
       </Suspense>
     </main>

@@ -8,28 +8,19 @@ import React, {
 import MenuPanel from "./panels/MenuPanel";
 import FilterPanel from "./panels/FilterPanel";
 import AboutPanel from "./panels/AboutPanel";
-import { Dish, Location, FoodPrint } from "@/types/types";
+import { Dish, Location, FoodPrint, PanelType } from "@/types/types";
 import PanelOverlay from "./panels/PanelOverlay";
 import LocationSummaryPanel from "./panels/LocationSummaryPanel";
 import LocationDetailPanel from "./panels/LocationDetailPanel";
 import FoodPrintSummaryPanel from "./panels/FoodPrintSummaryPanel";
 import FoodPrintDetailPanel from "./panels/FoodPrintDetailPanel";
+import HomePanel from "./panels/HomePanel";
 
 interface PanelManagerProps {
   dishData?: Dish[];
   selectedDishes?: string[];
   onFilterApply?: (selectedDishes: string[]) => void;
 }
-
-type PanelType =
-  | "menu"
-  | "filter"
-  | "about"
-  | "locationSummary"
-  | "locationDetail"
-  | "foodPrintSummary"
-  | "foodPrintDetail"
-  | null;
 
 export interface PanelManagerRef {
   openMenu: () => void;
@@ -39,6 +30,8 @@ export interface PanelManagerRef {
   openLocationDetail: (location: Location) => void;
   openFoodPrintSummary: (selectedFoodPrint: FoodPrint) => void;
   openFoodPrintDetail: (selectedFoodPrint: FoodPrint) => void;
+  openHomePanel: () => void;
+  closeAllPanels: () => void;
 }
 
 const PanelManager: React.ForwardRefRenderFunction<
@@ -77,6 +70,9 @@ const PanelManager: React.ForwardRefRenderFunction<
         setSelectedFoodPrint(selectedFoodPrint);
         setCurrentPanel("foodPrintDetail");
       },
+      openHomePanel: () => {
+        setCurrentPanel("home");
+      },
       closeAllPanels: () => {
         setCurrentPanel(null);
         setSelectedLocation(null);
@@ -98,7 +94,18 @@ const PanelManager: React.ForwardRefRenderFunction<
         <MenuPanel
           isVisible={currentPanel === "menu"}
           onClose={() => setCurrentPanel(null)}
+          onOpenHome={() => {
+            if (currentPanel !== "home") {
+              setCurrentPanel("home");
+            }
+          }}
           onOpenAbout={() => setCurrentPanel("about")}
+        />
+
+        <HomePanel
+          isVisible={currentPanel === "home"}
+          dishes={dishData}
+          onClose={() => setCurrentPanel(null)}
         />
 
         <FilterPanel
@@ -132,7 +139,6 @@ const PanelManager: React.ForwardRefRenderFunction<
         <LocationDetailPanel
           location={selectedLocation}
           isVisible={currentPanel === "locationDetail"}
-          isMobile={true}
           onClose={() => {
             setSelectedLocation(null);
             setCurrentPanel(null);
@@ -154,7 +160,6 @@ const PanelManager: React.ForwardRefRenderFunction<
         <FoodPrintDetailPanel
           selectedFoodPrint={selectedFoodPrint}
           isVisible={currentPanel === "foodPrintDetail"}
-          isMobile={true}
           onClose={() => {
             setSelectedFoodPrint(null);
             setCurrentPanel(null);
