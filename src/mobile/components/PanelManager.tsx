@@ -4,6 +4,7 @@ import React, {
   useState,
   useImperativeHandle,
   forwardRef,
+  useEffect,
 } from "react";
 import MenuPanel from "./panels/MenuPanel";
 import FilterPanel from "./panels/FilterPanel";
@@ -79,6 +80,10 @@ const PanelManager: React.ForwardRefRenderFunction<
         setSelectedFoodPrint(null);
       },
     }));
+
+      useEffect(() => {
+        setCurrentPanel("home");
+      }, []);
 
     const isModalVisible =
       currentPanel !== null && ["menu", "filter"].includes(currentPanel);

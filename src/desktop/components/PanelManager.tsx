@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useImperativeHandle, forwardRef } from "react";
+import React, { useState, useImperativeHandle, forwardRef, useEffect } from "react";
 import MenuPanel from "./panels/MenuPanel";
 import FilterPanel from "./panels/FilterPanel";
 import AboutPanel from "./panels/AboutPanel";
@@ -12,6 +12,7 @@ import LocationDetailPanel from "./panels/LocationDetailPanel";
 import FoodPrintSummaryPanel from "./panels/FoodPrintSummaryPanel";
 import FoodPrintDetailPanel from "./panels/FoodPrintDetailPanel";
 import ExplorePanel from "./panels/ExplorePanel";
+import HomePanel from "./panels/HomePanel";
 
 interface PanelManagerProps {
   dishData?: Dish[];
@@ -32,6 +33,7 @@ export interface PanelManagerRef {
   openFoodPrintDetail: (selectedFoodPrint: FoodPrint) => void;
   openExplore: () => void;
   closeAllPanels: () => void;
+  openHome: () => void;
   getCurrentPanel: () => PanelType;
 }
 
@@ -94,11 +96,21 @@ const PanelManager: React.ForwardRefRenderFunction<
       setCurrentPanel("explore");
       onPanelChange?.("explore");
     },
+    openHome: () => {
+      handleClosePanel();
+      setCurrentPanel("home");
+      onPanelChange?.("home");
+    },
     closeAllPanels: () => {
       handleClosePanel();
     },
     getCurrentPanel: () => currentPanel,
   }));
+
+  useEffect(() => {
+    setCurrentPanel("home");
+    onPanelChange?.("home");
+  }, []);
 
   const handleClosePanel = () => {
     if (onClose) onClose();
@@ -134,13 +146,17 @@ const PanelManager: React.ForwardRefRenderFunction<
         onClose={handleClosePanel}
       />
 
+      <HomePanel
+        isVisible={currentPanel === "home"}
+        dishes={dishData}
+        onClose={() => setCurrentPanel(null)}
+      />
+
       <MenuPanel
         isVisible={currentPanel === "menu"}
-        onClose={handleClosePanel}
-        onOpenAbout={() => {
-          setCurrentPanel("about");
-          onPanelChange?.("about");
-        }}
+        onClose={() => setCurrentPanel(null)}
+        onOpenHome={() => setCurrentPanel("home")}
+        onOpenAbout={() => setCurrentPanel("about")}
       />
 
       <FilterPanel

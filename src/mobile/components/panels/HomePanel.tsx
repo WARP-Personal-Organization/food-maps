@@ -1,8 +1,8 @@
 'use client';
 
 import React, { useRef, useState } from 'react';
-import DishImage from "@/components/dishes/DishImage";
 import { useRouter } from "next/navigation";
+import Image from 'next/image';
 import PanelManager, { PanelManagerRef } from '../PanelManager';
 import MenuButton from "@/components/buttons/MenuButton";
 import { Dish } from '@/types/types';
@@ -19,7 +19,7 @@ const HomePanel: React.FC<HomePanelProps> = ({
   onClose,
 }) => {
   if (!isVisible || dishes.length === 0) return null;
-  
+
   const [activeIndex, setActiveIndex] = useState(0);
   const [touchStartX, setTouchStartX] = useState<number | null>(null);
 
@@ -65,24 +65,26 @@ const HomePanel: React.FC<HomePanelProps> = ({
 
   return (
     <div
-  className={`fixed bottom-0 w-full h-full bg-white z-60 rounded-t-sm shadow-lg 
+      className={`fixed bottom-0 w-full h-full bg-white z-60 rounded-t-sm shadow-lg 
   overflow-y-auto overflow-x-hidden
   transform transition-transform duration-300
   ${isVisible ? "translate-y-0" : "translate-y-full"}`}
->
+    >
       <PanelManager ref={panelRef} />
       <MenuButton onClick={() => panelRef.current?.openMenu()} />
 
       {/* Top Image */}
       <div className="relative w-full aspect-square">
-        <DishImage
-          dish={activeDish}
-          className="relative h-full w-full"
-          imageClassName="z-10 object-cover"
-          onTouchStart={handleTouchStart}
-          onTouchEnd={handleTouchEnd}
-          priority
-        />
+        <div className="w-full relative h-full">
+          <Image
+            src={activeDish.image}
+            alt={activeDish.name}
+            layout="fill"
+            objectFit="cover"
+            className="object-cover"
+            priority
+          />
+        </div>
       </div>
 
       {/* Bottom Content */}
