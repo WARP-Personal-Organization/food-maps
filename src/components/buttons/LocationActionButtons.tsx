@@ -1,6 +1,6 @@
 import React from 'react';
 import Image from 'next/image';
-import GetDirectionsButton from '@/mobile/components/buttons/GetDirectionsButton';
+import GetDirectionsButton from '@/components/buttons/GetDirectionsButton';
 
 const LocationActionButtons: React.FC = () => {
   return (

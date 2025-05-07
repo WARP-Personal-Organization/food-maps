@@ -2,10 +2,10 @@
 
 import React, { useState } from "react";
 import Image from "next/image";
-import { Location } from "@/lib/locationData";
-import LocationActionButtons from "@/components/LocationActionButtons";
+import { Location } from "@/types/types";
+import LocationActionButtons from "@/components/buttons/LocationActionButtons";
 import { MapPin, Tag } from "lucide-react";
-import CloseButton from "../buttons/CloseButton";
+import CloseButton from "@/components/buttons/CloseButton";
 
 interface LocationDetailPanelProps {
   location: Location | null;

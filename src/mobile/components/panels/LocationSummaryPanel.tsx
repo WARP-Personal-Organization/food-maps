@@ -2,9 +2,9 @@
 import React from "react";
 import Image from "next/image";
 import { Location } from "@/types/types";
-import GetDirectionsButton from "@/mobile/components/buttons/GetDirectionsButton";
-import CloseButton from "../buttons/CloseButton";
-import ViewDetailsButton from "@/mobile/components/buttons/ViewDetailsButton";
+import GetDirectionsButton from "@/components/buttons/GetDirectionsButton";
+import CloseButton from "@/components/buttons/CloseButton";
+import ViewDetailsButton from "@/components/buttons/ViewDetailsButton";
 import { MapPin, Tag } from "lucide-react";
 
 interface LocationSummaryPanelProps {
