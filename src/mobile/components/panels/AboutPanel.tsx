@@ -13,18 +13,23 @@ const AboutPanel: React.FC<AboutPanelProps> = ({ onClose, isVisible }) => {
   if (!isVisible) return null; // Ensure the panel is only shown when isVisible is true
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-white bg-opacity-60 backdrop-blur-sm overflow-y-auto overflow-x-hidden">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-white bg-opacity-60 backdrop-blur-sm overflow-y-auto">
       <div className="pb-10">
-        {/* <Image
-          src="/images/DGLogo.png"
-          alt="Daily Guardian Logo"
-        /> */}
-        {/* Close Button */}
-        <CloseButton
+        <div>
+          <Image
+            src="/images/DGLogo.png"
+            alt="Daily Guardian Logo"
+            width={1000}
+            height={20}
+            className="absolute top-5 left-2 w-auto h-auto"
+          />
+          <CloseButton
           onClick={onClose}
-          className="absolute top-4 right-4 bg-yellow-300"
+          className="absolute top-3 right-4 bg-yellow-300 w-auto h-auto"
           aria-label="Close About Panel"
         />
+        </div>
+        
         {/* Your exact design below */}
         <section className="m-0 pt-13">
           <div className="pb-8 pt-18">
