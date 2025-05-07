@@ -19,7 +19,7 @@ const DishContent: React.FC<DishContentProps> = ({
   headingClassName = 'text-4xl font-bold mt-2',
   taglineClassName = 'italic text-gray-500 text-lg',
   descriptionClassName = 'text-gray-700 mt-4',
-  buttonClassName = 'mt-6 w-[345px] bg-[#F9D408] text-black font-bold py-3 rounded inline-block text-center cursor-pointer',
+  buttonClassName = 'mt-6 w-[345px] bg-[#F9D408] text-black font-semibold py-3 rounded inline-block text-center cursor-pointer',
   showButton = true,
   buttonText = 'Where to Eat',
   buttonHref,
@@ -65,7 +65,12 @@ const DishContent: React.FC<DishContentProps> = ({
       <p className={descriptionClassName}>{dish.description}</p>
 
       {showButton && (
-        <Link href={linkHref} className={buttonClassName}>
+        <Link
+          href={linkHref}
+          className={buttonClassName}
+          tabIndex={0}
+          aria-label={`${buttonText} for ${dish.name}`}
+        >
           {buttonText}
         </Link>
       )}
