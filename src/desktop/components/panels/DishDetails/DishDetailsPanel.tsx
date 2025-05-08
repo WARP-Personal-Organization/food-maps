@@ -1,9 +1,9 @@
-"use client";
+'use client';
 
-import React, { useEffect, useState } from "react";
-import CloseButton from "@/components/buttons/CloseButton";
-import { Dish } from "@/types/types";
-import DishDetails from "@/desktop/components/panels/DishDetails/DishDetails";
+import React, { useEffect, useState } from 'react';
+import CloseButton from '@/components/buttons/CloseButton';
+import { Dish } from '@/types/types';
+import DishDetails from '@/desktop/components/panels/DishDetails/DishDetails';
 
 interface DishDetailsPanelProps {
   dishes: Dish[];
@@ -43,9 +43,8 @@ const DishDetailsPanel: React.FC<DishDetailsPanelProps> = ({
 
   return (
     <div
-      className={`fixed top-0 left-0 w-[35vh] h-full bg-white shadow-lg z-10 transform transition-transform duration-300 
-        ${isVisible ? "translate-x-0" : "-translate-x-full"
-        }`}
+      className={`fixed top-0 left-0 w-[300px] min-w-[300px] md:w-[320px] lg:w-[350px] xl:w-[400px] h-full bg-white shadow-lg z-10 transform transition-transform duration-300 
+        ${isVisible ? 'translate-x-0' : '-translate-x-full'}`}
     >
       <div className="absolute items-center justify-between p-4">
         <CloseButton onClick={onClose} />

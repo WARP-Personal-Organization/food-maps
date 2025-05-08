@@ -1,8 +1,8 @@
-import React from "react";
-import { Location } from "@/types/types";
-import LocationCard from "@/desktop/components/panels/DishDetails/LocationCard"
-import { LocationData } from "@/lib/LocationData";
-import CloseButton from "@/components/buttons/CloseButton";
+import React from 'react';
+import { Location } from '@/types/types';
+import LocationCard from '@/desktop/components/panels/DishDetails/LocationCard';
+import { LocationData } from '@/lib/LocationData';
+import CloseButton from '@/components/buttons/CloseButton';
 
 interface ExplorePanelProps {
   activeFilters: string[];
@@ -39,9 +39,8 @@ const ExplorePanel: React.FC<ExplorePanelProps> = ({
 
   return (
     <div
-      className={`fixed top-0 left-0 w-[35vh] h-full bg-white shadow-lg z-50 transform transition-transform duration-300 
-        ${isVisible ? "translate-x-0" : "-translate-x-full"
-        }`}
+      className={`fixed top-0 left-0 w-[300px] min-w-[300px] md:w-[320px] lg:w-[350px] xl:w-[400px] h-full bg-white shadow-lg z-50 transform transition-transform duration-300 
+        ${isVisible ? 'translate-x-0' : '-translate-x-full'}`}
     >
       {/* Explore Header */}
       <div className="flex justify-between items-center px-4 py-4">
@@ -89,11 +88,11 @@ const ExplorePanel: React.FC<ExplorePanelProps> = ({
             <LocationCard
               key={`${location.name}-${index}`}
               name={location.name}
-              image={location.iconUrl || "/images/filter-dish/siopao.png"}
+              image={location.iconUrl || '/images/filter-dish/siopao.png'}
               location={
                 location.address
-                  ? location.address.split(",")[0]
-                  : "Iloilo City Proper"
+                  ? location.address.split(',')[0]
+                  : 'Iloilo City Proper'
               }
               duration="8 min"
               rating={4.2}

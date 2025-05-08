@@ -5,7 +5,7 @@ import Image from 'next/image';
 import { FoodPrint } from '@/types/types';
 import { MapPin } from 'lucide-react';
 import LocationActionButtons from '@/components/buttons/LocationActionButtons';
-import CloseButton from "@/components/buttons/CloseButton";
+import CloseButton from '@/components/buttons/CloseButton';
 
 interface FoodPrintDetailsPanelProps {
   selectedFoodPrint: FoodPrint | null;
@@ -27,9 +27,8 @@ const FoodPrintDetailsPanel: React.FC<FoodPrintDetailsPanelProps> = ({
 
   return (
     <div
-      className={`fixed top-0 left-0 w-[35vh] h-full bg-white shadow-lg z-50 transform transition-transform duration-300 
-        ${isVisible ? "translate-x-0" : "-translate-x-full"
-        }`}
+      className={`fixed top-0 left-0 w-[300px] min-w-[300px] md:w-[320px] lg:w-[350px] xl:w-[400px] h-full bg-white shadow-lg z-50 transform transition-transform duration-300 
+        ${isVisible ? 'translate-x-0' : '-translate-x-full'}`}
     >
       {/* Main image - matching the reference image */}
       <div className="relative h-[30vh] w-full">
