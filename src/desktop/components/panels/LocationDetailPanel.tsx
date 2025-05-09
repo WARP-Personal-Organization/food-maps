@@ -1,10 +1,10 @@
-"use client";
+'use client';
 
-import React, { useState } from "react";
-import Image from "next/image";
-import { Location } from "@/types/types";
-import LocationActionButtons from "@/components/buttons/LocationActionButtons";
-import CloseButton from "@/components/buttons/CloseButton";
+import React, { useState } from 'react';
+import Image from 'next/image';
+import { Location } from '@/types/types';
+import LocationActionButtons from '@/components/buttons/LocationActionButtons';
+import CloseButton from '@/components/buttons/CloseButton';
 
 interface LocationDetailPanelProps {
   location: Location | null;
@@ -17,29 +17,28 @@ const LocationDetailPanel: React.FC<LocationDetailPanelProps> = ({
   isVisible,
   onClose,
 }) => {
-  const [activeTab, setActiveTab] = useState("photos");
+  const [activeTab, setActiveTab] = useState('photos');
 
   if (!location) return null;
 
   // Default data if not provided
-  const address = location.address || "Molo District, Iloilo City";
-  const openHours = location.openHours || "10:00 AM - 7:00 PM";
-  const priceRange = location.priceRange || "₱100-200";
+  const address = location.address || 'Molo District, Iloilo City';
+  const openHours = location.openHours || '10:00 AM - 7:00 PM';
+  const priceRange = location.priceRange || '₱100-200';
 
   return (
     <div
-      className={`fixed top-0 left-0 w-[35vh] h-full bg-white shadow-lg z-50 transform transition-transform duration-300 
-        ${isVisible ? "translate-x-0" : "-translate-x-full"
-        }`}
+      className={`fixed top-0 left-0 w-[300px] min-w-[300px] md:w-[320px] lg:w-[350px] xl:w-[400px] h-full bg-white shadow-lg z-50 transform transition-transform duration-300 
+        ${isVisible ? 'translate-x-0' : '-translate-x-full'}`}
     >
       {/* Main image - Adjusted height */}
       <div className="relative h-[30vh] w-full">
         <div className="rounded-t-xl overflow-hidden h-full w-full">
           <Image
-            src={location.photos?.[0] || "/images/robertos/r5.jpg"}
+            src={location.photos?.[0] || '/images/robertos/r5.jpg'}
             alt={`${location.name} Image`}
             fill
-            style={{ objectFit: "cover" }}
+            style={{ objectFit: 'cover' }}
             priority
           />
         </div>
@@ -52,8 +51,9 @@ const LocationDetailPanel: React.FC<LocationDetailPanelProps> = ({
           {[0, 1, 2, 3, 4].map((index) => (
             <div
               key={index}
-              className={`h-1 w-1 rounded-full ${index === 0 ? "bg-white" : "bg-white/40"
-                } md:h-1 md:w-1 2xl:h-2 2xl:w-2`}
+              className={`h-1 w-1 rounded-full ${
+                index === 0 ? 'bg-white' : 'bg-white/40'
+              } md:h-1 md:w-1 2xl:h-2 2xl:w-2`}
             />
           ))}
         </div>
@@ -129,26 +129,28 @@ const LocationDetailPanel: React.FC<LocationDetailPanelProps> = ({
       <div className="border-b border-gray-200">
         <div className="flex">
           <button
-            className={`flex-1 text-center py-3 text-base relative cursor-pointer ${activeTab === "photos"
-                ? "text-gray-800 font-bold"
-                : "text-gray-400 font bold"
-              } md:py-2 md:text-sm lg:py-2 lg:text-sm xl:py-3 xl:text-base 2xl:py-5 2xl:text-xl`}
-            onClick={() => setActiveTab("photos")}
+            className={`flex-1 text-center py-3 text-base relative cursor-pointer ${
+              activeTab === 'photos'
+                ? 'text-gray-800 font-bold'
+                : 'text-gray-400 font bold'
+            } md:py-2 md:text-sm lg:py-2 lg:text-sm xl:py-3 xl:text-base 2xl:py-5 2xl:text-xl`}
+            onClick={() => setActiveTab('photos')}
           >
             Photos
-            {activeTab === "photos" && (
+            {activeTab === 'photos' && (
               <div className="absolute bottom-0 left-0 right-0 h-1 bg-yellow-400 md:h-0.5 lg:h-0.5 xl:h-0.75 2xl:h-1.5"></div>
             )}
           </button>
           <button
-            className={`flex-1 text-center py-3 text-base relative cursor-pointer ${activeTab === "menu"
-                ? "text-gray-800 font-bold"
-                : "text-gray-400 font-bold"
-              } md:py-2 md:text-sm lg:py-2 lg:text-sm xl:py-3 xl:text-base 2xl:py-5 2xl:text-xl`}
-            onClick={() => setActiveTab("menu")}
+            className={`flex-1 text-center py-3 text-base relative cursor-pointer ${
+              activeTab === 'menu'
+                ? 'text-gray-800 font-bold'
+                : 'text-gray-400 font-bold'
+            } md:py-2 md:text-sm lg:py-2 lg:text-sm xl:py-3 xl:text-base 2xl:py-5 2xl:text-xl`}
+            onClick={() => setActiveTab('menu')}
           >
             Menu
-            {activeTab === "menu" && (
+            {activeTab === 'menu' && (
               <div className="absolute bottom-0 left-0 right-0 h-1 bg-yellow-400 md:h-0.5 lg:h-0.5 xl:h-0.75 2xl:h-1.5"></div>
             )}
           </button>
@@ -158,7 +160,7 @@ const LocationDetailPanel: React.FC<LocationDetailPanelProps> = ({
       {/* Tab content container - consistent sizing for both tabs */}
       <div className="h-[350px] overflow-y-auto md:h-[300px] lg:h-[320px] xl:h-[400px] 2xl:h-[500px]">
         {/* Photos section */}
-        {activeTab === "photos" && (
+        {activeTab === 'photos' && (
           <div className="p-4 md:p-3 lg:p-4 xl:p-5 2xl:p-8">
             <p className="text-gray-400 mb-3 md:text-xs md:mb-2 lg:text-xs lg:mb-2 xl:text-sm xl:mb-3 2xl:text-xl 2xl:mb-5">
               See Photos
@@ -170,7 +172,7 @@ const LocationDetailPanel: React.FC<LocationDetailPanelProps> = ({
                     src="/images/robertos/r2.jpeg"
                     alt={`${location.name} Interior`}
                     fill
-                    style={{ objectFit: "cover" }}
+                    style={{ objectFit: 'cover' }}
                   />
                 </div>
               </div>
@@ -180,7 +182,7 @@ const LocationDetailPanel: React.FC<LocationDetailPanelProps> = ({
                     src="/images/robertos/r3.jpg"
                     alt={`${location.name} Sign`}
                     fill
-                    style={{ objectFit: "cover" }}
+                    style={{ objectFit: 'cover' }}
                   />
                 </div>
               </div>
@@ -190,7 +192,7 @@ const LocationDetailPanel: React.FC<LocationDetailPanelProps> = ({
                     src="/images/robertos/r4.jpg"
                     alt={`${location.name} Product`}
                     fill
-                    style={{ objectFit: "cover" }}
+                    style={{ objectFit: 'cover' }}
                   />
                 </div>
               </div>
@@ -200,7 +202,7 @@ const LocationDetailPanel: React.FC<LocationDetailPanelProps> = ({
                     src="/images/robertos/r1.webp"
                     alt={`${location.name} Ingredients`}
                     fill
-                    style={{ objectFit: "cover" }}
+                    style={{ objectFit: 'cover' }}
                   />
                 </div>
               </div>
@@ -210,7 +212,7 @@ const LocationDetailPanel: React.FC<LocationDetailPanelProps> = ({
                     src="/images/robertos/r5.jpg"
                     alt={`${location.name} Close-up`}
                     fill
-                    style={{ objectFit: "cover" }}
+                    style={{ objectFit: 'cover' }}
                   />
                 </div>
               </div>
@@ -219,7 +221,7 @@ const LocationDetailPanel: React.FC<LocationDetailPanelProps> = ({
         )}
 
         {/* Menu section - exactly matching structure to Photos */}
-        {activeTab === "menu" && (
+        {activeTab === 'menu' && (
           <div className="p-4 md:p-3 lg:p-4 xl:p-5 2xl:p-8">
             <p className="text-gray-400 mb-3 md:text-xs md:mb-2 lg:text-xs lg:mb-2 xl:text-sm xl:mb-3 2xl:text-xl 2xl:mb-5">
               Menu

@@ -27,7 +27,7 @@ interface DishDetailsProps {
 const DishDetails: React.FC<DishDetailsProps> = ({
   dish,
   onPrevDish,
-  onNextDish
+  onNextDish,
 }) => {
   // Reference to the Swiper instance
   const swiperRef = useRef<SwiperRef>(null);
@@ -59,12 +59,11 @@ const DishDetails: React.FC<DishDetailsProps> = ({
   const dishImages =
     dish.images && dish.images.length > 0 ? dish.images : [dish.image]; // Fallback to single image if no images array
 
-    const isVisible = true; // This should be controlled by the parent component
+  const isVisible = true; // This should be controlled by the parent component
   return (
     <div
-      className={`fixed top-0 left-0 w-[35vh] h-full bg-white shadow-lg z-50 transform transition-transform duration-300 
-        ${isVisible ? "translate-x-0" : "-translate-x-full"
-        }`}
+      className={`fixed top-0 left-0 w-[300px] min-w-[300px] md:w-[320px] lg:w-[350px] xl:w-[400px] h-full bg-white shadow-lg z-50 transform transition-transform duration-300 
+        ${isVisible ? 'translate-x-0' : '-translate-x-full'}`}
     >
       {/* Header with image slider */}
       <div className="relative ">
@@ -104,9 +103,9 @@ const DishDetails: React.FC<DishDetailsProps> = ({
         {/* Dish header with title and navigation - Part of scrollable content */}
         <div className="px-4 lg:px-5 xl:px-6 pt-4 lg:pt-5 pb-3 bg-white">
           <div className="flex items-center">
-          <h1 className="text-2xl lg:text-3xl xl:text-4xl font-extrabold text-gray-900 font-serif">
-            {dish.name}
-          </h1>
+            <h1 className="text-2xl lg:text-3xl xl:text-4xl font-extrabold text-gray-900 font-serif">
+              {dish.name}
+            </h1>
             <div className="flex ml-auto space-x-2 lg:space-x-3">
               <button
                 onClick={onPrevDish}

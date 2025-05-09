@@ -1,18 +1,18 @@
-"use client";
+'use client';
 
-import React, { useRef, useEffect, useState, useMemo } from "react";
-import PanelManager, { PanelManagerRef } from "./components/PanelManager";
-import { Location, FoodPrint, Dish, PanelType } from "@/types/types";
+import React, { useRef, useEffect, useState, useMemo } from 'react';
+import PanelManager, { PanelManagerRef } from './components/PanelManager';
+import { Location, FoodPrint, Dish, PanelType } from '@/types/types';
 import {
   ClientOnly,
   MapComponent,
   EmptyState,
-} from "../components/map/MapUtilComponents";
+} from '../components/map/MapUtilComponents';
 
-import { IoClose } from "react-icons/io5";
-import MenuButton from "@/components/buttons/MenuButton";
-import FilterButton from "@/components/buttons/FilterButton";
-import { FoodPrintData } from "@/lib/FoodPrintData";
+import { IoClose } from 'react-icons/io5';
+import MenuButton from '@/components/buttons/MenuButton';
+import FilterButton from '@/components/buttons/FilterButton';
+import { FoodPrintData } from '@/lib/FoodPrintData';
 
 interface DesktopMapLayoutProps {
   dishData: Dish[];
@@ -69,8 +69,8 @@ const DesktopMapLayout: React.FC<DesktopMapLayoutProps> = ({
   // Foodprint markers filtered by active filters
   const foodprintMarkers = activeFilters.length
     ? foodPrintData.markers.filter((marker) =>
-      activeFilters.includes(marker.dishName)
-    )
+        activeFilters.includes(marker.dishName)
+      )
     : foodPrintData.markers;
 
   // Get all locations
@@ -109,10 +109,10 @@ const DesktopMapLayout: React.FC<DesktopMapLayoutProps> = ({
     if (!window.location.search) return;
 
     const searchParams = new URLSearchParams(window.location.search);
-    const dishParam = searchParams.get("dish");
+    const dishParam = searchParams.get('dish');
 
     if (dishParam && onFilterChange) {
-      const newFilters = dishParam.split(",");
+      const newFilters = dishParam.split(',');
       if (JSON.stringify(activeFilters) !== JSON.stringify(newFilters)) {
         onFilterChange(newFilters);
       }
@@ -132,68 +132,74 @@ const DesktopMapLayout: React.FC<DesktopMapLayoutProps> = ({
         />
       </div>
       {(!currentPanel || !['explore', 'filter'].includes(currentPanel)) && (
-      <div
-        className={`absolute z-30 w-full transition-transform duration-300 ease-in-out ${panelOpen ? "translate-x-[35vh]" : "translate-x-0"
+        <div
+          className={`absolute z-30 w-full transition-transform duration-300 ease-in-out ${
+            panelOpen
+              ? 'translate-x-[300px] md:translate-x-[320px] lg:translate-x-[350px] xl:translate-x-[400px]'
+              : 'translate-x-0'
           }`}
-      >
-        <div className="flex items-center gap-4 px-4 py-3 overflow-x-auto">
-          {/* Filter Buttons */}
-          <div className="flex items-center gap-2 shrink-0">
-            <FilterButton
-              className="z-10"
-              onClick={() => {
-                panelRef.current?.openDishDetails();
-                setPanelOpen(true);
-              }}
-            />
-            <FilterButton
-              isDesktop={true}
-              onClick={() => {
-                panelRef.current?.openFilter();
-                setPanelOpen(true);
-              }}
-            />
-          </div>
+        >
+          <div className="flex items-center gap-4 px-4 py-3 overflow-x-auto">
+            {/* Filter Buttons */}
+            <div className="flex items-center gap-2 shrink-0">
+              <FilterButton
+                className="z-10"
+                onClick={() => {
+                  panelRef.current?.openDishDetails();
+                  setPanelOpen(true);
+                }}
+              />
+              <FilterButton
+                isDesktop={true}
+                onClick={() => {
+                  panelRef.current?.openFilter();
+                  setPanelOpen(true);
+                }}
+              />
+            </div>
 
-          {/* Filter Label + Tags */}
-          <div className="flex items-center gap-2 flex-wrap text-white">
-            <span className="text-xs font-bold whitespace-nowrap">
-              Filters ({activeFilters.length})
-            </span>
+            {/* Filter Label + Tags */}
+            <div className="flex items-center gap-2 flex-wrap text-white">
+              <span className="text-xs font-bold whitespace-nowrap">
+                Filters ({activeFilters.length})
+              </span>
 
-            {activeFilters.map((filter) => (
-              <div
-                key={filter}
-                className="bg-yellow-300 border border-blue-400 rounded-full flex items-center text-sm text-gray-900 font-medium px-3 py-1 shadow-sm"
-              >
-                <span className="pr-1">{filter}</span>
-                <button
-                  onClick={() =>
-                    updateFilters(activeFilters.filter((f) => f !== filter))
-                  }
-                  className="w-5 h-5 flex items-center justify-center text-gray-800"
-                  aria-label={`Remove ${filter} filter`}
+              {activeFilters.map((filter) => (
+                <div
+                  key={filter}
+                  className="bg-yellow-300 border border-blue-400 rounded-full flex items-center text-sm text-gray-900 font-medium px-3 py-1 shadow-sm"
                 >
-                  <IoClose />
-                </button>
-              </div>
-            ))}
+                  <span className="pr-1">{filter}</span>
+                  <button
+                    onClick={() =>
+                      updateFilters(activeFilters.filter((f) => f !== filter))
+                    }
+                    className="w-5 h-5 flex items-center justify-center text-gray-800"
+                    aria-label={`Remove ${filter} filter`}
+                  >
+                    <IoClose />
+                  </button>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
-      </div>
       )}
 
-
       {/* Menu Button */}
-      <MenuButton className="z-30" onClick={() => panelRef.current?.openMenu()} />
+      <MenuButton
+        className="z-30"
+        onClick={() => panelRef.current?.openMenu()}
+      />
 
       {/* Map or Empty State */}
       {hasDishes ? (
         <ClientOnly>
           <div className="h-full w-full bg-[#3b3b3f]">
             <MapComponent
-              key={`mobile-map-${activeFilters.join("-")}-${allLocations.length
-                }`}
+              key={`mobile-map-${activeFilters.join('-')}-${
+                allLocations.length
+              }`}
               locations={filteredLocations}
               foodPrintMarkers={foodprintMarkers}
               mapImageUrl="/Map.png"
