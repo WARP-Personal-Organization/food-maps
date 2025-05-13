@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { Suspense, useEffect, useState } from 'react';
 import LoadingScreen from '@/components/LoadingScreen';
 import MapLayout from '@/components/MapLayout';
 import { resetCache } from '@/components/map/delayed-component';
@@ -20,8 +20,10 @@ export default function Home() {
 
   return (
     <main className="max-h-screen bg-white">
-      {/* Always mount the map so it starts loading */}
-      <MapLayout />
+      {/* Wrap MapLayout in Suspense to handle useSearchParams */}
+      <Suspense fallback={<LoadingScreen />}>
+        <MapLayout />
+      </Suspense>
 
       {/* Show loading screen on top if still loading */}
       {showLoading && (

@@ -37,6 +37,7 @@ export interface PanelManagerRef {
   openFoodPrintSummary: (selectedFoodPrint: FoodPrint) => void;
   openFoodPrintDetail: (selectedFoodPrint: FoodPrint) => void;
   openExplore: () => void;
+  closeMenu: () => void;
   closeAllPanels: () => void;
   openHome: () => void;
   getCurrentPanel: () => PanelType;
@@ -110,6 +111,9 @@ const PanelManager: React.ForwardRefRenderFunction<
       setCurrentPanel("home");
       onPanelChange?.("home");
     },
+    closeMenu: () => {
+      setIsMenuVisible(false);
+    },
     closeAllPanels: () => {
       handleClosePanel();
     },
@@ -137,18 +141,13 @@ const PanelManager: React.ForwardRefRenderFunction<
     onPanelChange?.("explore");
   };
 
-  const isModalVisible =
-    currentPanel !== null && ["menu"].includes(currentPanel);
-
   return (
     <>
-      {isMenuVisible && (
-        <PanelOverlay
-          isVisible={isModalVisible}
-          onClose={() => setCurrentPanel(null)}
-          withBlur={isMenuVisible || currentPanel === "filter"}
-        />
-      )}
+      <PanelOverlay
+        isVisible={isMenuVisible}
+        onClose={() => setIsMenuVisible(false)}
+        withBlur={isMenuVisible || currentPanel === "filter"}
+      />
 
       <MenuPanel
         isVisible={isMenuVisible}
@@ -173,8 +172,11 @@ const PanelManager: React.ForwardRefRenderFunction<
       <HomePanel
         isVisible={currentPanel === "home"}
         dishes={dishData}
-        openMenu={() => setCurrentPanel("menu")}
-        onClose={() => setCurrentPanel(null)}
+        openMenu={() => setIsMenuVisible(true)}
+        onClose={() => {
+          setIsMenuVisible(false);
+          setCurrentPanel(null);
+        }}
       />
 
       <FilterPanel
