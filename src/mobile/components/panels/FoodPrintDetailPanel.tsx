@@ -104,11 +104,11 @@ const FoodPrintDetailsPanel: React.FC<FoodPrintDetailsPanelProps> = ({
             </>
           )}
         </div>
-        <div className='pb-12'></div>
+        <div className='pb-1'></div>
       </div>
 
       {/* Action buttons with fade-out effect - fixed at the bottom */}
-      <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-white via-white to-transparent pt-20 pb-0 p-5 z-10">
+      <div className="sticky bottom-0 left-0 right-0 bg-gradient-to-t from-white via-white to-transparent pt-20 pb-0 p-5 z-10">
         <LocationActionButtons />
       </div>
       {/* Removed the extra pb-1 div */}
