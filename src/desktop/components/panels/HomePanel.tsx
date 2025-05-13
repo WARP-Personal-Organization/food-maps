@@ -44,7 +44,7 @@ const HomePanel: React.FC<HomePanelProps> = ({
 
   return (
     <div
-      className={`fixed flex h-full w-full bg-white shadow-lg z-50 transform transition-transform duration-300 ${isVisible ? 'translate-x-0' : 'translate-x-full'
+      className={`fixed flex h-full w-full bg-white shadow-lg z-45 transform transition-transform duration-300 ${isVisible ? 'translate-x-0' : 'translate-x-full'
         }`}
     >
       <MenuButton onClick={openMenu} />
