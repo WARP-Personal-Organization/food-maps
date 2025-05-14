@@ -28,7 +28,7 @@ const LocationDetailPanel: React.FC<LocationDetailPanelProps> = ({
 
   return (
     <div
-      className={`fixed top-0 left-0 w-[300px] min-w-[300px] md:w-[320px] lg:w-[350px] xl:w-[400px] h-full bg-white shadow-lg z-50 transform transition-transform duration-300 
+      className={`fixed top-0 left-0 w-[300px] min-w-[300px] md:w-[320px] lg:w-[350px] xl:w-[400px] h-full bg-white shadow-lg z-50 overflow-y-scroll transform transition-transform duration-300 
         ${isVisible ? 'translate-x-0' : '-translate-x-full'}`}
     >
       {/* Main image - Adjusted height */}
@@ -236,7 +236,7 @@ const LocationDetailPanel: React.FC<LocationDetailPanelProps> = ({
       </div>
 
       {/* Action buttons with fade-out effect - improved sizing for larger screens */}
-      <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-white via-white to-transparent pt-20 pb-0 p-5 md:pt-16 md:p-3 lg:pt-18 lg:p-4 xl:pt-24 xl:p-5 2xl:pt-28 2xl:p-6">
+      <div className="sticky bottom-0 left-0 right-0 bg-gradient-to-t from-white via-white to-transparent pt-20 pb-0 p-5 md:pt-16 md:p-3 lg:pt-18 lg:p-4 xl:pt-24 xl:p-5 2xl:pt-28 2xl:p-6">
         <LocationActionButtons />
       </div>
     </div>
