@@ -1,9 +1,9 @@
 'use client';
 
 import React, { useState } from 'react';
-import { useRouter } from "next/navigation";
+import { useRouter } from 'next/navigation';
 import Image from 'next/image';
-import MenuButton from "@/components/buttons/MenuButton";
+import MenuButton from '@/components/buttons/MenuButton';
 import { Dish } from '@/types/types';
 
 interface HomePanelProps {
@@ -37,7 +37,7 @@ const HomePanel: React.FC<HomePanelProps> = ({
   };
 
   const handleWhereToEat = () => {
-    if (activeDish.href === "/") {
+    if (activeDish.href === '/') {
       router.push(`/?dish=${encodeURIComponent(activeDish.name)}&view=map`);
     } else {
       router.push(activeDish.href);
@@ -49,7 +49,7 @@ const HomePanel: React.FC<HomePanelProps> = ({
     <div
       className={`fixed bottom-0 w-full h-full bg-white z-30 rounded-t-sm shadow-lg
       transform transition-transform duration-300
-      ${isVisible ? "translate-y-0" : "translate-y-full"}`}
+      ${isVisible ? 'translate-y-0' : 'translate-y-full'}`}
     >
       <MenuButton onClick={openMenu} />
 
@@ -74,14 +74,14 @@ const HomePanel: React.FC<HomePanelProps> = ({
           <div className="flex items-center gap-2">
             <button
               onClick={onPrev}
-              className="h-10 w-10 p-2 rounded-full bg-yellow-300 flex items-center justify-center hover:bg-[#E6C207] transition-colors"
+              className="h-10 w-10 p-2 rounded-full bg-yellow-300 flex items-center justify-center hover:bg-[#E6C207] transition-colors cursor-pointer"
               aria-label="Previous dish"
             >
               <span className="text-sm">❮</span>
             </button>
             <button
               onClick={onNext}
-              className="h-10 w-10 p-2 rounded-full bg-yellow-300 flex items-center justify-center hover:bg-[#E6C207] transition-colors"
+              className="h-10 w-10 p-2 rounded-full bg-yellow-300 flex items-center justify-center hover:bg-[#E6C207] transition-colors cursor-pointer"
               aria-label="Next dish"
             >
               <span className="text-sm">❯</span>
