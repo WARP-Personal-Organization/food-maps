@@ -74,17 +74,17 @@ const HomePanel: React.FC<HomePanelProps> = ({
           <div className="flex items-center gap-2">
             <button
               onClick={onPrev}
-              className="h-10 w-10 p-2 rounded-full bg-[#ebebeb] flex items-center justify-center hover:bg-gray-200 transition-colors"
+              className="h-10 w-10 p-2 rounded-full bg-yellow-300 flex items-center justify-center hover:bg-[#E6C207] transition-colors"
               aria-label="Previous dish"
             >
-              <span className="text-[#c2c2c2] text-sm">❮</span>
+              <span className="text-sm">❮</span>
             </button>
             <button
               onClick={onNext}
-              className="h-10 w-10 p-2 rounded-full bg-[#F9D408] flex items-center justify-center hover:bg-[#E6C207] transition-colors"
+              className="h-10 w-10 p-2 rounded-full bg-yellow-300 flex items-center justify-center hover:bg-[#E6C207] transition-colors"
               aria-label="Next dish"
             >
-              <span className="text-[#202020] text-sm">❯</span>
+              <span className="text-sm">❯</span>
             </button>
           </div>
         </div>
