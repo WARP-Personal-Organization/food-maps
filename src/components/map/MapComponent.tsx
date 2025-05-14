@@ -3,7 +3,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import mapboxgl from 'mapbox-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
-import '../styles/map.css';
+import '@/styles/map.css';
 import { FoodPrint, Location } from '@/types/types';
 
 interface MapComponentProps {
@@ -17,6 +17,7 @@ interface MapComponentProps {
   mapboxToken?: string;
   mapStyle?: string;
   useCustomMap?: boolean;
+  isDesktop?: boolean;
 }
 
 const MapComponent: React.FC<MapComponentProps> = ({
@@ -35,6 +36,7 @@ const MapComponent: React.FC<MapComponentProps> = ({
     '',
   mapStyle = 'mapbox://styles/mapbox/streets-v12',
   useCustomMap = true,
+  isDesktop = false
 }) => {
   const mapContainerRef = useRef<HTMLDivElement>(null);
   const mapInstanceRef = useRef<mapboxgl.Map | null>(null);
@@ -340,9 +342,11 @@ const MapComponent: React.FC<MapComponentProps> = ({
       document.head.appendChild(style);
 
       // Add controls
-      map.addControl(new mapboxgl.AttributionControl(), 'bottom-left');
-      map.addControl(new mapboxgl.NavigationControl(), 'bottom-right');
-
+      if (isDesktop) {
+        map.addControl(new mapboxgl.AttributionControl(), 'bottom-left');
+        map.addControl(new mapboxgl.NavigationControl(), 'bottom-right');
+      }
+      
       // Save reference to map
       mapInstanceRef.current = map;
       mapInitializedRef.current = true;

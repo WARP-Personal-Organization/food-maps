@@ -212,6 +212,7 @@ const DesktopMapLayout: React.FC<DesktopMapLayoutProps> = ({
               onLocationClick={handleLocationClick}
               onFoodPrintClick={handleFoodprintClick}
               useCustomMap
+              isDesktop = {true}
             />
           </div>
         </ClientOnly>
