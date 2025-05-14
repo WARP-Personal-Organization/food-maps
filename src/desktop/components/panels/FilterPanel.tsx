@@ -4,6 +4,7 @@ import React, { useEffect, useState } from 'react';
 import Image from 'next/image';
 import { Dish } from '@/types/types';
 import CloseButton from '@/components/buttons/CloseButton';
+import { Search } from "lucide-react";
 
 interface FilterPanelProps {
   dishData: Dish[];
@@ -65,19 +66,14 @@ const FilterPanel: React.FC<FilterPanelProps> = ({
         <div className="relative">
           <input
             type="text"
-            className="w-full pl-10 pr-3 py-2 border rounded-md focus:outline-none"
+            className="w-full pl-10 pr-3 py-2 border rounded-md focus:outline-none bg-gray-200"
             placeholder="Search dishes..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             aria-label="Search dishes"
           />
           <div className="absolute left-3 top-2.5 text-gray-400">
-            <svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true">
-              <path
-                d="M15.5 14H14.71L14.43 13.73C15.41 12.59 16 11.11 16 9.5C16 5.91 13.09 3 9.5 3C5.91 3 3 5.91 3 9.5C3 13.09 5.91 16 9.5 16C11.11 16 12.59 15.41 13.73 14.43L14 14.71V15.5L19 20.49L20.49 19L15.5 14Z"
-                fill="currentColor"
-              />
-            </svg>
+            <Search size="21" />
           </div>
         </div>
       </div>
