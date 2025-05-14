@@ -4,17 +4,15 @@ import React, { useRef, useEffect } from 'react';
 import Image from 'next/image';
 import LocationCard from './LocationCard';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
-// Import Swiper components and styles
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Pagination, Autoplay } from 'swiper/modules';
 import type { SwiperRef } from 'swiper/react';
-// Import Swiper styles
+
 import 'swiper/css';
 import 'swiper/css/pagination';
 import 'swiper/css/autoplay';
-
-// Custom styles for Swiper pagination
 import './dish-details-swiper.css';
+
 import { LocationData } from '@/lib/LocationData';
 import { Dish } from '@/types/types';
 
@@ -29,53 +27,42 @@ const DishDetails: React.FC<DishDetailsProps> = ({
   onPrevDish,
   onNextDish,
 }) => {
-  // Reference to the Swiper instance
   const swiperRef = useRef<SwiperRef>(null);
 
-  // Effect to reset the Swiper to the first slide when the dish changes
+  // Reset swiper to first slide on dish change
   useEffect(() => {
-    if (swiperRef.current && swiperRef.current.swiper) {
-      // Reset to the first slide
-      swiperRef.current.swiper.slideTo(0, 0);
-    }
-  }, [dish.name]); // Dependency on dish.name to trigger when dish changes
+    swiperRef.current?.swiper?.slideTo(0, 0);
+  }, [dish.name]);
 
-  // Get actual locations for this dish from LocationData
   const locations = LocationData[dish.name] || [];
 
-  // Convert location data to the format expected by LocationCard
   const locationCards = locations.map((location) => ({
     name: location.name,
-    image: location.photos
-      ? location.photos[0]
-      : '/images/placeholder-location.jpg',
+    image: location.photos?.[0] || '/images/placeholder-location.jpg',
     location: location.address || '',
-    duration: '10 min', // This would need to be calculated dynamically in a real app
-    rating: 4.5, // This would come from a ratings system in a real app
+    duration: '10 min', // Placeholder
+    rating: 4.5, // Placeholder
     tags: [dish.name],
   }));
 
-  // Create an array of images for the dish
-  const dishImages =
-    dish.images && dish.images.length > 0 ? dish.images : [dish.image]; // Fallback to single image if no images array
+  const dishImages = dish.images?.length ? dish.images : [dish.image];
 
-  const isVisible = true; // This should be controlled by the parent component
+  const isVisible = true; // Should be managed by parent
+
   return (
     <div
-      className={`fixed top-0 left-0 w-[300px] min-w-[300px] md:w-[320px] lg:w-[350px] xl:w-[400px] h-full bg-white shadow-lg z-50 transform transition-transform duration-300 
-        ${isVisible ? 'translate-x-0' : '-translate-x-full'}`}
+      className={`fixed top-0 left-0 h-full w-[300px] min-w-[300px] md:w-[320px] lg:w-[350px] xl:w-[400px] bg-white shadow-lg z-50 transform transition-transform duration-300 
+      ${isVisible ? 'translate-x-0' : '-translate-x-full'} flex flex-col`}
     >
-      {/* Header with image slider */}
-      <div className="relative ">
+      {/* Swiper Header */}
+      <div className="relative">
         <Swiper
           ref={swiperRef}
           modules={[Pagination, Autoplay]}
-          pagination={{
-            clickable: true,
-          }}
+          pagination={{ clickable: true }}
           spaceBetween={0}
           slidesPerView={1}
-          loop={true}
+          loop
           autoplay={{ delay: 5000, disableOnInteraction: false }}
           speed={500}
           className="h-full w-full"
@@ -98,80 +85,68 @@ const DishDetails: React.FC<DishDetailsProps> = ({
         </Swiper>
       </div>
 
-      {/* Scrollable content container */}
-      <div className="flex-grow overflow-y-auto scrollbar-hide">
-        {/* Dish header with title and navigation - Part of scrollable content */}
-        <div className="px-4 lg:px-5 xl:px-6 pt-4 lg:pt-5 pb-3 bg-white">
-          <div className="flex items-center">
-            <h1 className="text-2xl lg:text-3xl xl:text-4xl font-extrabold text-gray-900 font-serif">
-              {dish.name}
-            </h1>
-            <div className="flex ml-auto space-x-2 lg:space-x-3">
-              <button
-                onClick={onPrevDish}
-                className="bg-gray-100 rounded-full w-8 h-8 lg:w-10 lg:h-10 flex items-center justify-center"
-                aria-label="Previous dish"
-              >
-                <ChevronLeft
-                  className="text-gray-500 cursor-pointer"
-                  size={18}
-                />
-              </button>
-              <button
-                onClick={onNextDish}
-                className="bg-yellow-400 rounded-full w-8 h-8 lg:w-10 lg:h-10 flex items-center justify-center"
-                aria-label="Next dish"
-              >
-                <ChevronRight className="text-black cursor-pointer" size={18} />
-              </button>
-            </div>
+      {/* Scrollable Content */}
+      <div className="flex-grow min-h-0 overflow-y-auto px-4 lg:px-5 xl:px-6 pt-4 scrollbar-hide">
+        {/* Title and Nav */}
+        <div className="flex items-center mb-3">
+          <h1 className="text-2xl lg:text-3xl xl:text-4xl font-extrabold text-gray-900 font-serif">
+            {dish.name}
+          </h1>
+          <div className="flex ml-auto space-x-2 lg:space-x-3">
+            <button
+              onClick={onPrevDish}
+              className="bg-gray-100 rounded-full w-8 h-8 lg:w-10 lg:h-10 flex items-center justify-center"
+              aria-label="Previous dish"
+            >
+              <ChevronLeft className="text-gray-500" size={18} />
+            </button>
+            <button
+              onClick={onNextDish}
+              className="bg-yellow-400 rounded-full w-8 h-8 lg:w-10 lg:h-10 flex items-center justify-center"
+              aria-label="Next dish"
+            >
+              <ChevronRight className="text-black" size={18} />
+            </button>
           </div>
         </div>
 
-        {/* Main content - Description and locations */}
-        <div className="px-4 lg:px-5 xl:px-6 pt-3">
-          {/* Description */}
-          <div className="mt-1 lg:mt-2 space-y-2">
-            <p className="text-gray-500 mt-1 text-sm lg:text-base italic font-medium">
-              {dish.tagline}
-            </p>
-            <p className="text-gray-700 leading-relaxed text-sm lg:text-base">
-              {dish.description}
-            </p>
-          </div>
+        {/* Description */}
+        <div className="space-y-2 mb-6">
+          <p className="text-gray-500 text-sm lg:text-base italic font-medium">
+            {dish.tagline}
+          </p>
+          <p className="text-gray-700 leading-relaxed text-sm lg:text-base">
+            {dish.description}
+          </p>
+        </div>
 
-          {/* See Locations Button */}
-          <div className="mt-4 lg:mt-6 border-b border-gray-200 pb-2 lg:pb-3">
-            <div className="text-gray-700 font-medium flex items-center justify-between cursor-pointer">
-              <span>See Locations</span>
-              <span className="text-gray-400 text-sm">
-                ({locations.length})
-              </span>
+        {/* Locations Header */}
+        <div className="border-b border-gray-200 pb-2 lg:pb-3 mb-4">
+          <div className="text-gray-700 font-medium flex items-center justify-between">
+            <span>See Locations</span>
+            <span className="text-gray-400 text-sm">({locations.length})</span>
+          </div>
+        </div>
+
+        {/* Locations List */}
+        <div className="space-y-3 mb-6">
+          {locationCards.length > 0 ? (
+            locationCards.map((location, index) => (
+              <LocationCard
+                key={index}
+                name={location.name}
+                image={location.image}
+                location={location.location}
+                duration={location.duration}
+                rating={location.rating}
+                tags={location.tags}
+              />
+            ))
+          ) : (
+            <div className="text-center py-6 lg:py-8 text-gray-500">
+              No locations available for this dish
             </div>
-          </div>
-
-          {/* Locations List */}
-          <div className="py-2 lg:py-4 mb-6">
-            {locationCards.length > 0 ? (
-              <div className="space-y-3">
-                {locationCards.map((location, index) => (
-                  <LocationCard
-                    key={index}
-                    name={location.name}
-                    image={location.image}
-                    location={location.location}
-                    duration={location.duration}
-                    rating={location.rating}
-                    tags={location.tags}
-                  />
-                ))}
-              </div>
-            ) : (
-              <div className="text-center py-6 lg:py-8 text-gray-500">
-                No locations available for this dish
-              </div>
-            )}
-          </div>
+          )}
         </div>
       </div>
     </div>

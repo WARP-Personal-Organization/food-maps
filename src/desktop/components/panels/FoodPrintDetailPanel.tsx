@@ -47,7 +47,7 @@ const FoodPrintDetailsPanel: React.FC<FoodPrintDetailsPanelProps> = ({
       </div>
 
       {/* Content wrapper with rounded top and negative margin - matching reference */}
-      <div className="rounded-t-sm -mt-2 relative z-10 bg-white flex-1 overflow-y-auto pb-32">
+      <div className="rounded-t-sm -mt-2 relative z-10 bg-white flex-1 overflow-y-auto pb-40">
         {/* Label - FOODPRINT */}
         <div className="pt-3 pb-2 px-6">
           <span className="inline-block bg-yellow-400 px-4 py-1.5 text-sm font-bold uppercase">

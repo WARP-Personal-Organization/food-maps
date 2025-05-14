@@ -100,9 +100,9 @@ const HomePanel: React.FC<HomePanelProps> = ({
                   onClick={onPrev}
                   aria-label="Previous slide"
                   tabIndex={0}
-                  className="rounded-full w-14 h-14 2xl:w-16 2xl:h-16 flex items-center justify-center bg-[#eeeeee]"
+                  className="rounded-full w-14 h-14 2xl:w-16 2xl:h-16 flex items-center justify-center bg-yellow-300"
                 >
-                  <span className="text-[#c2c2c2] text-xl 2xl:text-2xl">❮</span>
+                  <span className="text-xl 2xl:text-2xl">❮</span>
                 </button>
 
                 {/* Dot indicators */}
@@ -121,7 +121,7 @@ const HomePanel: React.FC<HomePanelProps> = ({
                   onClick={onNext}
                   aria-label="Next slide"
                   tabIndex={0}
-                  className="rounded-full w-14 h-14 2xl:w-16 2xl:h-16 flex items-center justify-center bg-[#F9D408]"
+                  className="rounded-full w-14 h-14 2xl:w-16 2xl:h-16 flex items-center justify-center bg-yellow-300"
                 >
                   <span className="text-black text-xl 2xl:text-2xl">❯</span>
                 </button>
