@@ -1,0 +1,32 @@
+/* Custom styling for Swiper pagination in DishDetailsView */
+
+/* Style for the pagination container */
+.swiper-pagination {
+  bottom: 8px !important;
+}
+
+/* Style for pagination bullets */
+.swiper-pagination-bullet {
+  width: 5px !important;
+  height: 5px !important;
+  background: rgba(255, 255, 255, 0.5) !important;
+  opacity: 1 !important;
+  margin: 0 3px !important;
+}
+
+/* Style for active pagination bullet */
+.swiper-pagination-bullet-active {
+  background: white !important;
+  opacity: 1 !important;
+}
+
+/* Make sure the Swiper container takes full height of its parent */
+.swiper {
+  height: 100%;
+  width: 100%;
+}
+
+.swiper-slide {
+  height: 100%;
+  width: 100%;
+}

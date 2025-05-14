@@ -1,26 +1,36 @@
 'use client';
 
-import { Suspense, useEffect } from 'react';
-import LoadingScreen from '@/components/loading-screen';
-import DelayedComponent, { resetCache } from '@/components/delayed-component';
-import HomePage from '@/components/Homepage';
+import { Suspense, useEffect, useState } from 'react';
+import LoadingScreen from '@/components/LoadingScreen';
+import MapLayout from '@/components/MapLayout';
+import { resetCache } from '@/components/map/delayed-component';
 
 export default function Home() {
-  // Reset the cache when the component mounts
+  const [showLoading, setShowLoading] = useState(true);
+
+  // Reset the cache on mount and set loading timeout
   useEffect(() => {
     resetCache();
+    const timeout = setTimeout(() => {
+      setShowLoading(false);
+    }, 3500); // Show loading screen for 3.5 seconds
+
+    return () => clearTimeout(timeout);
   }, []);
 
   return (
     <main className="max-h-screen bg-white">
+      {/* Wrap MapLayout in Suspense to handle useSearchParams */}
       <Suspense fallback={<LoadingScreen />}>
-        <DelayedComponent delayTime={3500}>
-          {/* Main content will appear after loading */}
-          <div className="">
-            <HomePage/>
-          </div>
-        </DelayedComponent>
+        <MapLayout />
       </Suspense>
+
+      {/* Show loading screen on top if still loading */}
+      {showLoading && (
+        <div className="absolute inset-0 z-50">
+          <LoadingScreen />
+        </div>
+      )}
     </main>
   );
 }

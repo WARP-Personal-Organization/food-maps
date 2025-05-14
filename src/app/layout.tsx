@@ -1,13 +1,28 @@
 import './globals.css';
-import type { Metadata } from 'next';
-import { Inter } from 'next/font/google';
+import type { Metadata, Viewport } from 'next';
+import { Open_Sans, Faustina } from 'next/font/google';
 
-const inter = Inter({ subsets: ['latin'] });
+const openSans = Open_Sans({
+  subsets: ['latin'],
+  variable: '--font-open-sans',
+  display: 'swap',
+});
+
+const faustina = Faustina({
+  subsets: ['latin'],
+  variable: '--font-faustina',
+  display: 'swap',
+});
 
 export const metadata: Metadata = {
   title: 'FoodPrints',
   description: 'A food map application for Iloilo City',
-  viewport: 'width=device-width, initial-scale=1, maximum-scale=1',
+};
+
+export const viewport: Viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  maximumScale: 1,
 };
 
 export default function RootLayout({
@@ -16,15 +31,11 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" className={`${openSans.variable} ${faustina.variable}`}>
       <head>
-        <meta
-          name="viewport"
-          content="width=device-width, initial-scale=1, maximum-scale=1"
-        />
         {/* Mapbox CSS is imported in the component directly */}
       </head>
-      <body className={inter.className}>
+      <body className="font-open-sans">
         <div>{children}</div>
       </body>
     </html>

@@ -148,3 +148,11 @@
   /* Safari and Chrome */
   display: block;
 }
+
+.font-faustina {
+  font-family: var(--font-faustina);
+}
+
+.font-open-sans {
+  font-family: var(--font-open-sans);
+}
