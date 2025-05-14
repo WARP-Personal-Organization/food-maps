@@ -29,10 +29,10 @@ const LocationDetailPanel: React.FC<LocationDetailPanelProps> = ({
 
   return (
     <div
-      className={`fixed bottom-0  w-full h-full bg-white z-50 rounded-t-sm shadow-lg overflow-y-auto touch-pan-y 
-    transform transition-transform duration-300
-        ${isVisible ? "translate-y-0" : "translate-y-full"
-        }`}
+      className={`fixed bottom-0 w-full h-full bg-white z-50 rounded-t-sm shadow-lg overflow-y-auto touch-pan-y 
+        transform transition-transform duration-300
+        ${isVisible ? "translate-y-0" : "translate-y-full"}
+      `}
     >
       {/* Main image - Adjusted height */}
       <div className="relative h-56 w-full md:h-48 lg:h-54 xl:h-68 2xl:h-80 3xl:h-96">
@@ -158,48 +158,28 @@ const LocationDetailPanel: React.FC<LocationDetailPanelProps> = ({
                   <Image
                     src="/images/robertos/r2.jpeg"
                     alt={`${location.name} Interior`}
-                    fill
-                    style={{ objectFit: "cover" }}
+                    layout="fill"
+                    objectFit="cover"
                   />
                 </div>
               </div>
-              <div className="col-span-1 relative rounded overflow-hidden bg-gray-200">
-                <div className="aspect-square">
+              <div className="relative rounded overflow-hidden bg-gray-200">
+                <div className="aspect-square h-full">
                   <Image
-                    src="/images/robertos/r3.jpg"
-                    alt={`${location.name} Sign`}
-                    fill
-                    style={{ objectFit: "cover" }}
+                    src="/images/robertos/r1.jpg"
+                    alt={`${location.name} Dish`}
+                    layout="fill"
+                    objectFit="cover"
                   />
                 </div>
               </div>
-              <div className="col-span-1 relative rounded overflow-hidden bg-gray-200">
-                <div className="aspect-square">
+              <div className="relative rounded overflow-hidden bg-gray-200">
+                <div className="aspect-square h-full">
                   <Image
-                    src="/images/robertos/r4.jpg"
-                    alt={`${location.name} Product`}
-                    fill
-                    style={{ objectFit: "cover" }}
-                  />
-                </div>
-              </div>
-              <div className="col-span-1 relative rounded overflow-hidden bg-gray-200">
-                <div className="aspect-square">
-                  <Image
-                    src="/images/robertos/r1.webp"
-                    alt={`${location.name} Ingredients`}
-                    fill
-                    style={{ objectFit: "cover" }}
-                  />
-                </div>
-              </div>
-              <div className="col-span-1 relative rounded overflow-hidden bg-gray-200">
-                <div className="aspect-square">
-                  <Image
-                    src="/images/robertos/r5.jpg"
-                    alt={`${location.name} Close-up`}
-                    fill
-                    style={{ objectFit: "cover" }}
+                    src="/images/robertos/r3.jpeg"
+                    alt={`${location.name} Food`}
+                    layout="fill"
+                    objectFit="cover"
                   />
                 </div>
               </div>
@@ -207,23 +187,18 @@ const LocationDetailPanel: React.FC<LocationDetailPanelProps> = ({
           </div>
         )}
 
-        {/* Menu section - exactly matching structure to Photos */}
+        {/* Menu section */}
         {activeTab === "menu" && (
           <div className="p-4 md:p-3 lg:p-4 xl:p-5 2xl:p-8">
             <p className="text-gray-400 mb-3 md:text-xs md:mb-2 lg:text-xs lg:mb-2 xl:text-sm xl:mb-3 2xl:text-xl 2xl:mb-5">
-              Menu
+              Menu Coming Soon
             </p>
-            <div className="flex items-center justify-center h-[250px] md:h-[210px] lg:h-[230px] xl:h-[300px] 2xl:h-[370px]">
-              <p className="text-gray-500 text-sm md:text-xs lg:text-xs xl:text-sm 2xl:text-lg">
-                Menu information not available
-              </p>
-            </div>
           </div>
         )}
       </div>
 
-      {/* Action buttons with fade-out effect - improved sizing for larger screens */}
-      <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-white via-white to-transparent pt-20 pb-0 p-5 md:pt-16 md:p-3 lg:pt-18 lg:p-4 xl:pt-24 xl:p-5 2xl:pt-28 2xl:p-6">
+      {/* Sticky Action Buttons */}
+      <div className="sticky bottom-0 shadow-xl bg-gradient-to-t from-white via-white to-transparent pt-20 pb-0 p-5 md:pt-16 md:p-3 lg:pt-18 lg:p-4 xl:pt-24 xl:p-5 2xl:pt-28 2xl:p-6">
         <LocationActionButtons />
       </div>
     </div>
