@@ -9,61 +9,104 @@ interface AboutPanelProps {
 }
 
 const AboutPanel: React.FC<AboutPanelProps> = ({ onClose, isVisible }) => {
-  if (!isVisible) return null; // Ensure the panel is only shown when isVisible is true
+  if (!isVisible) return null;
+
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === 'Enter' || e.key === 'Space') {
+      onClose();
+    }
+  };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-60 backdrop-blur-sm overflow-y-auto p-4">
-      <div className="relative bg-white rounded-xl w-full max-w-4xl p-6 shadow-xl">
-        {/* Close Button */}
-        <button
-          onClick={onClose}
-          className="absolute top-4 right-4 p-2 bg-gray-300 rounded-full text-gray-700 hover:bg-gray-400"
-        >
-          &times; {/* This will show a "×" symbol for closing */}
-        </button>
-
-        {/* Your exact design below */}
-        <section className="m-0 pt-4">
-          <div className="relative w-full pb-8">
+    <div className="fixed inset-0 z-50 bg-black bg-opacity-80">
+      <div className="relative bg-white w-full h-screen flex flex-col overflow-hidden">
+        {/* Header with Logo and Close Button */}
+        <div className="flex items-center justify-between px-6 py-3 bg-white shrink-0">
+          <div className="flex items-center">
             <Image
-              src="/images/about-image.png"
-              alt="DG Logo"
-              width={1000}
-              height={20}
-              className="object-cover object-center w-full"
+              src="/about-page/dg-logo.png"
+              alt="Daily Guardian Logo"
+              width={130}
+              height={40}
+              className="object-contain"
             />
           </div>
-          <h1 className="bg-yellow-300 font-bold w-28 rounded h-8 flex items-center justify-center text-center mb-4">
-            ABOUT US
-          </h1>
-          <p className="pb-4">
-            Lorem ipsum dolor sit amet consectetur adipiscing elit. Ex sapien vitae pellentesque sem placerat in id. 
-            Pretium tellus duis convallis tempus leo eu aenean. Urna tempor pulvinar vivamus fringilla lacus nec metus. 
-            Iaculis massa nisl malesuada lacinia integer nunc posuere. 
-            Purus est efficitur laoreet mauris pharetra vestibulum fusce.
-          </p>
-          <p className="mb-6">
-            Semper vel class aptent taciti sociosqu ad litora. 
-            Conubia nostra inceptos himenaeos orci varius natoque penatibus. Dis parturient montes nascetur ridiculus mus donec rhoncus.
-            Nulla molestie mattis scelerisque maximus eget fermentum odio.
-          </p>
-        </section>
+          <button
+            onClick={onClose}
+            className="bg-yellow-300 rounded-md w-8 h-8 flex items-center justify-center text-xl font-bold cursor-pointer"
+            aria-label="Close panel"
+            tabIndex={0}
+            onKeyDown={handleKeyDown}
+          >
+            ×
+          </button>
+        </div>
 
-        <section>
-          <h1 className="flex items-center justify-center mb-6 font-bold">Partners</h1>
-          <div className="grid grid-cols-4 gap-4 md:grid-cols-8">
-            {Array.from({ length: 8 }).map((_, idx) => (
-              <Image
-                key={idx}
-                src="/images/partner-mockup.jpg"
-                alt="DG Logo"
-                width={100}
-                height={20}
-                className="object-cover object-center rounded-full w-18"
-              />
-            ))}
+        {/* Main content container - fixed height with no scrolling */}
+        <div className="flex flex-col flex-1 overflow-hidden">
+          {/* Food Banner Image - responsive height */}
+          <div className="w-full h-[20vh] md:h-[25vh] lg:h-[28vh] relative shrink-0">
+            <Image
+              src="/about-page/dg-about-image.png"
+              alt="Filipino food showcase"
+              fill
+              className="object-cover"
+              priority
+            />
           </div>
-        </section>
+
+          {/* About Content - auto-adjusting height */}
+          <div className="flex flex-col items-center justify-between flex-1 px-4 py-4 md:py-6">
+            <div className="w-full max-w-5xl mx-auto flex flex-col items-center">
+              <div className="bg-yellow-300 w-28 h-8 md:w-32 md:h-9 rounded flex items-center justify-center text-center font-bold text-sm mb-4 md:mb-6">
+                ABOUT US
+              </div>
+
+              {/* Text content - adaptive sizing based on screen height */}
+              <div className="w-full max-w-3xl mx-auto px-2 md:px-4">
+                <p className="text-center text-xs md:text-sm mb-2 md:mb-4 line-clamp-4 md:line-clamp-none">
+                  Roberto&apos;s Siopao is an iconic delicacy from Iloilo City,
+                  known for its generous size, flavorful fillings, and unique,
+                  homemade taste. A must-visit spot for both locals and
+                  tourists, Roberto&apos;s has built a strong reputation over
+                  the decades for serving siopao that&apos;s packed with a rich
+                  combination of ingredients — from savory pork and chicken to
+                  Chinese sausage and hard-boiled egg.
+                </p>
+
+                <p className="text-center text-xs md:text-sm mb-4 md:mb-8 line-clamp-4 md:line-clamp-none">
+                  Their famous &quot;Queen Siopao&quot; stands out as the
+                  ultimate indulgence, stuffed with a hefty portion of meat,
+                  sausage, and egg, making it a satisfying meal on its own.
+                  Unlike many siopaos that focus on fluffy buns with minimal
+                  filling, Roberto&apos;s ensures each bite is a perfect balance
+                  of soft, steamed dough and savory goodness.
+                </p>
+              </div>
+            </div>
+
+            {/* Partners Section - auto-adjusting based on available space */}
+            <div className="w-full mt-2 md:mt-4">
+              <h2 className="font-bold text-center text-base md:text-lg mb-3 md:mb-6">
+                Partners
+              </h2>
+
+              <div className="flex justify-center flex-wrap gap-5 md:gap-8 w-full max-w-2xl mx-auto">
+                {Array.from({ length: 6 }).map((_, idx) => (
+                  <div
+                    key={idx}
+                    className="bg-gray-100 rounded-full w-16 h-16 md:w-20 md:h-20 flex items-center justify-center"
+                  >
+                    {/* Empty circle as shown in the image */}
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Extra bottom space */}
+            <div className="h-8 md:h-12 lg:h-16"></div>
+          </div>
+        </div>
       </div>
     </div>
   );
