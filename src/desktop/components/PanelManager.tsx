@@ -12,9 +12,7 @@ import AboutPanel from "./panels/AboutPanel";
 import { Dish, Location, FoodPrint, PanelType } from "@/types/types";
 import PanelOverlay from "./panels/PanelOverlay";
 import DishDetailsPanel from "./panels/DishDetails/DishDetailsPanel";
-import LocationSummaryPanel from "./panels/LocationSummaryPanel";
 import LocationDetailPanel from "./panels/LocationDetailPanel";
-import FoodPrintSummaryPanel from "./panels/FoodPrintSummaryPanel";
 import FoodPrintDetailPanel from "./panels/FoodPrintDetailPanel";
 import ExplorePanel from "./panels/ExplorePanel";
 import HomePanel from "./panels/HomePanel";
@@ -194,30 +192,10 @@ const PanelManager: React.ForwardRefRenderFunction<
         onClose={handleClosePanel}
       />
 
-      <LocationSummaryPanel
-        location={selectedLocation}
-        isVisible={currentPanel === "locationSummary"}
-        onClose={handleClosePanel}
-        onViewDetails={() => {
-          setCurrentPanel("locationDetail");
-          onPanelChange?.("locationDetail");
-        }}
-      />
-
       <LocationDetailPanel
         location={selectedLocation}
         isVisible={currentPanel === "locationDetail"}
         onClose={handleClosePanel}
-      />
-
-      <FoodPrintSummaryPanel
-        selectedFoodPrint={selectedFoodPrint}
-        isVisible={currentPanel === "foodPrintSummary"}
-        onClose={handleClosePanel}
-        onReadArticle={() => {
-          setCurrentPanel("foodPrintDetail");
-          onPanelChange?.("foodPrintDetail");
-        }}
       />
 
       <FoodPrintDetailPanel
