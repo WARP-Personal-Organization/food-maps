@@ -28,10 +28,10 @@ export const ClientOnly = ({ children }: { children: React.ReactNode }) => {
       try {
         // Wait for all images to load
         await Promise.all([
-          preloadImage('/Map.png'),
-          preloadImage('/siopao-1.png'),
-          preloadImage('/siopao-2.png'),
-          preloadImage('/siopao-3.png'),
+          preloadImage('/images/map/Map.png'),
+          preloadImage('/images/location-markers/siopao-1.png'),
+          preloadImage('/images/location-markers/siopao-2.png'),
+          preloadImage('/images/location-markers/siopao-3.png'),
         ]);
         console.log('Map images preloaded successfully');
       } catch (err) {

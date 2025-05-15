@@ -142,7 +142,7 @@ const MobileMapLayout: React.FC<MobileMapLayoutProps> = ({
                 }`}
               locations={filteredLocations}
               foodPrintMarkers={foodprintMarkers}
-              mapImageUrl="/Map.png"
+              mapImageUrl="/images/map/Map.png"
               mapBounds={[
                 [0, 0],
                 [1000, 1000],

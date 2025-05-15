@@ -18,7 +18,7 @@ const AboutPanel: React.FC<AboutPanelProps> = ({ onClose, isVisible }) => {
         <div className="flex items-center justify-between px-6 py-4 bg-white">
           <div className="flex items-center">
             <Image
-              src="/about-page/dg-logo.png"
+              src="/images/about-page/dg-logo.png"
               alt="Daily Guardian Logo"
               width={120}
               height={44}
@@ -40,7 +40,7 @@ const AboutPanel: React.FC<AboutPanelProps> = ({ onClose, isVisible }) => {
           {/* Food Banner Image */}
           <div className="w-full relative" style={{ height: '28vh' }}>
             <Image
-              src="/about-page/dg-about-image.png"
+              src="/images/about-page/dg-about-image.png"
               alt="Filipino food showcase"
               fill
               className="object-cover"

@@ -43,7 +43,7 @@ const xyToLngLat = (
 const MapComponent: React.FC<MapComponentProps> = ({
   locations = [],
   foodPrintMarkers = [],
-  mapImageUrl = '/FoodPrints-Map.png',
+  mapImageUrl = '/images/map/FoodPrints-Map.png',
   mapBounds = [
     [0, 0],
     [1000, 1000],
@@ -183,7 +183,7 @@ const MapComponent: React.FC<MapComponentProps> = ({
               const siopaoVariant = location.siopaoVariant || 1;
               markerElement.innerHTML = `
                 <div class="marker-icon siopao-marker">
-                  <img src="/siopao-${siopaoVariant}.png" alt="Siopao Marker" style="width: 36px; height: auto; filter: drop-shadow(0px 3px 3px rgba(0, 0, 0, 0.4));" />
+                  <img src="/images/location-markers/siopao-${siopaoVariant}.png" alt="Siopao Marker" style="width: 36px; height: auto; filter: drop-shadow(0px 3px 3px rgba(0, 0, 0, 0.4));" />
                 </div>
               `;
               break;
