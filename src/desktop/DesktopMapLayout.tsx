@@ -95,14 +95,14 @@ const DesktopMapLayout: React.FC<DesktopMapLayoutProps> = ({
 
   // Location click handler
   const handleLocationClick = (location: Location) => {
-    setPanelOpen(true);
     panelRef.current?.openLocationDetail(location);
+    setPanelOpen(true);
   };
 
   // Foodprint click handler
   const handleFoodprintClick = (foodprint: FoodPrint) => {
-    setPanelOpen(true);
     panelRef.current?.openFoodPrintDetail(foodprint);
+    setPanelOpen(true);
   };
 
   // Update filters based on search params
