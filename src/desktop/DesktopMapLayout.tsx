@@ -12,6 +12,7 @@ import {
 import { IoClose } from 'react-icons/io5';
 import MenuButton from '@/components/buttons/MenuButton';
 import FilterButton from '@/components/buttons/FilterButton';
+import HomeButton from '@/components/buttons/HomeButton';
 import { FoodPrintData } from '@/lib/FoodPrintData';
 
 interface DesktopMapLayoutProps {
@@ -94,14 +95,14 @@ const DesktopMapLayout: React.FC<DesktopMapLayoutProps> = ({
 
   // Location click handler
   const handleLocationClick = (location: Location) => {
-    setPanelOpen(true);
     panelRef.current?.openLocationDetail(location);
+    setPanelOpen(true);
   };
 
   // Foodprint click handler
   const handleFoodprintClick = (foodprint: FoodPrint) => {
-    setPanelOpen(true);
     panelRef.current?.openFoodPrintDetail(foodprint);
+    setPanelOpen(true);
   };
 
   // Update filters based on search params
@@ -139,10 +140,10 @@ const DesktopMapLayout: React.FC<DesktopMapLayoutProps> = ({
               : 'translate-x-0'
           }`}
         >
-          <div className="flex items-center gap-4 px-4 py-3 overflow-x-auto">
+          <div className="flex items-center gap-4 px-4 py-3 overflow-x-auto pt-10">
             {/* Filter Buttons */}
             <div className="flex items-center gap-2 shrink-0">
-              <FilterButton
+              <HomeButton
                 className="z-10"
                 onClick={() => {
                   panelRef.current?.openDishDetails();
@@ -202,7 +203,7 @@ const DesktopMapLayout: React.FC<DesktopMapLayoutProps> = ({
               }`}
               locations={filteredLocations}
               foodPrintMarkers={foodprintMarkers}
-              mapImageUrl="/Map.png"
+              mapImageUrl="/images/map/Map.png"
               mapBounds={[
                 [0, 0],
                 [1000, 1000],
@@ -211,6 +212,7 @@ const DesktopMapLayout: React.FC<DesktopMapLayoutProps> = ({
               onLocationClick={handleLocationClick}
               onFoodPrintClick={handleFoodprintClick}
               useCustomMap
+              isDesktop = {true}
             />
           </div>
         </ClientOnly>

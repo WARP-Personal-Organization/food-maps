@@ -34,7 +34,7 @@ const HomePanel: React.FC<HomePanelProps> = ({
   };
 
   const handleWhereToEat = () => {
-    if (activeDish.href === "/") {
+    if (activeDish.href === '/') {
       router.push(`/?dish=${encodeURIComponent(activeDish.name)}&view=map`);
     } else {
       router.push(activeDish.href);
@@ -44,8 +44,9 @@ const HomePanel: React.FC<HomePanelProps> = ({
 
   return (
     <div
-      className={`fixed flex h-full w-full bg-white shadow-lg z-45 transform transition-transform duration-300 ${isVisible ? 'translate-x-0' : 'translate-x-full'
-        }`}
+      className={`fixed flex h-full w-full bg-white shadow-lg z-45 transform transition-transform duration-300 ${
+        isVisible ? 'translate-x-0' : 'translate-x-full'
+      }`}
     >
       <MenuButton onClick={openMenu} />
 
@@ -86,8 +87,10 @@ const HomePanel: React.FC<HomePanelProps> = ({
           <div className="absolute bottom-0 left-0 right-0 px-8 md:px-10 lg:px-12 2xl:px-16 pb-10 2xl:pb-16 bg-white">
             {/* Where to Eat Button */}
             <div className="w-full mb-8 2xl:mb-16">
-              <button className="w-full bg-[#F9D408] text-[#3b3b3b] font-bold py-3.5 2xl:py-4 rounded-sm inline-block text-center cursor-pointer text-base 2xl:text-lg"
-                onClick={handleWhereToEat}>
+              <button
+                className="w-full bg-[#F9D408] text-[#3b3b3b] font-bold py-3.5 2xl:py-4 rounded-sm inline-block text-center cursor-pointer text-base 2xl:text-lg"
+                onClick={handleWhereToEat}
+              >
                 Where to Eat
               </button>
             </div>
@@ -100,7 +103,7 @@ const HomePanel: React.FC<HomePanelProps> = ({
                   onClick={onPrev}
                   aria-label="Previous slide"
                   tabIndex={0}
-                  className="rounded-full w-14 h-14 2xl:w-16 2xl:h-16 flex items-center justify-center bg-yellow-300"
+                  className="rounded-full w-14 h-14 2xl:w-16 2xl:h-16 flex items-center justify-center bg-yellow-300 cursor-pointer"
                 >
                   <span className="text-xl 2xl:text-2xl">❮</span>
                 </button>
@@ -110,8 +113,9 @@ const HomePanel: React.FC<HomePanelProps> = ({
                   {Array.from({ length: dishes.length }).map((_, index) => (
                     <span
                       key={index}
-                      className={`h-2 w-2 2xl:h-3 2xl:w-3 rounded-full ${activeIndex === index ? 'bg-gray-400' : 'bg-gray-300'
-                        }`}
+                      className={`h-2 w-2 2xl:h-3 2xl:w-3 rounded-full ${
+                        activeIndex === index ? 'bg-gray-400' : 'bg-gray-300'
+                      }`}
                     />
                   ))}
                 </div>
@@ -121,7 +125,7 @@ const HomePanel: React.FC<HomePanelProps> = ({
                   onClick={onNext}
                   aria-label="Next slide"
                   tabIndex={0}
-                  className="rounded-full w-14 h-14 2xl:w-16 2xl:h-16 flex items-center justify-center bg-yellow-300"
+                  className="rounded-full w-14 h-14 2xl:w-16 2xl:h-16 flex items-center justify-center bg-yellow-300 cursor-pointer"
                 >
                   <span className="text-black text-xl 2xl:text-2xl">❯</span>
                 </button>

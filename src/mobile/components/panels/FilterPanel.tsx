@@ -80,6 +80,7 @@ const FilterPanel: React.FC<FilterPanelProps> = ({
               placeholder="Search dishes..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
+              aria-label="Search dishes"
             />
             <div className="absolute left-3 top-2.5 text-gray-400">
               <Search size="21" />

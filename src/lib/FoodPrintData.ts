@@ -18,9 +18,8 @@ const foodPrintMarkersData: FoodPrint[] = [
     name: "Roberto's Siopao: The Queen of All Siopaos in PH",
     x: 800,
     y: 350,
-    description:
-      "Roberto's Siopao is an iconic delicacy from Iloilo City, known for its generous size, flavorful fillings, and unique, homemade taste.",
-    iconUrl: '/foodprint-markers/siopao-foodprint-marker.png',
+    description: "Roberto's Siopao is an iconic delicacy from Iloilo City, known for its generous size, flavorful fillings, and unique, homemade taste.",
+    iconUrl: '/images/foodprint-markers/siopao-foodprint-marker.png',
     dishName: 'Siopao',
     dateVisited: '2024-07-15',
     heroImage: '/images/robertos/r3.jpg',
@@ -29,13 +28,14 @@ const foodPrintMarkersData: FoodPrint[] = [
       "A must-visit spot for both locals and tourists, Roberto's has built a strong reputation over the decades for serving siopao that's packed with a rich combination of ingredients — from savory pork and chicken to Chinese sausage and hard-boiled egg.",
       'Their famous "Queen Siopao" stands out as the ultimate indulgence, stuffed with a hefty portion of meat, sausage, and egg, making it a satisfying meal on its own that\'s well worth the experience.',
     ],
+    title: ''
   },
   {
     name: 'Batchoy Discovery',
     x: 480,
     y: 420,
     description: 'Found an amazing Batchoy place near the market.',
-    iconUrl: '/foodprint-markers/batchoy-foodprint-marker.png',
+    iconUrl: '/images/foodprint-markers/batchoy-foodprint-marker.png',
     dishName: 'La Paz Batchoy',
     dateVisited: '2024-07-18',
     heroImage: '/images/batchoy/hero.jpg',
@@ -44,14 +44,14 @@ const foodPrintMarkersData: FoodPrint[] = [
       'La Paz Batchoy is an iconic noodle soup that originated from the La Paz district of Iloilo City. This hearty dish features a rich, flavorful broth made with pork organs, beef, and sometimes chicken.',
       'What makes it special are the garnishes: crispy pork cracklings (chicharon), fried garlic, spring onions, and a raw egg that gets partially cooked when mixed with the hot broth.',
     ],
+    title: ''
   },
   {
     name: "Deco's Original Cansi",
     x: 620,
     y: 280,
-    description:
-      'A Kansi place that locals swear by, offering the best bone marrow soup in town.',
-    iconUrl: '/foodprint-markers/cansi-foodprint-marker.png',
+    description: 'A Kansi place that locals swear by, offering the best bone marrow soup in town.',
+    iconUrl: '/images/foodprint-markers/cansi-foodprint-marker.png',
     dishName: 'Cansi', // Changed from 'Kansi' to match dishData.ts
     dateVisited: '2024-07-20',
     heroImage: '/images/kansi/decos.jpg',
@@ -60,14 +60,14 @@ const foodPrintMarkersData: FoodPrint[] = [
       "Kansi is Iloilo's perfect hybrid between sinigang and bulalo - a sour soup with fall-off-the-bone beef shanks and rich bone marrow.",
       "Deco's has perfected their recipe over generations, using batwan fruit for sourness and slow-cooking the beef for hours until it becomes tender and flavorful.",
     ],
+    title: ''
   },
   {
     name: 'Manokan Country Chicken Inasal',
     x: 380,
     y: 320,
-    description:
-      'The authentic chicken inasal experience in the heart of Bacolod.',
-    iconUrl: '/foodprint-markers/inasal-foodprint-marker.png',
+    description: 'The authentic chicken inasal experience in the heart of Bacolod.',
+    iconUrl: '/images/foodprint-markers/inasal-foodprint-marker.png',
     dishName: 'Inasal', // Changed from 'Chicken Inasal' to match dishData.ts
     dateVisited: '2024-07-22',
     heroImage: '/images/inasal/manokan.jpg',
@@ -76,14 +76,14 @@ const foodPrintMarkersData: FoodPrint[] = [
       "Chicken Inasal is Bacolod's iconic grilled chicken, marinated in a mixture of calamansi, pepper, coconut vinegar and annatto oil, giving it a distinctive flavor and color.",
       "The best way to enjoy inasal is to dip it in a mixture of soy sauce, calamansi, and chili, then eat it with your hands alongside garlic rice. Don't miss the chicken oil topping that adds an extra layer of richness to your rice.",
     ],
+    title: ''
   },
   {
     name: 'KBL: Kadios, Baboy, Langka',
     x: 510,
     y: 240,
-    description:
-      'A traditional Ilonggo soup combining three distinctive ingredients.',
-    iconUrl: '/foodprint-markers/kbl-foodprint-marker.png',
+    description: 'A traditional Ilonggo soup combining three distinctive ingredients.',
+    iconUrl: '/images/foodprint-markers/kbl-foodprint-marker.png',
     dishName: 'KBL',
     dateVisited: '2024-07-25',
     heroImage: '/images/kbl/classic.jpg',
@@ -92,13 +92,14 @@ const foodPrintMarkersData: FoodPrint[] = [
       'KBL stands for Kadios (pigeon peas), Baboy (pork), and Langka (jackfruit), a unique combination that creates a sour-savory soup loved throughout the Western Visayas region.',
       'The dish balances the earthiness of kadios beans, the richness of pork belly, and the subtle sweetness of unripe jackfruit, all in a souring base of batwan fruit or sometimes tamarind.',
     ],
+    title: ''
   },
   {
     name: 'Original Pancit Molo House',
     x: 490,
     y: 470,
     description: 'Serving traditional Ilonggo wonton soup since 1950.',
-    iconUrl: '/foodprint-markers/pancit-molo-foodprint-marker.png',
+    iconUrl: '/images/foodprint-markers/pancit-molo-foodprint-marker.png',
     dishName: 'Pancit Molo',
     dateVisited: '2024-07-30',
     heroImage: '/images/pancit-molo/original.jpg',
@@ -107,6 +108,23 @@ const foodPrintMarkersData: FoodPrint[] = [
       'Pancit Molo is a traditional Filipino soup originating from the district of Molo in Iloilo City. Unlike other "pancit" dishes, Pancit Molo is a soup with dumplings rather than noodles.',
       'The soup features delicate dumplings filled with ground pork, wrapped in thin wonton wrappers, and served in a clear, flavorful chicken broth garnished with spring onions and fried garlic.',
     ],
+    title: ''
+  },
+  {
+    name: 'Seafood',
+    x: 500,
+    y: 490,
+    description: 'Serving traditional Ilonggo wonton soup since 1950.',
+    iconUrl: '/images/foodprint-markers/seafood-foodprint-marker.png',
+    dishName: 'Seafood',
+    dateVisited: '2024-07-30',
+    heroImage: '/images/seafood/original.jpg',
+    location: 'Molo District, Iloilo City',
+    extendedDescription: [
+      'Pancit Molo is a traditional Filipino soup originating from the district of Molo in Iloilo City. Unlike other "pancit" dishes, Pancit Molo is a soup with dumplings rather than noodles.',
+      'The soup features delicate dumplings filled with ground pork, wrapped in thin wonton wrappers, and served in a clear, flavorful chicken broth garnished with spring onions and fried garlic.',
+    ],
+    title: ''
   },
 ];
 

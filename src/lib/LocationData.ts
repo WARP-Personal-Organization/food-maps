@@ -8,6 +8,7 @@ export const LocationData: Record<string, Location[]> = {
         y: 300,
         description: "Famous for their Siopao since 1978",
         iconType: "siopao",
+        iconUrl: "/location-markers/batchoy-marker-2.png",
         siopaoVariant: 1,
         address: "Rizal Street, La Paz Public Market, La Paz, Iloilo City",
         openHours: "10:00 AM - 9:00 PM",
@@ -25,10 +26,12 @@ export const LocationData: Record<string, Location[]> = {
         y: 400,
         description: "Home of the King-sized Siopao",
         iconType: "siopao",
+        iconUrl: "/location-markers/batchoy-marker-2.png",
         siopaoVariant: 2,
         address: "Iznart Street, Iloilo City",
         openHours: "8:00 AM - 8:00 PM",
         priceRange: "₱150-300",
+        photos: []
       },
       {
         name: "Kusina ni Mama",
@@ -40,6 +43,8 @@ export const LocationData: Record<string, Location[]> = {
         address: "JM Basa Street, Iloilo City",
         openHours: "9:00 AM - 7:00 PM",
         priceRange: "₱100-200",
+        iconUrl: "",
+        photos: []
       },
     ],
     "La Paz Batchoy": [
@@ -53,6 +58,8 @@ export const LocationData: Record<string, Location[]> = {
         address: "La Paz Public Market, Iloilo City",
         openHours: "7:00 AM - 8:00 PM",
         priceRange: "₱100-200",
+        siopaoVariant: 1,
+        photos: []
       },
       {
         name: "Deco's La Paz Batchoy",
@@ -64,6 +71,8 @@ export const LocationData: Record<string, Location[]> = {
         address: "Rizal Street, La Paz, Iloilo City",
         openHours: "8:00 AM - 9:00 PM",
         priceRange: "₱120-220",
+        siopaoVariant: 1,
+        photos: []
       },
     ],
     Cansi: [
@@ -77,6 +86,8 @@ export const LocationData: Record<string, Location[]> = {
         address: "Molo, Iloilo City",
         openHours: "10:00 AM - 8:00 PM",
         priceRange: "₱250-450",
+        siopaoVariant: 2,
+        photos: []
       },
     ],
     Inasal: [
@@ -90,6 +101,8 @@ export const LocationData: Record<string, Location[]> = {
         address: "Reclamation Area, Bacolod City",
         openHours: "10:00 AM - 10:00 PM",
         priceRange: "₱150-300",
+        siopaoVariant: 3,
+        photos: []
       },
       {
         name: "Aida's Chicken",
@@ -101,6 +114,8 @@ export const LocationData: Record<string, Location[]> = {
         address: "Lacson Street, Bacolod City",
         openHours: "10:00 AM - 9:00 PM",
         priceRange: "₱180-350",
+        siopaoVariant: 1,
+        photos: []
       },
     ],
     KBL: [
@@ -114,6 +129,8 @@ export const LocationData: Record<string, Location[]> = {
         address: "Villa Beach, Iloilo City",
         openHours: "10:00 AM - 9:00 PM",
         priceRange: "₱200-500",
+        siopaoVariant: 1,
+        photos: []
       },
     ],
     "Pancit Molo": [
@@ -127,6 +144,8 @@ export const LocationData: Record<string, Location[]> = {
         address: "Molo Plaza, Iloilo City",
         openHours: "9:00 AM - 8:00 PM",
         priceRange: "₱120-250",
+        siopaoVariant: 2,
+        photos: []
       },
       {
         name: "Original Pancit Molo House",
@@ -138,6 +157,8 @@ export const LocationData: Record<string, Location[]> = {
         address: "Molo District, Iloilo City",
         openHours: "10:00 AM - 7:00 PM",
         priceRange: "₱100-200",
+        siopaoVariant: 3,
+        photos: []
       },
     ],
   };

@@ -14,7 +14,7 @@
   height: 100%;
   width: 100%;
   background-color: #3b3b3f !important;
-  background-image: url('/FoodPrints-Map.png');
+  background-image: url('/images/map/FoodPrints-Map.png');
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center;
@@ -28,7 +28,7 @@
   right: 10;
   width: 100px;
   height: 100px;
-  background-image: url('/Compass.png');
+  background-image: url('/images/map/Compass.png');
   background-size: contain;
   background-repeat: no-repeat;
   background-position: bottom right;
