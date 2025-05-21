@@ -116,6 +116,11 @@ const PanelManager: React.ForwardRefRenderFunction<
         dishes={dishData}
         openMenu={() => setIsMenuVisible(true)}
         onClose={() => setCurrentPanel(null)}
+        onFilterApply={(filters) => {
+          if (onFilterApply) {
+            onFilterApply(filters);
+          }
+        }}
       />
 
       <FilterPanel

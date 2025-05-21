@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useRef, useEffect, useMemo } from "react";
+import React, { useRef, useMemo } from "react";
 import PanelManager, { PanelManagerRef } from "./components/PanelManager";
 import { Location, FoodPrint, Dish } from "@/types/types";
 import {
@@ -102,21 +102,6 @@ const MobileMapLayout: React.FC<MobileMapLayoutProps> = ({
       panelRef.current?.openFoodPrintSummary(foodprint);
     }
   };
-
-  // Update filters based on search params
-  useEffect(() => {
-    if (!window.location.search) return;
-
-    const searchParams = new URLSearchParams(window.location.search);
-    const dishParam = searchParams.get("dish");
-
-    if (dishParam && onFilterChange) {
-      const newFilters = dishParam.split(",");
-      if (JSON.stringify(activeFilters) !== JSON.stringify(newFilters)) {
-        onFilterChange(newFilters);
-      }
-    }
-  }, [onFilterChange, activeFilters]);
 
   return (
     <div className="hidden max-[899px]:flex flex-col h-screen">

@@ -1,7 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
-import { useRouter } from 'next/navigation';
+import React, { useEffect, useState } from 'react';
 import Image from 'next/image';
 import MenuButton from '@/components/buttons/MenuButton';
 import { Dish } from '@/types/types';
@@ -11,6 +10,7 @@ interface HomePanelProps {
   isVisible: boolean;
   openMenu: () => void;
   onClose: () => void;
+  onFilterApply: (filters: string[]) => void;
 }
 
 const HomePanel: React.FC<HomePanelProps> = ({
@@ -18,13 +18,17 @@ const HomePanel: React.FC<HomePanelProps> = ({
   isVisible,
   openMenu,
   onClose,
+  onFilterApply,
 }) => {
   // ✅ Always call hooks first
   const [activeIndex, setActiveIndex] = useState(0);
-  const router = useRouter();
+  const [selectedDish, setSelectedDish] = useState<string | null>(null);
 
-  // ✅ Now you can safely guard rendering
-  if (!isVisible || dishes.length === 0) return null;
+  useEffect(() => {
+    if (isVisible && dishes.length > 0) {
+      setSelectedDish(dishes[activeIndex].name);
+    }
+  }, [isVisible, activeIndex, dishes]);
 
   const activeDish = dishes[activeIndex] ?? dishes[0];
 
@@ -36,11 +40,9 @@ const HomePanel: React.FC<HomePanelProps> = ({
     setActiveIndex((prev) => (prev - 1 + dishes.length) % dishes.length);
   };
 
-  const handleWhereToEat = () => {
-    if (activeDish.href === '/') {
-      router.push(`/?dish=${encodeURIComponent(activeDish.name)}&view=map`);
-    } else {
-      router.push(activeDish.href);
+  const handleApplyFilter = () => {
+    if (selectedDish) {
+      onFilterApply([selectedDish]);
     }
     onClose();
   };
@@ -101,7 +103,7 @@ const HomePanel: React.FC<HomePanelProps> = ({
       {/* Fixed Button */}
       <div className="absolute bottom-0 left-0 w-full px-[24px] pb-[24px] bg-white">
         <button
-          onClick={handleWhereToEat}
+          onClick={handleApplyFilter}
           className="w-full bg-[#F9D408] text-[#3b3b3b] font-bold text-base
           py-2 rounded-[3px] text-center hover:bg-[#E6C207] transition-colors shadow-sm"
         >
