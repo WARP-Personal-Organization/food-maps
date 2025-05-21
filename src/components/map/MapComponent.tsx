@@ -300,32 +300,6 @@ const MapComponent: React.FC<MapComponentProps> = ({
         }
       };
 
-      // Add CSS for markers
-      const style = document.createElement('style');
-      style.textContent = `
-        .custom-marker {
-          cursor: pointer;
-          transition: transform 0.2s ease;
-          width: 40px;
-          height: 40px;
-        }
-        .custom-marker:hover {
-          transform: scale(1.2);
-        }
-        .marker-icon {
-          width: 40px;
-          height: 40px;
-          display: flex;
-          justify-content: center;
-          align-items: center;
-          position: relative;
-        }
-        .restaurant-marker {
-          transform: translateY(-50%);
-        }
-      `;
-      document.head.appendChild(style);
-
       // Add controls
       if (isDesktop) {
         map.addControl(new mapboxgl.AttributionControl(), 'bottom-left');
@@ -391,11 +365,6 @@ const MapComponent: React.FC<MapComponentProps> = ({
           // Just add markers if not using custom map
           addMarkers();
         }
-      });
-
-      // Clean up when map is removed
-      map.on('remove', () => {
-        style.remove();
       });
     };
 
