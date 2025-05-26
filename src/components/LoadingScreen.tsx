@@ -81,12 +81,8 @@ export default function LoadingScreen() {
 
       {/* Loading indicator */}
       <div className="absolute bottom-[15%] flex flex-col items-center z-10">
-        <div className="w-32 h-1 bg-black/20 rounded-full mb-4">
-          <div
-            className="h-full bg-black rounded-full transition-all duration-300 ease-out"
-            style={{ width: `${loadingProgress}%` }}
-          />
-        </div>
+        {/* Spinner Example */}
+        <div className="w-5 h-5 border-2 border-black border-t-transparent rounded-full animate-spin mb-2"></div>
         <p className="text-black text-sm">{loadingText}</p>
       </div>
     </div>
