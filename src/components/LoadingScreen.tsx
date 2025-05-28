@@ -2,10 +2,11 @@
 
 import { useEffect, useState } from 'react';
 import Image from 'next/image';
+import { motion } from 'framer-motion';
 
 export default function LoadingScreen() {
-  const [loadingProgress, setLoadingProgress] = useState(0);
-  const [loadingText, setLoadingText] = useState('Serving in 3, 2, 1...');
+  const [loadingProgress, setLoadingProgress] = useState<number>(0); // Explicitly type useState
+  const [loadingText, setLoadingText] = useState<string>('Serving in 3, 2, 1...'); // Explicitly type useState
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -18,7 +19,7 @@ export default function LoadingScreen() {
   }, [loadingProgress]);
 
   useEffect(() => {
-    const textSequences = [
+    const textSequences: string[] = [ // Explicitly type the array
       'Serving in 3, 2, 1...',
       'Finding food spots...',
       'Mapping delicious locations...',
@@ -34,7 +35,11 @@ export default function LoadingScreen() {
   }, [loadingProgress]);
 
   return (
-    <div className="relative flex flex-col items-center justify-center min-h-screen overflow-hidden">
+    <motion.div
+      initial={{ opacity: 1 }}
+      exit={{ opacity: 0, transition: { duration: 0.5 } }}
+      className="relative flex flex-col items-center justify-center min-h-screen overflow-hidden"
+    >
       {/* Full background image */}
       <div
         className="absolute inset-0 z-0"
@@ -78,13 +83,10 @@ export default function LoadingScreen() {
           </div>
         </div>
       </div>
-
-      {/* Loading indicator */}
       <div className="absolute bottom-[15%] flex flex-col items-center z-10">
-        {/* Spinner Example */}
         <div className="w-5 h-5 border-2 border-black border-t-transparent rounded-full animate-spin mb-2"></div>
         <p className="text-black text-sm">{loadingText}</p>
       </div>
-    </div>
+    </motion.div>
   );
 }
