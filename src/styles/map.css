@@ -129,7 +129,17 @@
   filter: drop-shadow(0px 4px 5px rgba(0, 0, 0, 0.6));
 }
 
-/* Remove the transform-origin override */
-/* .mapboxgl-marker {
-  transform-origin: bottom center !important;
-} */
+.custom-marker {
+  cursor: pointer;
+  width: 40px;
+  height: 40px;
+}
+
+.marker-icon {
+  width: 40px;
+  height: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+}

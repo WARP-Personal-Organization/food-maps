@@ -93,7 +93,7 @@ const PanelManager: React.ForwardRefRenderFunction<
       {isMenuVisible && (
         <PanelOverlay
           isVisible={isModalVisible}
-          onClose={() => setCurrentPanel(null)}
+          onClose={() => { setCurrentPanel(null); setIsMenuVisible(false); }}
           withBlur={isMenuVisible || currentPanel === "filter"}
         />
       )}

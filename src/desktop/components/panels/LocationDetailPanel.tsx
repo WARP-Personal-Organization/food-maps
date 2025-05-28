@@ -28,7 +28,7 @@ const LocationDetailPanel: React.FC<LocationDetailPanelProps> = ({
 
   return (
     <div
-      className={`fixed top-0 left-0 w-[300px] min-w-[300px] md:w-[320px] lg:w-[350px] xl:w-[400px] h-full bg-white shadow-lg z-50 overflow-y-scroll transform transition-transform duration-300 
+      className={`fixed top-0 left-0 w-[300px] min-w-[300px] md:w-[320px] lg:w-[350px] xl:w-[400px] h-full bg-white shadow-lg z-30 overflow-y-scroll transform transition-transform duration-300 
         ${isVisible ? 'translate-x-0' : '-translate-x-full'}`}
     >
       {/* Main image - Adjusted height */}

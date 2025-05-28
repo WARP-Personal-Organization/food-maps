@@ -27,7 +27,7 @@ const FoodPrintDetailsPanel: React.FC<FoodPrintDetailsPanelProps> = ({
 
   return (
     <div
-      className={`fixed top-0 left-0 w-[300px] min-w-[300px] md:w-[320px] lg:w-[350px] xl:w-[400px] h-full bg-white shadow-lg z-50 transform transition-transform duration-300 flex flex-col
+      className={`fixed top-0 left-0 w-[300px] min-w-[300px] md:w-[320px] lg:w-[350px] xl:w-[400px] h-full bg-white shadow-lg z-30 transform transition-transform duration-300 flex flex-col
         ${isVisible ? 'translate-x-0' : '-translate-x-full'}`}
     >
       {/* Main image - matching the reference image */}
