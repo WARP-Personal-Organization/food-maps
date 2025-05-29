@@ -10,6 +10,7 @@ export type Location = {
   openHours: string;
   priceRange: string;
   photos: string[];
+  mapLink: string;
 };
 
 export type Dish = {
@@ -36,6 +37,7 @@ export type FoodPrint = {
   location: string;
   extendedDescription: string[];
   title: string;
+  locations: Location[];
 };
 
 export type PanelType =

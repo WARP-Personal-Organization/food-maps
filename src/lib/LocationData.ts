@@ -3,22 +3,27 @@ import { Location } from "@/types/types";
 export const LocationData: Record<string, Location[]> = {
     Siopao: [
       {
-        name: "Roberto's Siopao",
-        x: 500,
-        y: 300,
-        description: "Famous for their Siopao since 1978",
-        iconType: "siopao",
-        iconUrl: "/images/location-markers/batchoy-marker-2.png",
-        siopaoVariant: 1,
-        address: "Rizal Street, La Paz Public Market, La Paz, Iloilo City",
-        openHours: "10:00 AM - 9:00 PM",
-        priceRange: "₱200-400",
+        name: "Roberto's",
+        address: "61 JM Basa St, Iloilo City Proper, Iloilo City, Iloilo",
+        x: 10.693725517477665,         
+        y: 122.57122612477521,    
+        openHours: "8:00 AM to 5:30 PM",
+        priceRange: "₱1-200",    
+        mapLink: "https://maps.app.goo.gl/nc9ANGGvnH851Z8A8",
         photos: [
           "/images/location-photos/robertos-1.jpg",
           "/images/location-photos/robertos-2.jpg",
           "/images/location-photos/robertos-3.jpg",
           "/images/location-photos/robertos-4.jpg",
         ],
+        iconUrl: "/images/location-markers/batchoy-marker-2.png",
+
+
+
+
+        description: "Famous for their Siopao since 1978",
+        iconType: "siopao",
+        siopaoVariant: 1,
       },
       {
         name: "Deco's",
@@ -31,7 +36,8 @@ export const LocationData: Record<string, Location[]> = {
         address: "Iznart Street, Iloilo City",
         openHours: "8:00 AM - 8:00 PM",
         priceRange: "₱150-300",
-        photos: []
+        photos: [],
+        mapLink: "https://goo.gl/maps/6Z1b7f8x9kz2"
       },
       {
         name: "Kusina ni Mama",
@@ -44,10 +50,11 @@ export const LocationData: Record<string, Location[]> = {
         openHours: "9:00 AM - 7:00 PM",
         priceRange: "₱100-200",
         iconUrl: "/images/location-markers/batchoy-marker-2.png",
-        photos: []
+        photos: [],
+        mapLink: "https://goo.gl/maps/3Z1b7f8x9kz2"
       },
     ],
-    "La Paz Batchoy": [
+    Batchoy: [
       {
         name: "Ted's Oldtimer La Paz Batchoy",
         x: 450,
@@ -59,7 +66,8 @@ export const LocationData: Record<string, Location[]> = {
         openHours: "7:00 AM - 8:00 PM",
         priceRange: "₱100-200",
         siopaoVariant: 1,
-        photos: []
+        photos: [],
+        mapLink: "https://goo.gl/maps/4Z1b7f8x9kz2"
       },
       {
         name: "Deco's La Paz Batchoy",
@@ -72,7 +80,8 @@ export const LocationData: Record<string, Location[]> = {
         openHours: "8:00 AM - 9:00 PM",
         priceRange: "₱120-220",
         siopaoVariant: 1,
-        photos: []
+        photos: [],
+        mapLink: "https://goo.gl/maps/5Z1b7f8x9kz2"
       },
     ],
     Cansi: [
@@ -87,10 +96,11 @@ export const LocationData: Record<string, Location[]> = {
         openHours: "10:00 AM - 8:00 PM",
         priceRange: "₱250-450",
         siopaoVariant: 2,
-        photos: []
+        photos: [],
+        mapLink: "https://goo.gl/maps/6Z1b7f8x9kz2"
       },
     ],
-    Inasal: [
+    ChickenInasal: [
       {
         name: "Manokan Country",
         x: 480,
@@ -102,7 +112,8 @@ export const LocationData: Record<string, Location[]> = {
         openHours: "10:00 AM - 10:00 PM",
         priceRange: "₱150-300",
         siopaoVariant: 3,
-        photos: []
+        photos: [],
+        mapLink: "https://goo.gl/maps/7Z1b7f8x9kz2"
       },
       {
         name: "Aida's Chicken",
@@ -115,7 +126,8 @@ export const LocationData: Record<string, Location[]> = {
         openHours: "10:00 AM - 9:00 PM",
         priceRange: "₱180-350",
         siopaoVariant: 1,
-        photos: []
+        photos: [],
+        mapLink: "https://goo.gl/maps/8Z1b7f8x9kz2"
       },
     ],
     KBL: [
@@ -130,10 +142,11 @@ export const LocationData: Record<string, Location[]> = {
         openHours: "10:00 AM - 9:00 PM",
         priceRange: "₱200-500",
         siopaoVariant: 1,
-        photos: []
+        photos: [],
+        mapLink: "https://goo.gl/maps/9Z1b7f8x9kz2"
       },
     ],
-    "Pancit Molo": [
+    PancitMolo: [
       {
         name: "Mama's Kitchen",
         x: 580,
@@ -145,7 +158,8 @@ export const LocationData: Record<string, Location[]> = {
         openHours: "9:00 AM - 8:00 PM",
         priceRange: "₱120-250",
         siopaoVariant: 2,
-        photos: []
+        photos: [],
+        mapLink: "https://goo.gl/maps/10Z1b7f8x9kz2"
       },
       {
         name: "Original Pancit Molo House",
@@ -158,7 +172,38 @@ export const LocationData: Record<string, Location[]> = {
         openHours: "10:00 AM - 7:00 PM",
         priceRange: "₱100-200",
         siopaoVariant: 3,
-        photos: []
+        photos: [],
+        mapLink: "https://goo.gl/maps/11Z1b7f8x9kz2"
+      },
+    ],
+    Seafood: [
+      {
+        name: "Mama's Kitchen",
+        x: 580,
+        y: 340,
+        description: "Home of authentic Pancit Molo",
+        iconType: "restaurant",
+        iconUrl: "/images/location-markers/batchoy-marker-2.png",
+        address: "Molo Plaza, Iloilo City",
+        openHours: "9:00 AM - 8:00 PM",
+        priceRange: "₱120-250",
+        siopaoVariant: 2,
+        photos: [],
+        mapLink: "https://goo.gl/maps/10Z1b7f8x9kz2"
+      },
+      {
+        name: "Original Pancit Molo House",
+        x: 490,
+        y: 470,
+        description: "Serving traditional Ilonggo Pancit Molo",
+        iconType: "restaurant",
+        iconUrl: "/images/location-markers/batchoy-marker-2.png",
+        address: "Molo District, Iloilo City",
+        openHours: "10:00 AM - 7:00 PM",
+        priceRange: "₱100-200",
+        siopaoVariant: 3,
+        photos: [],
+        mapLink: "https://goo.gl/maps/11Z1b7f8x9kz2"
       },
     ],
   };

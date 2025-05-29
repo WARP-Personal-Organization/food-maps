@@ -3,8 +3,8 @@
 import React, { useState } from 'react';
 import Image from 'next/image';
 import { Location } from '@/types/types';
-import LocationActionButtons from '@/components/buttons/LocationActionButtons';
 import CloseButton from '@/components/buttons/CloseButton';
+import GetDirectionsButton from '@/components/buttons/GetDirectionsButton';
 
 interface LocationDetailPanelProps {
   location: Location | null;
@@ -237,7 +237,7 @@ const LocationDetailPanel: React.FC<LocationDetailPanelProps> = ({
 
       {/* Action buttons with fade-out effect - improved sizing for larger screens */}
       <div className="sticky bottom-0 left-0 right-0 bg-gradient-to-t from-white via-white to-transparent pt-20 pb-0 p-5 md:pt-16 md:p-3 lg:pt-18 lg:p-4 xl:pt-24 xl:p-5 2xl:pt-28 2xl:p-6">
-        <LocationActionButtons />
+       <GetDirectionsButton className="w-full bg-yellow-300 p-2" onClick={() => window.open(location.mapLink, '_blank')}/>
       </div>
     </div>
   );

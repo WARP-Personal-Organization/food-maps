@@ -23,6 +23,7 @@ const FoodPrintSummaryPanel: React.FC<FoodPrintSummaryPanelProps> = ({
   if (!selectedFoodPrint) return null;
 
   const imageUrl = selectedFoodPrint.heroImage;
+  const mapLink = selectedFoodPrint.locations[0]?.mapLink || '';
 
   return (
     <div
@@ -76,9 +77,8 @@ const FoodPrintSummaryPanel: React.FC<FoodPrintSummaryPanelProps> = ({
         {/* Buttons Container */}
         <div className="sticky bottom-0 px-0 pb-6 bg-gradient-to-t from-white via-white to-transparent"> {/* Adjusted padding for consistency and added pb-6 */}
           <div className="grid grid-cols-2 gap-2">
-            <GetDirectionsButton className="bg-gray-200" />
-
-            <ReadArticleButton onClick={onReadArticle} />
+          <GetDirectionsButton className="w-full bg-grey-200" onClick={() => window.open(mapLink, '_blank')}/>
+          <ReadArticleButton onClick={onReadArticle} />
           </div>
         </div>
 

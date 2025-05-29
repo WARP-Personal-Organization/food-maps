@@ -3,9 +3,9 @@
 import React, { useState } from "react";
 import Image from "next/image";
 import { Location } from "@/types/types";
-import LocationActionButtons from "@/components/buttons/LocationActionButtons";
 import { MapPin, Tag } from "lucide-react";
 import CloseButton from "@/components/buttons/CloseButton";
+import GetDirectionsButton from "@/components/buttons/GetDirectionsButton";
 
 interface LocationDetailPanelProps {
   location: Location | null;
@@ -199,7 +199,7 @@ const LocationDetailPanel: React.FC<LocationDetailPanelProps> = ({
 
       {/* Sticky Action Buttons */}
       <div className="sticky bottom-0 shadow-xl bg-gradient-to-t from-white via-white to-transparent pt-20 pb-0 p-5 md:pt-16 md:p-3 lg:pt-18 lg:p-4 xl:pt-24 xl:p-5 2xl:pt-28 2xl:p-6">
-        <LocationActionButtons />
+      <GetDirectionsButton className="w-full bg-yellow-300 p-2" onClick={() => window.open(location.mapLink, '_blank')}/>
       </div>
     </div>
   );

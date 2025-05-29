@@ -19,7 +19,7 @@ export const DishData: Dish[] = [
     locations: LocationData["Siopao"],
   },
   {
-    name: "La Paz Batchoy",
+    name: "Batchoy",
     image: "/images/filter-dish/batchoy.webp",
     images: [
       "/images/filter-dish/batchoy.webp",
@@ -30,7 +30,7 @@ export const DishData: Dish[] = [
       "A hearty noodle soup with pork, liver, and chicharrón, La Paz Batchoy is a famous Ilonggo delicacy originating from La Paz, Iloilo.",
     tagline: "Ilonggo Noodle Soup",
     href: "/",
-    locations: LocationData["La Paz Batchoy"],
+    locations: LocationData["Batchoy"],
   },
   {
     name: "Cansi",
@@ -48,7 +48,7 @@ export const DishData: Dish[] = [
     locations: LocationData["Cansi"],
   },
   {
-    name: "Inasal",
+    name: "Chicken Inasal",
     image: "/images/filter-dish/inasal.jpg",
     images: [
       "/images/filter-dish/inasal.jpg",
@@ -60,7 +60,7 @@ export const DishData: Dish[] = [
       "Chicken Inasal is a famous Bacolod-style grilled chicken marinated in vinegar, calamansi, and spices, served with annatto oil and garlic rice.",
     tagline: "Bacolod Grilled Chicken",
     href: "/",
-    locations: LocationData["Inasal"],
+    locations: LocationData["ChickenInasal"],
   },
   {
     name: "KBL",
@@ -89,6 +89,21 @@ export const DishData: Dish[] = [
       "A dumpling soup originating from Molo, Iloilo, Pancit Molo consists of meat-filled wontons in a flavorful chicken broth.",
     tagline: "Ilonggo Wonton Soup",
     href: "/",
-    locations: LocationData["Pancit Molo"],
+    locations: LocationData["PancitMolo"],
+  },
+  {
+    name: "Seafood",
+    image: "/images/filter-dish/pancit_molo.jpg",
+    images: [
+      "/images/filter-dish/pancit_molo.jpg",
+      "/images/filter-dish/inasal.jpg",
+      "/images/filter-dish/siopao.png",
+      "/images/filter-dish/kbl.jpg",
+    ],
+    description:
+      "A dumpling soup originating from Molo, Iloilo, Pancit Molo consists of meat-filled wontons in a flavorful chicken broth.",
+    tagline: "Ilonggo Wonton Soup",
+    href: "/",
+    locations: LocationData["Seafood"],
   },
 ];

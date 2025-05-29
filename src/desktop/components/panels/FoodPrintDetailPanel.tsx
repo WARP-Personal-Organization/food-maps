@@ -4,8 +4,8 @@ import React from 'react';
 import Image from 'next/image';
 import { FoodPrint } from '@/types/types';
 import { MapPin } from 'lucide-react';
-import LocationActionButtons from '@/components/buttons/LocationActionButtons';
 import CloseButton from '@/components/buttons/CloseButton';
+import GetDirectionsButton from '@/components/buttons/GetDirectionsButton';
 
 interface FoodPrintDetailsPanelProps {
   selectedFoodPrint: FoodPrint | null;
@@ -24,6 +24,7 @@ const FoodPrintDetailsPanel: React.FC<FoodPrintDetailsPanelProps> = ({
 
   // Use a default image if none is provided
   const imageUrl = selectedFoodPrint.heroImage || '/images/robertos/r1.webp';
+  const mapLink = selectedFoodPrint.locations[0]?.mapLink || '';
 
   return (
     <div
@@ -102,8 +103,8 @@ const FoodPrintDetailsPanel: React.FC<FoodPrintDetailsPanelProps> = ({
       </div>
 
       {/* Action buttons with fade-out effect - fixed at the bottom */}
-      <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-white via-white to-transparent pt-20 pb-0 p-5 z-10">
-        <LocationActionButtons />
+      <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-white via-white to-transparent pt-20 pb-0 p-5 z-10 pb-6">
+        <GetDirectionsButton className="w-full bg-yellow-300 p-2" onClick={() => window.open(mapLink, '_blank')}/>
       </div>
     </div>
   );

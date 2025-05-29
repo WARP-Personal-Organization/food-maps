@@ -98,8 +98,8 @@ const LocationSummaryPanel: React.FC<LocationSummaryPanelProps> = ({
 
         {/* Buttons container */}
         <div className="sticky bottom-0 px-0 pb-6 bg-gradient-to-t from-white via-white to-transparent">
-          <div className="grid grid-cols-2 gap-2">
-            <GetDirectionsButton className="bg-yellow-300" />
+          <div className="grid grid-cols-2 gap-2 pb-3">
+            <GetDirectionsButton className="bg-yellow-300" onClick={() => window.open(location.mapLink, '_blank')}/>
             <ViewDetailsButton onClick={onViewDetails} className="bg-gray-200" />
           </div>
         </div>

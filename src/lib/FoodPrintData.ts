@@ -1,14 +1,14 @@
 import { FoodPrint } from '@/types/types';
+import { LocationData } from './LocationData';
 
 export const DishType = [
   "Siopao",
-  "La Paz Batchoy",
+  "Batchoy",
   "Cansi",
-  "Inasal",
+  "Chicken Inasal",
   "KBL",
   "Pancit Molo",
-  "Batchoy Tagalog",
-  "Tapsilog",
+  "Seafood",
 ] as const;
 
 export type DishType = (typeof DishType)[number];
@@ -28,7 +28,8 @@ const foodPrintMarkersData: FoodPrint[] = [
       "A must-visit spot for both locals and tourists, Roberto's has built a strong reputation over the decades for serving siopao that's packed with a rich combination of ingredients — from savory pork and chicken to Chinese sausage and hard-boiled egg.",
       'Their famous "Queen Siopao" stands out as the ultimate indulgence, stuffed with a hefty portion of meat, sausage, and egg, making it a satisfying meal on its own that\'s well worth the experience.',
     ],
-    title: ''
+    title: '',
+    locations: LocationData["Siopao"],
   },
   {
     name: 'Batchoy Discovery',
@@ -44,7 +45,8 @@ const foodPrintMarkersData: FoodPrint[] = [
       'La Paz Batchoy is an iconic noodle soup that originated from the La Paz district of Iloilo City. This hearty dish features a rich, flavorful broth made with pork organs, beef, and sometimes chicken.',
       'What makes it special are the garnishes: crispy pork cracklings (chicharon), fried garlic, spring onions, and a raw egg that gets partially cooked when mixed with the hot broth.',
     ],
-    title: ''
+    title: '',
+    locations: LocationData["Batchoy"],
   },
   {
     name: "Deco's Original Cansi",
@@ -60,7 +62,8 @@ const foodPrintMarkersData: FoodPrint[] = [
       "Kansi is Iloilo's perfect hybrid between sinigang and bulalo - a sour soup with fall-off-the-bone beef shanks and rich bone marrow.",
       "Deco's has perfected their recipe over generations, using batwan fruit for sourness and slow-cooking the beef for hours until it becomes tender and flavorful.",
     ],
-    title: ''
+    title: '',
+    locations: LocationData["Cansi"],
   },
   {
     name: 'Manokan Country Chicken Inasal',
@@ -76,7 +79,8 @@ const foodPrintMarkersData: FoodPrint[] = [
       "Chicken Inasal is Bacolod's iconic grilled chicken, marinated in a mixture of calamansi, pepper, coconut vinegar and annatto oil, giving it a distinctive flavor and color.",
       "The best way to enjoy inasal is to dip it in a mixture of soy sauce, calamansi, and chili, then eat it with your hands alongside garlic rice. Don't miss the chicken oil topping that adds an extra layer of richness to your rice.",
     ],
-    title: ''
+    title: '',
+    locations: LocationData["ChickenInasal"],
   },
   {
     name: 'KBL: Kadios, Baboy, Langka',
@@ -92,7 +96,8 @@ const foodPrintMarkersData: FoodPrint[] = [
       'KBL stands for Kadios (pigeon peas), Baboy (pork), and Langka (jackfruit), a unique combination that creates a sour-savory soup loved throughout the Western Visayas region.',
       'The dish balances the earthiness of kadios beans, the richness of pork belly, and the subtle sweetness of unripe jackfruit, all in a souring base of batwan fruit or sometimes tamarind.',
     ],
-    title: ''
+    title: '',
+    locations: LocationData["KBL"],
   },
   {
     name: 'Original Pancit Molo House',
@@ -108,7 +113,8 @@ const foodPrintMarkersData: FoodPrint[] = [
       'Pancit Molo is a traditional Filipino soup originating from the district of Molo in Iloilo City. Unlike other "pancit" dishes, Pancit Molo is a soup with dumplings rather than noodles.',
       'The soup features delicate dumplings filled with ground pork, wrapped in thin wonton wrappers, and served in a clear, flavorful chicken broth garnished with spring onions and fried garlic.',
     ],
-    title: ''
+    title: '',
+    locations: LocationData["PancitMolo"],
   },
   {
     name: 'Seafood',
@@ -124,7 +130,8 @@ const foodPrintMarkersData: FoodPrint[] = [
       'Pancit Molo is a traditional Filipino soup originating from the district of Molo in Iloilo City. Unlike other "pancit" dishes, Pancit Molo is a soup with dumplings rather than noodles.',
       'The soup features delicate dumplings filled with ground pork, wrapped in thin wonton wrappers, and served in a clear, flavorful chicken broth garnished with spring onions and fried garlic.',
     ],
-    title: ''
+    title: '',
+    locations: LocationData["Seafood"],
   },
 ];
 
