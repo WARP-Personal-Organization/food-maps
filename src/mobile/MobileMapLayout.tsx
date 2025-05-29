@@ -67,7 +67,7 @@ const MobileMapLayout: React.FC<MobileMapLayoutProps> = ({
   // Foodprint markers filtered by active filters
   const foodprintMarkers = activeFilters.length
     ? foodPrintData.markers.filter((marker) =>
-      activeFilters.includes(marker.dishName)
+      activeFilters.includes(marker.dishType)
     )
     : foodPrintData.markers;
 

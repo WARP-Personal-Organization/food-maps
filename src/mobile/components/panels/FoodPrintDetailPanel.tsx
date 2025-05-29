@@ -24,7 +24,7 @@ const FoodPrintDetailsPanel: React.FC<FoodPrintDetailsPanelProps> = ({
 
   // Use a default image if none is provided
   const imageUrl = selectedFoodPrint.heroImage || '/images/robertos/r1.webp';
-  const mapLink = selectedFoodPrint.locations[0]?.mapLink || '';
+  const mapLink = selectedFoodPrint.mapLink || '';
 
   return (
     <div

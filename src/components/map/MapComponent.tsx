@@ -176,56 +176,19 @@ const MapComponent: React.FC<MapComponentProps> = ({
           const markerElement = document.createElement('div');
           markerElement.className = 'custom-marker location-marker'; // Class for locations
 
-          // Add appropriate icon based on location type
-          switch (location.iconType) {
-            case 'siopao':
-              // Use siopao variant or default to variant 1
-              const siopaoVariant = location.siopaoVariant || 1;
-              markerElement.innerHTML = `
-                <div class="marker-icon siopao-marker">
-                  <img src="/images/location-markers/siopao-${siopaoVariant}.png" alt="Siopao Marker" style="width: 36px; height: auto; filter: drop-shadow(0px 3px 3px rgba(0, 0, 0, 0.4));" />
-                </div>
-              `;
-              break;
-            case 'restaurant':
-              markerElement.innerHTML = `
-                <div class="marker-icon restaurant-marker">
-                  <img src="${location.iconUrl || '/siopao-1.png'}" alt="${location.name
-                } Marker" style="width: 36px; height: auto; filter: drop-shadow(0px 3px 3px rgba(0, 0, 0, 0.4));" />
-                </div>
-              `;
-              break;
-            case 'shop':
-              markerElement.innerHTML = `
-                <div class="marker-icon shop-marker">
-                  <img src="${location.iconUrl || '/shop-icon.png'}" alt="${location.name
-                } Marker" style="width: 36px; height: auto; filter: drop-shadow(0px 3px 3px rgba(0, 0, 0, 0.4));" />
-                </div>
-              `;
-              break;
-            case 'attraction':
-              markerElement.innerHTML = `
-                <div class="marker-icon attraction-marker">
-                  <img src="${location.iconUrl || '/attraction-icon.png'
-                }" alt="${location.name
-                } Marker" style="width: 36px; height: auto; filter: drop-shadow(0px 3px 3px rgba(0, 0, 0, 0.4));" />
-                </div>
-              `;
-              break;
-            default:
-              if (location.iconUrl) {
-                markerElement.innerHTML = `
+          if (location.iconUrl) {
+            markerElement.innerHTML = `
                   <div class="marker-icon custom-icon-marker">
                     <img src="${location.iconUrl}" alt="${location.name}" style="width: 36px; height: auto; filter: drop-shadow(0px 3px 3px rgba(0, 0, 0, 0.4));" />
                   </div>
                 `;
-              } else {
-                markerElement.innerHTML = `
+          } else {
+            markerElement.innerHTML = `
                   <div class="marker-icon default-marker">
                     <img src="/siopao-1.png" alt="${location.name} Marker" style="width: 36px; height: auto; filter: drop-shadow(0px 3px 3px rgba(0, 0, 0, 0.4));" />
                   </div>
                 `;
-              }
+
           }
 
           const [lng, lat] = xyToLngLat(location.x, location.y, mapBounds);

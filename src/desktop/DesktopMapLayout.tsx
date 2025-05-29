@@ -67,7 +67,7 @@ const DesktopMapLayout: React.FC<DesktopMapLayoutProps> = ({
 
   const foodprintMarkers = activeFilters.length
     ? foodPrintData.markers.filter((marker) =>
-        activeFilters.includes(marker.dishName)
+        activeFilters.includes(marker.dishType)
       )
     : foodPrintData.markers;
 

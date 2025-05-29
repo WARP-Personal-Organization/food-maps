@@ -1,13 +1,8 @@
 'use client';
 
-import React, { useRef, useEffect } from 'react';
-import Image from 'next/image';
+import React from 'react';
 import LocationCard from './LocationCard';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
-import { Swiper, SwiperSlide } from 'swiper/react';
-import { Pagination, Autoplay } from 'swiper/modules';
-import type { SwiperRef } from 'swiper/react';
-
 import 'swiper/css';
 import 'swiper/css/pagination';
 import 'swiper/css/autoplay';
@@ -27,12 +22,6 @@ const DishDetails: React.FC<DishDetailsProps> = ({
   onPrevDish,
   onNextDish,
 }) => {
-  const swiperRef = useRef<SwiperRef>(null);
-
-  // Reset swiper to first slide on dish change
-  useEffect(() => {
-    swiperRef.current?.swiper?.slideTo(0, 0);
-  }, [dish.name]);
 
   const locations = LocationData[dish.name] || [];
 
@@ -45,8 +34,6 @@ const DishDetails: React.FC<DishDetailsProps> = ({
     tags: [dish.name],
   }));
 
-  const dishImages = dish.images?.length ? dish.images : [dish.image];
-
   const isVisible = true; // Should be managed by parent
 
   return (
@@ -54,37 +41,6 @@ const DishDetails: React.FC<DishDetailsProps> = ({
       className={`fixed top-0 left-0 h-full w-[300px] min-w-[300px] md:w-[320px] lg:w-[350px] xl:w-[400px] bg-white shadow-lg z-50 transform transition-transform duration-300 
       ${isVisible ? 'translate-x-0' : '-translate-x-full'} flex flex-col`}
     >
-      {/* Swiper Header */}
-      <div className="relative">
-        <Swiper
-          ref={swiperRef}
-          modules={[Pagination, Autoplay]}
-          pagination={{ clickable: true }}
-          spaceBetween={0}
-          slidesPerView={1}
-          loop
-          autoplay={{ delay: 5000, disableOnInteraction: false }}
-          speed={500}
-          className="h-full w-full"
-        >
-          {dishImages.map((imgSrc, index) => (
-            <SwiperSlide key={index}>
-              <div className="relative w-full h-[30vh]">
-                <Image
-                  src={imgSrc}
-                  alt={`${dish.name} - image ${index + 1}`}
-                  fill
-                  sizes="100vw"
-                  quality={90}
-                  priority={index === 0}
-                  className="object-cover object-center"
-                />
-              </div>
-            </SwiperSlide>
-          ))}
-        </Swiper>
-      </div>
-
       {/* Scrollable Content */}
       <div className="flex-grow min-h-0 overflow-y-auto px-4 lg:px-5 xl:px-6 pt-4 scrollbar-hide">
         {/* Title and Nav */}

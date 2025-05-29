@@ -23,7 +23,7 @@ const FoodPrintSummaryPanel: React.FC<FoodPrintSummaryPanelProps> = ({
   if (!selectedFoodPrint) return null;
 
   const imageUrl = selectedFoodPrint.heroImage;
-  const mapLink = selectedFoodPrint.locations[0]?.mapLink || '';
+  const mapLink = selectedFoodPrint.mapLink || '';
 
   return (
     <div
