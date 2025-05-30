@@ -13,6 +13,7 @@ import { IoClose, IoReturnUpBackSharp } from "react-icons/io5";
 import MenuButton from "@/components/buttons/MenuButton";
 import FilterButton from "@/components/buttons/FilterButton";
 import { FoodPrintData } from "@/lib/FoodPrintData";
+import { denormalizeKey } from "@/lib/utils";
 
 interface MobileMapLayoutProps {
   dishData: Dish[];
@@ -156,7 +157,7 @@ const MobileMapLayout: React.FC<MobileMapLayoutProps> = ({
                   key={filter}
                   className="bg-yellow-300 border border-blue-400 rounded-full flex items-center text-sm text-gray-900 font-medium px-2 py-2 shadow-sm"
                 >
-                  <span className="pl-2 pr-1">{filter}</span>
+                  <span className="pl-2 pr-1">{denormalizeKey(filter)}</span>
                   <button
                     onClick={() =>
                       updateFilters(activeFilters.filter((f) => f !== filter))

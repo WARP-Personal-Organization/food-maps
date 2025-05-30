@@ -14,6 +14,7 @@ import MenuButton from '@/components/buttons/MenuButton';
 import FilterButton from '@/components/buttons/FilterButton';
 import HomeButton from '@/components/buttons/HomeButton';
 import { FoodPrintData } from '@/lib/FoodPrintData';
+import { denormalizeKey } from '@/lib/utils';
 
 interface DesktopMapLayoutProps {
   dishData: Dish[];
@@ -150,7 +151,7 @@ const DesktopMapLayout: React.FC<DesktopMapLayoutProps> = ({
                   key={filter}
                   className="bg-yellow-300 border border-blue-400 rounded-full flex items-center text-sm text-gray-900 font-medium px-3 py-1 shadow-sm"
                 >
-                  <span className="pr-1">{filter}</span>
+                  <span className="pr-1">{denormalizeKey(filter)}</span>
                   <button
                     onClick={() => handleRemoveFilter(filter)}
                     className="w-5 h-5 flex items-center justify-center text-gray-800"

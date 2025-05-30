@@ -5,6 +5,7 @@ import Image from "next/image";
 import { Dish } from '@/types/types';
 import CloseButton from "@/components/buttons/CloseButton";
 import { Search } from "lucide-react";
+import { denormalizeKey } from "@/lib/utils";
 
 interface FilterPanelProps {
   dishData: Dish[];
@@ -118,7 +119,7 @@ const FilterPanel: React.FC<FilterPanelProps> = ({
                     <div className="absolute inset-0 bg-yellow-300 opacity-10" />
                   )}
                   <div className="p-2 text-sm bg-gray-50">
-                    <p className="font-semibold line-clamp-1">{dish.name}</p>
+                    <p className="font-semibold line-clamp-1">{denormalizeKey(dish.name)}</p>
                     <p className="text-gray-600 text-xs">
                       {dish.locations.length} Locations
                     </p>

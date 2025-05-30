@@ -1,5 +1,6 @@
 'use client';
 
+import { denormalizeKey } from '@/lib/utils';
 import Image from 'next/image';
 import React, { useState } from 'react';
 
@@ -76,7 +77,7 @@ const LocationCard: React.FC<LocationCardProps> = ({
                     index < tags.length - 1 ? 'mr-2' : ''
                   }`}
                 >
-                  {tag}
+                  {denormalizeKey(tag)}
                 </span>
               ))}
             </div>

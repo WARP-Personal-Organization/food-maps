@@ -3,6 +3,7 @@ import { Location } from '@/types/types';
 import LocationCard from '@/desktop/components/panels/DishDetails/LocationCard';
 import { LocationData } from '@/lib/LocationData';
 import CloseButton from '@/components/buttons/CloseButton';
+import { denormalizeKey } from '@/lib/utils';
 
 interface ExplorePanelProps {
   activeFilters: string[];
@@ -60,7 +61,7 @@ const ExplorePanel: React.FC<ExplorePanelProps> = ({
               key={filter}
               className="bg-[#FFD800] rounded-full px-4 py-1.5 text-gray-900 font-medium flex items-center gap-1 text-sm"
             >
-              <span>{filter}</span>
+              <span>{denormalizeKey(filter)}</span>
               <button
                 onClick={() => removeFilter(filter)}
                 className="ml-1 cursor-pointer"

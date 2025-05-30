@@ -5,6 +5,7 @@ import Image from 'next/image';
 import MenuButton from '@/components/buttons/MenuButton';
 import { Dish } from '@/types/types';
 import { ChevronsDown } from 'lucide-react';
+import { denormalizeKey } from '@/lib/utils';
 
 interface HomePanelProps {
   dishes: Dish[];
@@ -192,7 +193,7 @@ const HomePanel: React.FC<HomePanelProps> = ({
                 </h2>
 
                 <h1 className="font-faustina text-5xl min-[1400px]:text-6xl 2xl:text-7xl font-bold text-[#202020] mt-3 2xl:mt-6 leading-tight">
-                  {activeDish.name}
+                  {denormalizeKey(activeDish.name)}
                 </h1>
 
                 <h3 className="font-faustina italic text-[#7c7c7c] text-lg md:text-xl 2xl:text-2xl mt-1 2xl:mt-2">

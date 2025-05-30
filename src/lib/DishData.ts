@@ -27,7 +27,7 @@ export const DishData: Dish[] = [
     locations: LocationData["Cansi"],
   },
   {
-    name: "Chicken Inasal",
+    name: "ChickenInasal",
     image: "/images/filter-dish/inasal.jpg",
     description:
       "Chicken Inasal is a famous Bacolod-style grilled chicken marinated in vinegar, calamansi, and spices, served with annatto oil and garlic rice.",
@@ -43,7 +43,7 @@ export const DishData: Dish[] = [
     locations: LocationData["KBL"],
   },
   {
-    name: "Pancit Molo",
+    name: "PancitMolo",
     image: "/images/filter-dish/pancit_molo.jpg",
     description:
       "A dumpling soup originating from Molo, Iloilo, Pancit Molo consists of meat-filled wontons in a flavorful chicken broth.",
