@@ -6,7 +6,7 @@ export const DishData: Dish[] = [
     name: "Siopao",
     image: "/images/filter-dish/siopao.png",
     description:
-      "Bao Zi (包子), also known as mantou when unfilled, is a staple food among Chinese worldwide. Hence, there are Baozi versions in Singapore, HK, Vietnam, the Philippines, and other countries with strong Chinese influence. The exact origins of siopao in the Philippines are not well-documented, but Chinese vendors likely sold it along with noodles as early as the 1600s.",
+      "Bao Zi (包子), also known as mantou when unfilled, is a staple food among Chinese worldwide. Hence, there are Baozi versions in Singapore, HK, Vietnam, the Philippines, and other countries with strong Chinese influence.",
     tagline: "Philippine Steamed Bun",
     locations: LocationData["Siopao"],
   },

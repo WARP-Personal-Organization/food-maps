@@ -66,7 +66,7 @@ const ExplorePanel: React.FC<ExplorePanelProps> = ({
                 className="ml-1 cursor-pointer"
                 aria-label={`Remove ${filter} filter`}
               >
-                �
+                x
               </button>
             </div>
           ))}
