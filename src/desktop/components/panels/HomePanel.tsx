@@ -163,7 +163,7 @@ const HomePanel: React.FC<HomePanelProps> = ({
               shadow-lg hover:bg-gray-100 transition-colors cursor-pointer"
               aria-label="Scroll down to explore dishes"
             >
-              <ChevronsDown size={70} className="text-gray-400" />
+              <ChevronsDown size={40} className="text-gray-400" />
             </button>
           </div>
         </section>
