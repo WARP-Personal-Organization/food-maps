@@ -1,16 +1,13 @@
-'use client';
+"use client";
 
-import React from 'react';
-import LocationCard from './LocationCard';
-import { ChevronLeft, ChevronRight } from 'lucide-react';
-import 'swiper/css';
-import 'swiper/css/pagination';
-import 'swiper/css/autoplay';
-import './dish-details-swiper.css';
+import React from "react";
+import LocationCard from "./LocationCard";
+import { ChevronLeft, ChevronRight } from "lucide-react";
+import Image from "next/image";
 
-import { LocationData } from '@/lib/LocationData';
-import { Dish } from '@/types/types';
-import { denormalizeKey } from '@/lib/utils';
+import { LocationData } from "@/lib/LocationData";
+import { Dish } from "@/types/types";
+import { denormalizeKey } from "@/lib/utils";
 
 interface DishDetailsProps {
   dish: Dish;
@@ -23,14 +20,13 @@ const DishDetails: React.FC<DishDetailsProps> = ({
   onPrevDish,
   onNextDish,
 }) => {
-
   const locations = LocationData[dish.name] || [];
 
   const locationCards = locations.map((location) => ({
     name: location.name,
-    image: location.photos?.[0] || '/images/placeholder-location.jpg',
-    location: location.address || '',
-    duration: '10 min', // Placeholder
+    image: location.photos?.[0] || "/images/placeholder-location.jpg",
+    location: location.address || "",
+    duration: "10 min", // Placeholder
     rating: 4.5, // Placeholder
     tags: [dish.name],
   }));
@@ -40,9 +36,24 @@ const DishDetails: React.FC<DishDetailsProps> = ({
   return (
     <div
       className={`fixed top-0 left-0 h-full w-[300px] min-w-[300px] md:w-[320px] lg:w-[350px] xl:w-[400px] bg-white shadow-lg z-50 transform transition-transform duration-300 
-      ${isVisible ? 'translate-x-0' : '-translate-x-full'} flex flex-col`}
+      ${isVisible ? "translate-x-0" : "-translate-x-full"} flex flex-col`}
     >
-      {/* Scrollable Content */}
+      <div className="relative w-full h-[30vh]">
+        {dish?.image ? (
+          <Image
+            src={dish.image}
+            alt={dish.name}
+            fill
+            className="object-cover"
+            priority
+          />
+        ) : (
+          <div className="absolute inset-0 bg-gray-200 flex items-center justify-center text-gray-500">
+            No Image Available
+          </div>
+        )}
+      </div>
+
       <div className="flex-grow min-h-0 overflow-y-auto px-4 lg:px-5 xl:px-6 pt-4 scrollbar-hide">
         {/* Title and Nav */}
         <div className="flex items-center mb-3">
