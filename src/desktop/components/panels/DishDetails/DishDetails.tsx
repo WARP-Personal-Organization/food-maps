@@ -10,6 +10,7 @@ import './dish-details-swiper.css';
 
 import { LocationData } from '@/lib/LocationData';
 import { Dish } from '@/types/types';
+import { denormalizeKey } from '@/lib/utils';
 
 interface DishDetailsProps {
   dish: Dish;
@@ -46,7 +47,7 @@ const DishDetails: React.FC<DishDetailsProps> = ({
         {/* Title and Nav */}
         <div className="flex items-center mb-3">
           <h1 className="text-2xl lg:text-3xl xl:text-4xl font-extrabold text-gray-900 font-serif">
-            {dish.name}
+            {denormalizeKey(dish.name)}
           </h1>
           <div className="flex ml-auto space-x-2 lg:space-x-3">
             <button
