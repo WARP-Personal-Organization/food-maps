@@ -4,7 +4,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import Image from 'next/image';
 import MenuButton from '@/components/buttons/MenuButton';
 import { Dish } from '@/types/types';
-import { ChevronsDown} from 'lucide-react';
+import { ChevronsDown } from 'lucide-react';
 
 interface HomePanelProps {
   dishes: Dish[];
@@ -15,6 +15,7 @@ interface HomePanelProps {
 }
 
 const HEADER_HEIGHT_PX = 72; // Height for the initial header
+const FADE_DURATION_MS = 200; // Duration of the fade animation in milliseconds
 
 const HomePanel: React.FC<HomePanelProps> = ({
   dishes,
@@ -27,6 +28,7 @@ const HomePanel: React.FC<HomePanelProps> = ({
 
   const [isScrolledDown, setIsScrolledDown] = useState(false);
   const [activeIndex, setActiveIndex] = useState(0);
+  const [isFading, setIsFading] = useState(false); // State for fade animation
 
   const activeDish = dishes[activeIndex] ?? dishes[0];
 
@@ -36,6 +38,7 @@ const HomePanel: React.FC<HomePanelProps> = ({
       scrollContainerRef.current.scrollTo({ top: 0, behavior: 'auto' });
       setIsScrolledDown(false);
       setActiveIndex(0);
+      setIsFading(false); // Reset fade state
     }
   }, [isVisible]);
 
@@ -70,11 +73,19 @@ const HomePanel: React.FC<HomePanelProps> = ({
   };
 
   const onNext = () => {
-    setActiveIndex((prev) => (prev + 1) % dishes.length);
+    setIsFading(true);
+    setTimeout(() => {
+      setActiveIndex((prev) => (prev + 1) % dishes.length);
+      setIsFading(false);
+    }, FADE_DURATION_MS);
   };
 
   const onPrev = () => {
-    setActiveIndex((prev) => (prev - 1 + dishes.length) % dishes.length);
+    setIsFading(true);
+    setTimeout(() => {
+      setActiveIndex((prev) => (prev - 1 + dishes.length) % dishes.length);
+      setIsFading(false);
+    }, FADE_DURATION_MS);
   };
 
   // Only render if visible (the translate-y-full will handle the off-screen state)
@@ -157,8 +168,7 @@ const HomePanel: React.FC<HomePanelProps> = ({
         </section>
 
         {/* Dish Details Section (Full screen height, desktop layout) */}
-        <section className="h-screen w-full bg-white relative flex"> {/* Added flex for two-column */}
-
+        <section className="h-screen w-full bg-white relative flex">
           {/* Left content panel - Desktop design */}
           <div className="w-[40%] min-[1200px]:w-[35%] 2xl:w-[30%] h-full relative flex flex-col">
             <div className="h-full flex flex-col px-8 md:px-10 lg:px-12 2xl:px-16 pt-10 2xl:pt-16 pb-32 relative">
@@ -172,7 +182,11 @@ const HomePanel: React.FC<HomePanelProps> = ({
                 />
               </div>
 
-              <div className="flex-1 overflow-y-auto pr-2 scrollbar-hide">
+              {/* Dish text content - Apply fade here */}
+              <div
+                className={`flex-1 overflow-y-auto pr-2 scrollbar-hide
+                transition-opacity duration-${FADE_DURATION_MS} ${isFading ? 'opacity-0' : 'opacity-100'}`}
+              >
                 <h2 className="font-faustina italic text-gray-400 text-lg 2xl:text-xl font-light">
                   Ilonggo&apos;s Best Dishes
                 </h2>
@@ -238,8 +252,11 @@ const HomePanel: React.FC<HomePanelProps> = ({
             </div>
           </div>
 
-          {/* Right image - Desktop design */}
-          <div className="flex-1 relative h-full">
+          {/* Right image - Apply fade here */}
+          <div
+            className={`flex-1 relative h-full
+            transition-opacity duration-${FADE_DURATION_MS} ${isFading ? 'opacity-0' : 'opacity-100'}`}
+          >
             <Image
               src={activeDish.image}
               alt={activeDish.name}

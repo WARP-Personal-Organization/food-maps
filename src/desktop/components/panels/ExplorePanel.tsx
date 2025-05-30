@@ -39,7 +39,7 @@ const ExplorePanel: React.FC<ExplorePanelProps> = ({
 
   return (
     <div
-      className={`fixed top-0 left-0 w-[300px] min-w-[300px] md:w-[320px] lg:w-[350px] xl:w-[400px] h-full bg-white shadow-lg z-30 transform transition-transform duration-300 
+      className={`fixed top-0 left-0 w-[300px] min-w-[500px] md:w-[320px] lg:w-[350px] xl:w-[400px] h-full bg-white shadow-lg z-30 transform transition-transform duration-300 
         ${isVisible ? 'translate-x-0' : '-translate-x-full'}`}
     >
       {/* Explore Header */}

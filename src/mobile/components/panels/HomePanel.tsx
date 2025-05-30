@@ -15,8 +15,6 @@ interface HomePanelProps {
 }
 
 const HEADER_HEIGHT_PX = 72;
-const IMAGE_HEIGHT_PX = 300;
-const FOOTER_HEIGHT_PX = 70;
 
 const HomePanel: React.FC<HomePanelProps> = ({
   dishes,
@@ -26,47 +24,85 @@ const HomePanel: React.FC<HomePanelProps> = ({
   onFilterApply,
 }) => {
   const scrollContainerRef = useRef<HTMLDivElement>(null);
+  const dishSectionRef = useRef<HTMLElement>(null);
 
   const [isScrolledDown, setIsScrolledDown] = useState(false);
   const [activeIndex, setActiveIndex] = useState(0);
+  const [isTitleVisible, setIsTitleVisible] = useState(false);
 
   const activeDish = dishes[activeIndex] ?? dishes[0];
 
-  // Scroll to top and reset on open
   useEffect(() => {
-    if (isVisible && scrollContainerRef.current) {
-      scrollContainerRef.current.scrollTo({ top: 0, behavior: 'auto' });
+    if (isVisible) {
+      if (scrollContainerRef.current) {
+        scrollContainerRef.current.scrollTo({ top: 0, behavior: 'auto' });
+      }
       setIsScrolledDown(false);
       setActiveIndex(0);
+      const timer = setTimeout(() => setIsTitleVisible(true), 100);
+      return () => clearTimeout(timer);
+    } else {
+      setIsTitleVisible(false);
     }
   }, [isVisible]);
 
-  // Keep scroll position aligned when navigating dishes
   useEffect(() => {
-    if (isScrolledDown && scrollContainerRef.current) {
-      requestAnimationFrame(() => {
-        scrollContainerRef.current?.scrollTo({
-          top: window.innerHeight,
-          behavior: 'auto',
-        });
+    if (isScrolledDown && scrollContainerRef.current && dishSectionRef.current) {
+      // This auto-scroll is for when activeIndex changes and isScrolledDown is true,
+      // not for the initial scroll trigger from the button.
+      scrollContainerRef.current.scrollTo({
+        top: dishSectionRef.current.offsetTop,
+        behavior: 'auto',
       });
     }
   }, [activeIndex, isScrolledDown]);
 
   const handleScroll = () => {
     const scrollTop = scrollContainerRef.current?.scrollTop || 0;
-    setIsScrolledDown(scrollTop > window.innerHeight * 0.1);
+    setIsScrolledDown(scrollTop > 50);
   };
 
+  // Custom scroll function for slower animation
   const scrollToDishes = () => {
-    scrollContainerRef.current?.scrollTo({
-      top: window.innerHeight,
-      behavior: 'smooth',
-    });
+    const container = scrollContainerRef.current;
+    const targetElement = dishSectionRef.current;
+
+    if (!container || !targetElement) {
+      return;
+    }
+
+    const startPosition = container.scrollTop;
+    const targetPosition = targetElement.offsetTop;
+    const distance = targetPosition - startPosition;
+    const duration = 150; // Adjust this value to control scroll speed (in milliseconds)
+                          // 1000ms = 1 second, 2000ms = 2 seconds, etc.
+    let startTime: number | null = null;
+
+    const animateScroll = (currentTime: number) => {
+      if (!startTime) {
+        startTime = currentTime;
+      }
+
+      const elapsedTime = currentTime - startTime;
+      const progress = Math.min(elapsedTime / duration, 1); // Clamp progress between 0 and 1
+
+      // Linear interpolation for simplicity. You could add easing functions here for more natural movement.
+      const newScrollTop = startPosition + distance * progress;
+
+      container.scrollTop = newScrollTop;
+
+      if (elapsedTime < duration) {
+        requestAnimationFrame(animateScroll);
+      }
+    };
+
+    requestAnimationFrame(animateScroll);
   };
 
   const handleApplyFilter = () => {
-    if (activeDish?.name) onFilterApply([activeDish.name]);
+    if (activeDish?.name) {
+      onFilterApply([activeDish.name]);
+    }
     onClose();
   };
 
@@ -80,37 +116,37 @@ const HomePanel: React.FC<HomePanelProps> = ({
 
   return (
     <div
-      className={`fixed bottom-0 w-full h-full bg-white z-30 rounded-t-sm shadow-lg
-      transform transition-transform duration-300
-      ${isVisible ? 'translate-y-0' : 'translate-y-full'}`}
+      className={`fixed bottom-0 w-full h-full bg-white z-30 rounded-t-sm shadow-lg transition-transform duration-300 ${
+        isVisible ? 'translate-y-0' : 'translate-y-full'
+      } flex flex-col`}
     >
       {/* Header */}
       <div
-        className="absolute top-5 w-full px-6 py-4 flex items-center justify-between z-50"
+        className="absolute top-0 left-0 right-0 px-6 py-4 flex items-center justify-between z-50"
         style={{ height: `${HEADER_HEIGHT_PX}px` }}
       >
         <h1
-          className={`text-5xl font-bold font-['Faustina'] text-white transition-opacity duration-300
-          ${isScrolledDown ? 'opacity-0' : 'opacity-100'}`}
+          className={`text-5xl font-bold font-['Faustina'] text-white transition-opacity duration-500 ease-in ${
+            isTitleVisible && !isScrolledDown ? 'opacity-100' : 'opacity-0'
+          }`}
         >
           foodprints
         </h1>
         <MenuButton onClick={openMenu} />
       </div>
 
-      {/* Scrollable Container */}
+      {/* Scrollable Content */}
       <div
         ref={scrollContainerRef}
-        className="h-full overflow-y-scroll overflow-x-hidden"
-        style={{ scrollBehavior: 'smooth' }}
+        className="flex-grow overflow-y-scroll overflow-x-hidden"
         onScroll={handleScroll}
       >
-        {/* Intro Section */}
+        {/* Hero Section */}
         <section
-          className="relative h-screen w-full flex flex-col items-center justify-between text-center pb-12"
+          className="relative min-h-screen w-full flex flex-col items-center justify-between text-center pb-12"
           style={{ paddingTop: `${HEADER_HEIGHT_PX}px` }}
         >
-          {/* Blurred Map Background */}
+          {/* Background */}
           <div className="absolute inset-0 -mx-10 -my-10">
             <Image
               src="/images/map/FoodMapsMobile.svg"
@@ -122,7 +158,7 @@ const HomePanel: React.FC<HomePanelProps> = ({
             <div className="absolute inset-0 bg-black opacity-50" />
           </div>
 
-          {/* Centered Title */}
+          {/* Title */}
           <div className="relative z-40 flex flex-col items-center px-8 mt-auto mb-auto">
             <h1 className="text-white text-4xl sm:text-5xl font-['Faustina'] mb-4 py-2 px-6 text-center">
               Trace the
@@ -133,7 +169,7 @@ const HomePanel: React.FC<HomePanelProps> = ({
             </h1>
           </div>
 
-          {/* Intro Description */}
+          {/* Description */}
           <div className="relative z-40 flex py-2 px-10">
             <p className="text-white text-lg sm:text-xl leading-relaxed max-w-md">
               Discover where to find the best Ilonggo dishes, check out the map,
@@ -141,12 +177,11 @@ const HomePanel: React.FC<HomePanelProps> = ({
             </p>
           </div>
 
-          {/* Scroll Button */}
+          {/* Scroll Trigger */}
           <div className="relative z-40 w-full flex justify-center mt-auto">
             <button
               onClick={scrollToDishes}
-              className="p-2 rounded-full flex items-center justify-center
-              shadow-lg hover:bg-gray-100 transition-colors cursor-pointer"
+              className="p-2 rounded-full shadow-lg hover:bg-gray-100 transition-colors"
               aria-label="Scroll down to explore dishes"
             >
               <ChevronsUp size={70} className="text-gray-400" />
@@ -155,7 +190,7 @@ const HomePanel: React.FC<HomePanelProps> = ({
         </section>
 
         {/* Dish Section */}
-        <section className="h-screen w-full bg-white relative">
+        <section ref={dishSectionRef} className="w-full bg-white pb-8 min-h-screen flex flex-col">
           {/* Dish Image */}
           <div className="relative w-full h-[60vw] sm:h-[50vw] md:h-[40vw] lg:h-[300px]">
             {activeDish?.image ? (
@@ -173,15 +208,10 @@ const HomePanel: React.FC<HomePanelProps> = ({
             )}
           </div>
 
-          {/* Dish Details */}
-          <div
-            className="flex flex-col overflow-y-auto px-6 pt-4 gap-5"
-            style={{
-              height: `calc(100% - ${IMAGE_HEIGHT_PX + FOOTER_HEIGHT_PX}px)`,
-            }}
-          >
+          {/* Dish Info + Button */}
+          <div className="flex flex-col gap-8 px-6 pt-4 flex-grow">
             <div className="flex items-center justify-between">
-              <h1 className="text-3xl font-bold font-faustina text-[#202020]">
+              <h1 className="text-3xl sm:text-4xl md:text-8xl font-bold font-faustina text-[#202020]">
                 {activeDish?.name || 'Dish Name'}
               </h1>
               <div className="flex items-center gap-2">
@@ -202,27 +232,24 @@ const HomePanel: React.FC<HomePanelProps> = ({
               </div>
             </div>
 
-            <h3 className="font-bold italic text-base text-[#7c7c7c]">
+            <h3 className="font-bold italic text-base sm:text-lg md:text-4xl text-[#7c7c7c]">
               {activeDish?.tagline || 'A delicious culinary experience.'}
             </h3>
 
-            <p className="text-[#2a2a2a] text-base leading-relaxed">
+            <p className="text-[#2a2a2a] text-base sm:text-lg md:text-4xl leading-relaxed">
               {activeDish?.description || 'Description of the dish goes here.'}
             </p>
-          </div>
 
-          {/* Action Button */}
-          <div
-            className="absolute bottom-0 left-0 w-full px-6 pb-6 bg-white z-40"
-            style={{ height: `${FOOTER_HEIGHT_PX}px` }}
-          >
-            <button
-              onClick={handleApplyFilter}
-              className="w-full bg-[#F9D408] text-[#3b3b3b] font-bold text-base py-2
-              rounded-[3px] text-center hover:bg-[#E6C207] transition-colors shadow-sm"
-            >
-              Where to Eat
-            </button>
+            {/* "Where to Eat" Button - Back in its original position */}
+            <div className="static pt-10 mt-auto z-50">
+              <button
+                onClick={handleApplyFilter}
+                className="w-full bg-[#F9D408] text-[#3b3b3b] font-bold dont text-base py-2
+                rounded-[8px] text-center hover:bg-[#E6C207] transition-colors shadow-sm md:text-4xl"
+              >
+                Where to Eat
+              </button>
+            </div>
           </div>
         </section>
       </div>
