@@ -15,7 +15,7 @@ import DishDetailsPanel from "./panels/DishDetails/DishDetailsPanel";
 import LocationDetailPanel from "./panels/LocationDetailPanel";
 import FoodPrintDetailPanel from "./panels/FoodPrintDetailPanel";
 import ExplorePanel from "./panels/ExplorePanel";
-import HomePanel from "./panels/HomePanel";
+// import HomePanel from "./panels/HomePanel";
 
 interface PanelManagerProps {
   dishData?: Dish[];
@@ -167,7 +167,7 @@ const PanelManager: React.ForwardRefRenderFunction<
           onClose={handleClosePanel}
         />
 
-        <HomePanel
+        {/* <HomePanel
           isVisible={currentPanel === "home"}
           dishes={dishData}
           openMenu={() => setIsMenuVisible(true)}
@@ -180,7 +180,7 @@ const PanelManager: React.ForwardRefRenderFunction<
               onFilterApply(filters);
             }
           }}
-        />
+        /> */}
 
 
         <FilterPanel

@@ -1,4 +1,4 @@
-"use client";
+  "use client";
 
 import React, { useRef, useMemo } from "react";
 import PanelManager, { PanelManagerRef } from "./components/PanelManager";
@@ -14,6 +14,7 @@ import MenuButton from "@/components/buttons/MenuButton";
 import FilterButton from "@/components/buttons/FilterButton";
 import { FoodPrintData } from "@/lib/FoodPrintData";
 import { denormalizeKey } from "@/lib/utils";
+import HomeButton from "@/components/buttons/HomeButton";
 
 interface MobileMapLayoutProps {
   dishData: Dish[];
@@ -68,8 +69,8 @@ const MobileMapLayout: React.FC<MobileMapLayoutProps> = ({
   // Foodprint markers filtered by active filters
   const foodprintMarkers = activeFilters.length
     ? foodPrintData.markers.filter((marker) =>
-      activeFilters.includes(marker.dishType)
-    )
+        activeFilters.includes(marker.dishType)
+      )
     : foodPrintData.markers;
 
   // Get all locations
@@ -112,9 +113,30 @@ const MobileMapLayout: React.FC<MobileMapLayoutProps> = ({
         selectedDishes={activeFilters}
         onFilterApply={updateFilters}
       />
-
-      {/* Filter Button */}
-      <FilterButton className="z-20 absolute" onClick={() => panelRef.current?.openFilter()} />
+      <div className="relative w-full">
+        <HomeButton
+          className="absolute left-[5%] z-10"
+          onClick={() => {
+            panelRef.current?.openHome();
+            console.log("ww ")
+          }}
+        />
+              {/* <HomePanel
+        isVisible={currentPanel === "home"}
+        dishes={dishData}
+        openMenu={() => setIsMenuVisible(true)}
+        onClose={() => setCurrentPanel(null)}
+        onFilterApply={(filters) => {
+          if (onFilterApply) {
+            onFilterApply(filters);
+          }
+        }}
+      /> */}
+        <FilterButton
+          className="absolute left-[18%] z-20"
+          onClick={() => panelRef.current?.openFilter()}
+        />
+      </div>
 
       {/* Menu Button */}
       <MenuButton onClick={() => panelRef.current?.openMenu()} />
@@ -124,8 +146,9 @@ const MobileMapLayout: React.FC<MobileMapLayoutProps> = ({
         <ClientOnly>
           <div className="h-full w-full bg-[#3b3b3f]">
             <MapComponent
-              key={`mobile-map-${activeFilters.join("-")}-${allLocations.length
-                }`}
+              key={`mobile-map-${activeFilters.join("-")}-${
+                allLocations.length
+              }`}
               locations={filteredLocations}
               foodPrintMarkers={foodprintMarkers}
               mapImageUrl="/images/map/Map.png"

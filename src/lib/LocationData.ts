@@ -5,8 +5,8 @@ export const LocationData: Record<string, Location[]> = {
     {
       name: "Robertos",
       address: "61 JM Basa St, Iloilo City Proper, Iloilo City, Iloilo",
-      x: 650,
-      y: 300,
+      x: 700,
+      y: 200,
       openHours: "8:00 AM - 5:30 PM",
       priceRange: "₱1-200",
       mapLink: "https://maps.app.goo.gl/HpyHQaVQg4quy1j8A",
@@ -22,8 +22,8 @@ export const LocationData: Record<string, Location[]> = {
       name: "Dinagyang Siopao",
       address:
         "MGP6+FJM, Fegueroa St. Corner Bonifacio, Villa Arevalo Dist, Iloilo City",
-      x: 700,
-      y: 400,
+      x: 300,
+      y: 300,
       openHours: "7:00 AM - 9:00 PM",
       priceRange: "₱1-100",
       mapLink: "https://maps.app.goo.gl/NYpxLVv9nezJ3PDZ7",
@@ -234,7 +234,7 @@ export const LocationData: Record<string, Location[]> = {
         "/images/location-photos/doming's-3.jpg",
         "/images/location-photos/doming's-4.jpg",
       ],
-      iconUrl: "/images/location-markers/batchoy-marker-2.png",
+      iconUrl: "/images/location-markers/kbl-marker-1.png",
     },
     {
       name: "Punot",
@@ -251,7 +251,7 @@ export const LocationData: Record<string, Location[]> = {
         "/images/location-photos/punot-3.jpg",
         "/images/location-photos/punot-4.jpg",
       ],
-      iconUrl: "/images/location-markers/batchoy-marker-2.png",
+      iconUrl: "/images/location-markers/kbl-marker-1.png",
     },
     {
       name: "Breakthrough",
@@ -267,7 +267,7 @@ export const LocationData: Record<string, Location[]> = {
         "/images/location-photos/breakthrough-3.jpg",
         "/images/location-photos/breakthrough-4.jpg",
       ],
-      iconUrl: "/images/location-markers/batchoy-marker-2.png",
+      iconUrl: "/images/location-markers/kbl-marker-1.png",
     },
   ],
   PancitMolo: [

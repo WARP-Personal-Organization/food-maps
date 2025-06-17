@@ -143,3 +143,9 @@
   align-items: center;
   position: relative;
 }
+
+/* Hide Mapbox logo and attribution */
+.mapboxgl-ctrl-logo,
+.mapboxgl-ctrl-attrib {
+  display: none !important;
+}

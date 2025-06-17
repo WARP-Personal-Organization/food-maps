@@ -27,11 +27,13 @@ export type Location = {
   address: string;
   x: number;
   y: number;
+  lat?: number;
+  lng?: number;
   openHours: string;
   priceRange: string;
   mapLink: string;
-  photos: string[]; // Array of image URLs for the location
-  iconUrl: string; // URL to the marker icon
+  photos: string[];
+  iconUrl: string;
 };
 
 export type FoodPrint = {
@@ -39,6 +41,8 @@ export type FoodPrint = {
   location: string;
   x: number;
   y: number;
+  lat?: number;
+  lng?: number;
   description: string;
   extendedDescription: string[];
   iconUrl: string;
