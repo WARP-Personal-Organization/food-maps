@@ -1,6 +1,6 @@
-  "use client";
+"use client";
 
-import React, { useRef, useMemo } from "react";
+import React, { useRef, useMemo, useState } from "react";
 import PanelManager, { PanelManagerRef } from "./components/PanelManager";
 import { Location, FoodPrint, Dish } from "@/types/types";
 import {
@@ -15,7 +15,7 @@ import FilterButton from "@/components/buttons/FilterButton";
 import { FoodPrintData } from "@/lib/FoodPrintData";
 import { denormalizeKey } from "@/lib/utils";
 import HomeButton from "@/components/buttons/HomeButton";
-
+import HomePanel from "./components/panels/HomePanel";
 interface MobileMapLayoutProps {
   dishData: Dish[];
   foodPrintData: FoodPrintData;
@@ -43,7 +43,7 @@ const MobileMapLayout: React.FC<MobileMapLayoutProps> = ({
 
   // Helper to determine if we have dishes to display
   const hasDishes = filteredDishes && filteredDishes.length > 0;
-
+  const [currentPanel, setCurrentPanel] = useState<"home" | null>(null);
   // Helper to get locations based on active filters
   const getFilteredLocations = () => {
     // Collect all locations for the active filters
@@ -117,21 +117,19 @@ const MobileMapLayout: React.FC<MobileMapLayoutProps> = ({
         <HomeButton
           className="absolute left-[5%] z-10"
           onClick={() => {
-            panelRef.current?.openHome();
-            console.log("ww ")
+            setCurrentPanel("home"); // open the panel
           }}
         />
-              {/* <HomePanel
-        isVisible={currentPanel === "home"}
-        dishes={dishData}
-        openMenu={() => setIsMenuVisible(true)}
-        onClose={() => setCurrentPanel(null)}
-        onFilterApply={(filters) => {
-          if (onFilterApply) {
-            onFilterApply(filters);
-          }
-        }}
-      /> */}
+        <HomePanel
+          isVisible={currentPanel === "home"}
+          dishes={dishData}
+          openMenu={() => panelRef.current?.openMenu()}
+          onClose={() => setCurrentPanel(null)}
+          onFilterApply={(filters) => {
+            updateFilters(filters);
+            setCurrentPanel(null);
+          }}
+        />
         <FilterButton
           className="absolute left-[18%] z-20"
           onClick={() => panelRef.current?.openFilter()}
