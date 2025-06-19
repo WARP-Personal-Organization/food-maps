@@ -12,7 +12,7 @@ export const DishData: Dish[] = [
   },
   {
     name: "Batchoy",
-    image: "/images/filter-dish/batchoy.webp",
+    image: "/images/filter-dish/batchoy.jpg",
     description:
       "A hearty noodle soup with pork, liver, and chicharrón, La Paz Batchoy is a famous Ilonggo delicacy originating from La Paz, Iloilo.",
     tagline: "Ilonggo Noodle Soup",
