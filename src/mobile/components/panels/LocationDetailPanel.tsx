@@ -26,13 +26,14 @@ const LocationDetailPanel: React.FC<LocationDetailPanelProps> = ({
   const address = location.address || "Molo District, Iloilo City";
   const openHours = location.openHours || "10:00 AM - 7:00 PM";
   const priceRange = location.priceRange || "₱100-200";
+  console.log(location.menuPhotos);
 
   return (
     <div
       className={`fixed bottom-0 w-full h-full bg-white z-50 rounded-t-sm shadow-lg overflow-y-auto touch-pan-y 
-        transform transition-transform duration-300
-        ${isVisible ? "translate-y-0" : "translate-y-full"}
-      `}
+          transform transition-transform duration-300
+          ${isVisible ? "translate-y-0" : "translate-y-full"}
+        `}
     >
       {/* Main image - Adjusted height */}
       <div className="relative h-56 w-full md:h-48 lg:h-54 xl:h-68 2xl:h-80 3xl:h-96">
@@ -57,8 +58,9 @@ const LocationDetailPanel: React.FC<LocationDetailPanelProps> = ({
           {[0, 1, 2, 3, 4].map((index) => (
             <div
               key={index}
-              className={`h-1 w-1 rounded-full ${index === 0 ? "bg-white" : "bg-white/40"
-                } md:h-1 md:w-1 2xl:h-2 2xl:w-2`}
+              className={`h-1 w-1 rounded-full ${
+                index === 0 ? "bg-white" : "bg-white/40"
+              } md:h-1 md:w-1 2xl:h-2 2xl:w-2`}
             />
           ))}
         </div>
@@ -118,10 +120,11 @@ const LocationDetailPanel: React.FC<LocationDetailPanelProps> = ({
       <div className="border-b border-gray-200">
         <div className="flex">
           <button
-            className={`flex-1 text-center py-3 text-base relative cursor-pointer ${activeTab === "photos"
+            className={`flex-1 text-center py-3 text-base relative cursor-pointer ${
+              activeTab === "photos"
                 ? "text-gray-800 font-bold"
                 : "text-gray-400 font bold"
-              } md:py-2 md:text-sm lg:py-2 lg:text-sm xl:py-3 xl:text-base 2xl:py-5 2xl:text-xl`}
+            } md:py-2 md:text-sm lg:py-2 lg:text-sm xl:py-3 xl:text-base 2xl:py-5 2xl:text-xl`}
             onClick={() => setActiveTab("photos")}
           >
             Photos
@@ -130,10 +133,11 @@ const LocationDetailPanel: React.FC<LocationDetailPanelProps> = ({
             )}
           </button>
           <button
-            className={`flex-1 text-center py-3 text-base relative cursor-pointer ${activeTab === "menu"
+            className={`flex-1 text-center py-3 text-base relative cursor-pointer ${
+              activeTab === "menu"
                 ? "text-gray-800 font-bold"
                 : "text-gray-400 font-bold"
-              } md:py-2 md:text-sm lg:py-2 lg:text-sm xl:py-3 xl:text-base 2xl:py-5 2xl:text-xl`}
+            } md:py-2 md:text-sm lg:py-2 lg:text-sm xl:py-3 xl:text-base 2xl:py-5 2xl:text-xl`}
             onClick={() => setActiveTab("menu")}
           >
             Menu
@@ -149,40 +153,27 @@ const LocationDetailPanel: React.FC<LocationDetailPanelProps> = ({
         {/* Photos section */}
         {activeTab === "photos" && (
           <div className="p-4 md:p-3 lg:p-4 xl:p-5 2xl:p-8">
-            <p className="text-gray-400 mb-3 md:text-xs md:mb-2 lg:text-xs lg:mb-2 xl:text-sm xl:mb-3 2xl:text-xl 2xl:mb-5">
-              See Photos
-            </p>
+            {/* <p className="text-gray-400 mb-3 md:text-xs md:mb-2 lg:text-xs lg:mb-2 xl:text-sm xl:mb-3 2xl:text-xl 2xl:mb-5">
+                See Photos
+              </p> */}
             <div className="grid grid-cols-3 gap-2 md:gap-1.5 lg:gap-2 xl:gap-3 2xl:gap-4">
-              <div className="col-span-1 row-span-2 relative rounded overflow-hidden bg-gray-200">
-                <div className="aspect-square h-full">
-                  <Image
-                    src="/images/robertos/r2.jpeg"
-                    alt={`${location.name} Interior`}
-                    layout="fill"
-                    objectFit="cover"
-                  />
+              {location.photos?.slice(0, 5).map((photo, index) => (
+                <div
+                  key={index}
+                  className={`relative rounded overflow-hidden bg-gray-200 ${
+                    index === 0 ? "col-span-1 row-span-2" : ""
+                  }`}
+                >
+                  <div className="aspect-square h-full">
+                    <Image
+                      src={photo}
+                      alt={`${location.name} photo ${index + 1}`}
+                      layout="fill"
+                      objectFit="cover"
+                    />
+                  </div>
                 </div>
-              </div>
-              <div className="relative rounded overflow-hidden bg-gray-200">
-                <div className="aspect-square h-full">
-                  <Image
-                    src="/images/robertos/r1.jpg"
-                    alt={`${location.name} Dish`}
-                    layout="fill"
-                    objectFit="cover"
-                  />
-                </div>
-              </div>
-              <div className="relative rounded overflow-hidden bg-gray-200">
-                <div className="aspect-square h-full">
-                  <Image
-                    src="/images/robertos/r3.jpeg"
-                    alt={`${location.name} Food`}
-                    layout="fill"
-                    objectFit="cover"
-                  />
-                </div>
-              </div>
+              ))}
             </div>
           </div>
         )}
@@ -190,16 +181,38 @@ const LocationDetailPanel: React.FC<LocationDetailPanelProps> = ({
         {/* Menu section */}
         {activeTab === "menu" && (
           <div className="p-4 md:p-3 lg:p-4 xl:p-5 2xl:p-8">
-            <p className="text-gray-400 mb-3 md:text-xs md:mb-2 lg:text-xs lg:mb-2 xl:text-sm xl:mb-3 2xl:text-xl 2xl:mb-5">
+            {/* <p className="text-gray-400 mb-3 md:text-xs md:mb-2 lg:text-xs lg:mb-2 xl:text-sm xl:mb-3 2xl:text-xl 2xl:mb-5">
               Menu Coming Soon
-            </p>
+            </p> */}
+            <div className="grid grid-cols-3 gap-2 md:gap-1.5 lg:gap-2 xl:gap-3 2xl:gap-4">
+              {location.menuPhotos?.slice(0, 5).map((photo, index) => (
+                <div
+                  key={index}
+                  className={`relative rounded overflow-hidden bg-gray-200 ${
+                    index === 0 ? "col-span-1 row-span-2" : ""
+                  }`}
+                >
+                  <div className="aspect-square h-full">
+                    <Image
+                      src={photo}
+                      alt={`${location.name} photo ${index + 1}`}
+                      layout="fill"
+                      objectFit="cover"
+                    />
+                  </div>
+                </div>
+              ))}
+            </div>
           </div>
         )}
       </div>
 
       {/* Sticky Action Buttons */}
       <div className="sticky bottom-0 shadow-xl bg-gradient-to-t from-white via-white to-transparent pt-20 pb-0 p-5 md:pt-16 md:p-3 lg:pt-18 lg:p-4 xl:pt-24 xl:p-5 2xl:pt-28 2xl:p-6">
-      <GetDirectionsButton className="w-full bg-yellow-300 p-2" onClick={() => window.open(location.mapLink, '_blank')}/>
+        <GetDirectionsButton
+          className="w-full bg-yellow-300 p-2"
+          onClick={() => window.open(location.mapLink, "_blank")}
+        />
       </div>
     </div>
   );
