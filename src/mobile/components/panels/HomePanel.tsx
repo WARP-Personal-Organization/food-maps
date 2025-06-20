@@ -216,18 +216,22 @@ const HomePanel: React.FC<HomePanelProps> = ({
                 {denormalizeKey(activeDish.name)}
               </h1>
               <div className="flex items-center gap-2">
-                <button
+              <button
                   onClick={onPrev}
-                  className="h-10 w-10 p-2 rounded-full bg-yellow-300 flex items-center justify-center hover:bg-[#E6C207] transition-colors"
+                  disabled={activeIndex === 0}
+                  className={`h-10 w-10 p-2 rounded-full flex items-center justify-center transition-colors
+                    ${activeIndex === 0 ? "bg-gray-300 text-gray-500 cursor-not-allowed" : "bg-yellow-300 hover:bg-[#E6C207]"}`}
                   aria-label="Previous dish"
                 >
                   ❮
                 </button>
-                <button
-                  onClick={onNext}
-                  className="h-10 w-10 p-2 rounded-full bg-yellow-300 flex items-center justify-center hover:bg-[#E6C207] transition-colors"
-                  aria-label="Next dish"
-                >
+               <button
+                    onClick={onNext}
+                    disabled={activeIndex === dishes.length - 1}
+                    className={`h-10 w-10 p-2 rounded-full flex items-center justify-center transition-colors
+                      ${activeIndex === dishes.length - 1 ? "bg-gray-300 text-gray-500 cursor-not-allowed" : "bg-yellow-300 hover:bg-[#E6C207]"}`}
+                    aria-label="Next dish"
+                  >
                   ❯
                 </button>
               </div>
