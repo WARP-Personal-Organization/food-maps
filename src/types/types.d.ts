@@ -33,6 +33,8 @@ export type Location = {
   priceRange: string;
   mapLink: string;
   photos: string[];
+  menuPhotos?: string[];
+  foodPhotos?:string[]
   iconUrl: string;
 };
 
