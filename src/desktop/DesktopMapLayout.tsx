@@ -1,20 +1,20 @@
-'use client';
+"use client";
 
-import React, { useRef, useMemo, useState } from 'react';
-import PanelManager, { PanelManagerRef } from './components/PanelManager';
-import { Location, FoodPrint, Dish, PanelType } from '@/types/types';
+import React, { useRef, useMemo, useState, useEffect } from "react";
+import PanelManager, { PanelManagerRef } from "./components/PanelManager";
+import { Location, FoodPrint, Dish, PanelType } from "@/types/types";
 import {
   ClientOnly,
   MapComponent,
   EmptyState,
-} from '../components/map/MapUtilComponents';
+} from "../components/map/MapUtilComponents";
 
-import { IoClose } from 'react-icons/io5';
-import MenuButton from '@/components/buttons/MenuButton';
-import FilterButton from '@/components/buttons/FilterButton';
-import HomeButton from '@/components/buttons/HomeButton';
-import { FoodPrintData } from '@/lib/FoodPrintData';
-import { denormalizeKey } from '@/lib/utils';
+import { IoClose } from "react-icons/io5";
+import MenuButton from "@/components/buttons/MenuButton";
+import FilterButton from "@/components/buttons/FilterButton";
+import HomeButton from "@/components/buttons/HomeButton";
+import { FoodPrintData } from "@/lib/FoodPrintData";
+import { denormalizeKey } from "@/lib/utils";
 
 interface DesktopMapLayoutProps {
   dishData: Dish[];
@@ -34,13 +34,18 @@ const DesktopMapLayout: React.FC<DesktopMapLayoutProps> = ({
   onFilterChange,
 }) => {
   const panelRef = useRef<PanelManagerRef | null>(null);
-  const [panelOpen, setPanelOpen] = useState(false);
+  const [panelOpen, setPanelOpen] = useState(true);
   const [currentPanel, setCurrentPanel] = useState<PanelType | null>(null);
-
+  useEffect(() => {
+    if (currentPanel === null && panelRef.current) {
+      panelRef.current.openDishDetails(); // or openHome(), depending on which one your HomeButton triggers
+      setPanelOpen(true);
+    }
+  }, [currentPanel]);
   const handleFilterChange = (
     filters: string[] | ((prev: string[]) => string[])
   ) => {
-    console.log('Filters applied from HomePanel:', filters);
+    console.log("Filters applied from HomePanel:", filters);
     onFilterChange(filters);
   };
 
@@ -115,12 +120,12 @@ const DesktopMapLayout: React.FC<DesktopMapLayoutProps> = ({
         />
       </div>
 
-      {(!currentPanel || !['explore', 'filter'].includes(currentPanel)) && (
+      {(!currentPanel || !["explore", "filter"].includes(currentPanel)) && (
         <div
           className={`absolute z-30 w-full transition-transform duration-300 ease-in-out ${
             panelOpen
-              ? 'translate-x-[300px] md:translate-x-[320px] lg:translate-x-[350px] xl:translate-x-[400px]'
-              : 'translate-x-0'
+              ? "translate-x-[300px] md:translate-x-[320px] lg:translate-x-[350px] xl:translate-x-[400px]"
+              : "translate-x-0"
           }`}
         >
           <div className="flex items-center gap-4 px-4 py-3 overflow-x-auto pt-10">
@@ -175,7 +180,7 @@ const DesktopMapLayout: React.FC<DesktopMapLayoutProps> = ({
         <ClientOnly>
           <div className="h-full w-full bg-[#3b3b3f]">
             <MapComponent
-              key={`desktop-map-${activeFilters.join('-')}-${
+              key={`desktop-map-${activeFilters.join("-")}-${
                 allLocations.length
               }`}
               locations={filteredLocations}

@@ -6,7 +6,7 @@ import { Location } from "@/types/types";
 import { MapPin, Tag } from "lucide-react";
 import GetDirectionsButton from "@/components/buttons/GetDirectionsButton";
 import CloseButton from "@/components/buttons/CloseButton";
-// import ViewDetailsButton from "@/components/buttons/ViewDetailsButton";
+import { motion, AnimatePresence } from "framer-motion";
 
 interface LocationSummaryPanelProps {
   location: Location | null;
@@ -22,6 +22,7 @@ const LocationSummaryPanel: React.FC<LocationSummaryPanelProps> = ({
   isVisible,
 }) => {
   const [activeTab, setActiveTab] = useState<"photos" | "menu">("photos");
+  const [enlargedImage, setEnlargedImage] = useState<string | null>(null);
 
   if (!location) return null;
 
@@ -34,17 +35,51 @@ const LocationSummaryPanel: React.FC<LocationSummaryPanelProps> = ({
 
   return (
     <div
-      className={`fixed bottom-0 left-0 right-0 w-full h-[80vh] bg-white z-50 rounded-t-sm shadow-lg overflow-y-auto touch-pan-y
-        transform transition-transform duration-300 ${
-          isVisible ? "translate-y-0" : "translate-y-full"
-        }`}
+      className={`fixed bottom-0 left-0 right-0 w-full h-[80vh] bg-white z-50 rounded-t-sm shadow-lg overflow-y-auto touch-pan-y transform transition-transform duration-300 ${
+        isVisible ? "translate-y-0" : "translate-y-full"
+      }`}
     >
       {/* Close Button */}
       <div className="absolute top-4 right-4 z-50">
         <CloseButton onClick={onClose} />
       </div>
-
-      {/* Image Header */}
+      <AnimatePresence>
+        {enlargedImage && (
+          <motion.div
+            className="fixed inset-0 z-50 bg-black bg-opacity-80 flex items-center justify-center"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.2 }}
+            onClick={() => setEnlargedImage(null)}
+          >
+            <motion.div
+              className="relative w-full h-full"
+              initial={{ scale: 0.95, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.95, opacity: 0 }}
+              transition={{ duration: 0.3 }}
+              onClick={(e) => e.stopPropagation()} // prevent background click
+            >
+              <Image
+                src={enlargedImage}
+                alt="Enlarged View"
+                layout="fill"
+                objectFit="contain"
+                className="rounded-lg"
+              />
+              <div
+                onClick={() => setEnlargedImage(null)}
+                className="absolute top-5 right-5 p-2 rounded-full shadow hover:bg-gray-100 cursor-pointer"
+                aria-label="Close enlarged image"
+              >
+                <CloseButton />
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+      {/* Header Image */}
       <div className="relative w-full flex-shrink-0" style={{ height: "80vw" }}>
         <Image
           src={location.photos?.[0]}
@@ -56,8 +91,8 @@ const LocationSummaryPanel: React.FC<LocationSummaryPanelProps> = ({
       </div>
 
       {/* Info Section */}
-      <div className="rounded-t-lg bg-white w-full p-6 pt-4 gap-4 z-10 relative -mt-[10%] flex flex-col">
-        <h1 className="text-3xl font-serif font-bold text-gray-800 mb-5 leading-tight">
+      <div className="rounded-t-lg bg-white w-full p-6 pt-4  gap-4 z-10 relative -mt-[10%] flex flex-col">
+        <h1 className="text-3xl font-serif font-bold text-gray-800 mb-2 leading-tight">
           {location.name}
         </h1>
 
@@ -109,14 +144,14 @@ const LocationSummaryPanel: React.FC<LocationSummaryPanelProps> = ({
             >
               {tab.charAt(0).toUpperCase() + tab.slice(1)}
               {activeTab === tab && (
-                <div className="absolute bottom-0 left-0 right-0 h-1 bg-yellow-400"></div>
+                <div className="absolute bottom-0 left-0 right-0 h-1 bg-yellow-400" />
               )}
             </button>
           ))}
         </div>
       </div>
 
-      {/* Photos/Menu Grid */}
+      {/* Photo/Menu Grid */}
       <div className="p-4 grid grid-cols-3 gap-2 overflow-y-auto">
         {(photosToShow || []).slice(0, 5).map((photo, index) => (
           <div
@@ -125,26 +160,29 @@ const LocationSummaryPanel: React.FC<LocationSummaryPanelProps> = ({
               index === 0 ? "col-span-1 row-span-2" : ""
             }`}
           >
-            <div className="aspect-square h-full">
+            <div className="relative aspect-square w-full h-auto">
               <Image
                 src={photo}
                 alt={`${location.name} ${activeTab} ${index + 1}`}
                 layout="fill"
                 objectFit="cover"
+                className="cursor-pointer hover:opacity-80 transition"
+                onClick={() => setEnlargedImage(photo)}
               />
             </div>
           </div>
         ))}
       </div>
 
-      {/* Buttons */}
+      {/* Fullscreen Image Modal */}
+
+      {/* Action Buttons */}
       <div className="sticky bottom-0 z-10 bg-gradient-to-t from-white via-white to-transparent px-6 pt-4 pb-6">
         <div className="grid gap-3">
           <GetDirectionsButton
             className="bg-yellow-300"
             onClick={() => window.open(location.mapLink, "_blank")}
           />
-          {/* <ViewDetailsButton onClick={onViewDetails} className="bg-gray-200" /> */}
         </div>
       </div>
     </div>

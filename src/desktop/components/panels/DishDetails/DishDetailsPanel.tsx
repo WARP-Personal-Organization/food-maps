@@ -23,37 +23,39 @@ const DishDetailsPanel: React.FC<DishDetailsPanelProps> = ({
   const [activeIndex, setActiveIndex] = useState(initialIndex);
 
   useEffect(() => {
-    if (activeFilters) {
+    if (activeFilters?.length) {
       const index = dishes.findIndex((dish) => dish.name === activeFilters[0]);
       if (index !== -1) setActiveIndex(index);
     }
   }, [activeFilters, dishes]);
 
   const handlePrevDish = () => {
-    setActiveIndex((prev) => (prev > 0 ? prev - 1 : dishes.length - 1));
+    setActiveIndex((prev) => (prev > 0 ? prev - 1 : prev));
   };
 
   const handleNextDish = () => {
-    setActiveIndex((prev) => (prev < dishes.length - 1 ? prev + 1 : 0));
+    setActiveIndex((prev) => (prev < dishes.length - 1 ? prev + 1 : prev));
   };
 
   if (!isVisible || dishes.length === 0) return null;
 
   const currentDish = dishes[activeIndex];
+  const hasPrev = activeIndex > 0;
+  const hasNext = activeIndex < dishes.length - 1;
 
   return (
     <div
       className={`fixed top-0 left-0 w-[300px] min-w-[300px] md:w-[320px] lg:w-[350px] xl:w-[400px] h-full bg-white shadow-lg z-10 transform transition-transform duration-300 
         ${isVisible ? 'translate-x-0' : '-translate-x-full'}`}
     >
-      <div className="absolute items-center justify-between p-4">
-        <CloseButton onClick={onClose} />
-      </div>
       <CloseButton onClick={onClose} className="absolute top-5 right-5 z-40" />
+
       <DishDetails
         dish={currentDish}
         onPrevDish={handlePrevDish}
         onNextDish={handleNextDish}
+        hasPrev={hasPrev}
+        hasNext={hasNext}
       />
     </div>
   );

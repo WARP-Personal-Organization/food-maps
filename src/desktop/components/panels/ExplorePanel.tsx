@@ -41,7 +41,7 @@ const ExplorePanel: React.FC<ExplorePanelProps> = ({
   return (
     <div
       className={`fixed top-0 left-0 w-[300px] min-w-[500px] md:w-[320px] lg:w-[350px] xl:w-[400px] h-full bg-white shadow-lg z-30 transform transition-transform duration-300 
-        ${isVisible ? 'translate-x-0' : '-translate-x-full'}`}
+        ${isVisible ? 'translate-x-0' : '-translate-x-full'} flex flex-col`}
     >
       {/* Explore Header */}
       <div className="flex justify-between items-center px-4 py-4">
@@ -82,7 +82,7 @@ const ExplorePanel: React.FC<ExplorePanelProps> = ({
         </div>
       </div>
 
-      {/* Results List */}
+      {/* Scrollable Results List */}
       <div className="flex-1 overflow-y-auto px-4 pb-4">
         {filteredLocations.length > 0 ? (
           filteredLocations.map((location, index) => (

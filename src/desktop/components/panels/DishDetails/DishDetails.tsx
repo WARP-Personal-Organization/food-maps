@@ -13,12 +13,16 @@ interface DishDetailsProps {
   dish: Dish;
   onPrevDish: () => void;
   onNextDish: () => void;
+  hasPrev: boolean;
+  hasNext: boolean;
 }
 
 const DishDetails: React.FC<DishDetailsProps> = ({
   dish,
   onPrevDish,
   onNextDish,
+  hasPrev,
+  hasNext,
 }) => {
   const locations = LocationData[dish.name] || [];
 
@@ -62,18 +66,20 @@ const DishDetails: React.FC<DishDetailsProps> = ({
           </h1>
           <div className="flex ml-auto space-x-2 lg:space-x-3">
             <button
-              onClick={onPrevDish}
-              className="bg-gray-100 rounded-full w-8 h-8 lg:w-10 lg:h-10 flex items-center justify-center"
+              onClick={hasPrev ? onPrevDish : undefined}
+              className={`rounded-full w-8 h-8 lg:w-10 lg:h-10 flex items-center justify-center transition-colors duration-200
+                ${hasPrev ? "bg-yellow-400 text-black" : "bg-gray-200 text-gray-400 cursor-not-allowed"}`}
               aria-label="Previous dish"
             >
-              <ChevronLeft className="text-gray-500" size={18} />
+              <ChevronLeft size={18} />
             </button>
             <button
-              onClick={onNextDish}
-              className="bg-yellow-400 rounded-full w-8 h-8 lg:w-10 lg:h-10 flex items-center justify-center"
+              onClick={hasNext ? onNextDish : undefined}
+              className={`rounded-full w-8 h-8 lg:w-10 lg:h-10 flex items-center justify-center transition-colors duration-200
+                ${hasNext ? "bg-yellow-400 text-black" : "bg-gray-200 text-gray-400 cursor-not-allowed"}`}
               aria-label="Next dish"
             >
-              <ChevronRight className="text-black" size={18} />
+              <ChevronRight size={18} />
             </button>
           </div>
         </div>
