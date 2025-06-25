@@ -26,7 +26,7 @@ const LocationDetailPanel: React.FC<LocationDetailPanelProps> = ({
   const address = location.address || "Molo District, Iloilo City";
   const openHours = location.openHours || "10:00 AM - 7:00 PM";
   const priceRange = location.priceRange || "₱100-200";
-  console.log(location.menuPhotos);
+
 
   return (
     <div

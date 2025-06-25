@@ -14,7 +14,6 @@ import PanelOverlay from "./panels/PanelOverlay";
 import LocationSummaryPanel from "./panels/LocationSummaryPanel";
 // import LocationDetailPanel from "./panels/LocationDetailPanel";
 import FoodPrintSummaryPanel from "./panels/FoodPrintSummaryPanel";
-import FoodPrintDetailPanel from "./panels/FoodPrintDetailPanel";
 // import HomePanel from "./panels/HomePanel";
 
 interface PanelManagerProps {
@@ -172,14 +171,6 @@ const PanelManager: React.ForwardRefRenderFunction<
         }}
       />
 
-      <FoodPrintDetailPanel
-        selectedFoodPrint={selectedFoodPrint}
-        isVisible={currentPanel === "foodPrintDetail"}
-        onClose={() => {
-          setSelectedFoodPrint(null);
-          setCurrentPanel(null);
-        }}
-      />
     </>
   );
 };

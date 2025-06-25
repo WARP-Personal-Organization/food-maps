@@ -103,7 +103,7 @@ const FoodPrintDetailsPanel: React.FC<FoodPrintDetailsPanelProps> = ({
       </div>
 
       {/* Action buttons with fade-out effect - fixed at the bottom */}
-      <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-white via-white to-transparent pt-20 pb-0 p-5 z-10 pb-6">
+      <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-white via-white to-transparent pt-20 p-5 z-10 pb-6">
         <GetDirectionsButton className="w-full bg-yellow-300 p-2" onClick={() => window.open(mapLink, '_blank')}/>
       </div>
     </div>
