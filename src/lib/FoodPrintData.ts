@@ -14,11 +14,11 @@ export type DishType = (typeof DishType)[number];
 
 const foodPrintMarkersData: FoodPrint[] = [
   {
-    name: "Roberto's Siopao: The Queen of All Siopaos in PH",
+    name: "Siopao",
     x: 800,
     y: 350,
     description:
-      "Roberto's Siopao is an iconic delicacy from Iloilo City, known for its generous size, flavorful fillings, and unique, homemade taste.",
+      "A beloved siopao spot in Iloilo known for its large size and flavorful fillings.",
     iconUrl: "/images/foodprint-markers/siopao-foodprint-marker.png",
     dishType: "Siopao",
     heroImage: "/images/robertos/r3.jpg",
@@ -30,10 +30,11 @@ const foodPrintMarkersData: FoodPrint[] = [
     mapLink: "https://maps.app.goo.gl/HpyHQaVQg4quy1j8A",
   },
   {
-    name: "Batchoy Discovery",
+    name: "Batchoy",
     x: 480,
     y: 420,
-    description: "Found an amazing Batchoy place near the market.",
+    description:
+      "A flavorful and hearty bowl of batchoy near the public market.",
     iconUrl: "/images/foodprint-markers/batchoy-foodprint-marker.png",
     dishType: "Batchoy",
     heroImage: "/images/batchoy/hero.jpg",
@@ -45,11 +46,11 @@ const foodPrintMarkersData: FoodPrint[] = [
     mapLink: "https://goo.gl/maps/8Z1b7f8x9kz2",
   },
   {
-    name: "Deco's Original Cansi",
+    name: "Kansi",
     x: 620,
     y: 280,
     description:
-      "A Kansi place that locals swear by, offering the best bone marrow soup in town.",
+      "A local favorite kansi spot serving rich bone marrow beef soup.",
     iconUrl: "/images/foodprint-markers/cansi-foodprint-marker.png",
     dishType: "Cansi",
     heroImage: "/images/kansi/decos.jpg",
@@ -61,11 +62,11 @@ const foodPrintMarkersData: FoodPrint[] = [
     mapLink: "https://goo.gl/maps/8Z1b7f8x9kz2",
   },
   {
-    name: "Manokan Country Chicken Inasal",
+    name: "Chicken Inasal",
     x: 380,
     y: 320,
     description:
-      "The authentic chicken inasal experience in the heart of Bacolod.",
+      "Authentic grilled chicken inasal experience in Bacolod's food district.",
     iconUrl: "/images/foodprint-markers/inasal-foodprint-marker.png",
     dishType: "ChickenInasal",
     heroImage: "/images/inasal/manokan.jpg",
@@ -77,11 +78,11 @@ const foodPrintMarkersData: FoodPrint[] = [
     mapLink: "https://goo.gl/maps/8Z1b7f8x9kz2",
   },
   {
-    name: "KBL: Kadios, Baboy, Langka",
+    name: "KBL",
     x: 510,
     y: 240,
     description:
-      "A traditional Ilonggo soup combining three distinctive ingredients.",
+      "A comforting bowl of traditional kadios, baboy, and langka soup.",
     iconUrl: "/images/foodprint-markers/kbl-foodprint-marker.png",
     dishType: "KBL",
     heroImage: "/images/kbl/classic.jpg",
@@ -93,10 +94,10 @@ const foodPrintMarkersData: FoodPrint[] = [
     mapLink: "https://goo.gl/maps/8Z1b7f8x9kz2",
   },
   {
-    name: "Original Pancit Molo House",
+    name: "Pancit Molo",
     x: 490,
     y: 470,
-    description: "Serving traditional Ilonggo wonton soup since 1950.",
+    description: "Traditional Ilonggo wonton soup served since the 1950s.",
     iconUrl: "/images/foodprint-markers/pancit-molo-foodprint-marker.png",
     dishType: "PancitMolo",
     heroImage: "/images/pancit-molo/original.jpg",
@@ -111,7 +112,7 @@ const foodPrintMarkersData: FoodPrint[] = [
     name: "Seafood",
     x: 500,
     y: 490,
-    description: "Serving traditional Ilonggo wonton soup since 1950.",
+    description: "Fresh and flavorful seafood dishes from Iloilo.",
     dishType: "Seafood",
     iconUrl: "/images/foodprint-markers/seafood-foodprint-marker.png",
     heroImage: "/images/seafood/original.jpg",
