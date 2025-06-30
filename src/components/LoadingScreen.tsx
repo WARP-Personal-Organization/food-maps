@@ -5,11 +5,9 @@ import { motion } from 'framer-motion';
 import { useEffect, useState } from 'react';
 import Image from 'next/image';
 
-interface NewspaperAnimationProps {
-  onComplete: () => void;
-}
 
-export default function NewspaperAnimation({ onComplete }: NewspaperAnimationProps) {
+
+export default function NewspaperAnimation() {
   const [loadingProgress, setLoadingProgress] = useState<number>(0);
   const [loadingText, setLoadingText] = useState<string>('Cooking up something special just for you...');
 
@@ -47,7 +45,6 @@ export default function NewspaperAnimation({ onComplete }: NewspaperAnimationPro
         ease: [0.4, 0, 0.2, 1],
         delay: 0.5
       }}
-      onAnimationComplete={onComplete}
       className="fixed inset-0 z-40"
       style={{ 
         transformStyle: 'preserve-3d',

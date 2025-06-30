@@ -32,7 +32,7 @@ export default function Home() {
       <AnimatePresence>
         {isLoading && (
           <div className="absolute inset-0 z-50">
-            <LoadingScreen />
+            <LoadingScreen/>
           </div>
         )}
       </AnimatePresence>
