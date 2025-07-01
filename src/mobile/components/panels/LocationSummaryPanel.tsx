@@ -120,6 +120,7 @@ const LocationSummaryPanel: React.FC<LocationSummaryPanelProps> = ({
                   alt={`${location.name} Image`}
                   layout="fill"
                   objectFit="cover"
+                  fill
                   className="z-10 transition-transform duration-700 hover:scale-105"
                 />
                 {/* Subtle gradient overlay */}

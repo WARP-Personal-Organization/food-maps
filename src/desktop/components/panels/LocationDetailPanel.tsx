@@ -5,11 +5,14 @@ import Image from "next/image";
 import { Location } from "@/types/types";
 import CloseButton from "@/components/buttons/CloseButton";
 import GetDirectionsButton from "@/components/buttons/GetDirectionsButton";
+import { motion, AnimatePresence } from "framer-motion";
+import { MapPin, Tag } from "lucide-react";
 
 interface LocationDetailPanelProps {
   location: Location | null;
   isVisible: boolean;
   onClose: () => void;
+  onViewDetails: () => void;
 }
 
 const LocationDetailPanel: React.FC<LocationDetailPanelProps> = ({
@@ -18,14 +21,15 @@ const LocationDetailPanel: React.FC<LocationDetailPanelProps> = ({
   onClose,
 }) => {
   const [activeTab, setActiveTab] = useState("photos");
-
+  const [enlargedImage, setEnlargedImage] = useState<string | null>(null);
   if (!location) return null;
 
   // Default data if not provided
   const address = location.address || "Molo District, Iloilo City";
   const openHours = location.openHours || "10:00 AM - 7:00 PM";
   const priceRange = location.priceRange || "₱100-200";
-
+ const photosToShow =
+    activeTab === "menu" ? location.menuPhotos : location.photos;
   return (
     <div
       className={`fixed top-0 left-0 w-[300px] min-w-[300px] md:w-[320px] lg:w-[350px] xl:w-[400px] h-full bg-white shadow-lg z-30 overflow-y-scroll transform transition-transform duration-300 
@@ -33,231 +37,244 @@ const LocationDetailPanel: React.FC<LocationDetailPanelProps> = ({
     >
       {/* Main image - Adjusted height */}
       <div className="relative h-[30vh] w-full">
-        <div className="rounded-t-xl overflow-hidden h-full w-full">
-          <Image
-            src={location.photos?.[0] || "/images/robertos/r5.jpg"}
-            alt={`${location.name} Image`}
-            fill
-            style={{ objectFit: "cover" }}
-            priority
-          />
-        </div>
-
-        {/* Close button (X) at top right */}
-        <CloseButton onClick={onClose} className="absolute top-4 right-4" />
-
-        {/* Image indicator dots */}
-        <div className="absolute bottom-6 left-0 right-0 flex justify-center gap-1 md:bottom-4 2xl:gap-2 2xl:bottom-8">
-          {[0, 1, 2, 3, 4].map((index) => (
-            <div
-              key={index}
-              className={`h-1 w-1 rounded-full ${
-                index === 0 ? "bg-white" : "bg-white/40"
-              } md:h-1 md:w-1 2xl:h-2 2xl:w-2`}
-            />
-          ))}
-        </div>
-      </div>
-
-      {/* NEW DIV WRAPPER START */}
-      <div className="rounded-t-sm -mt-2 relative z-10 bg-white">
-        {/* Title and Info Section - more padding and larger text on bigger screens */}
-        <div className="px-6 pt-6 pb-4 md:px-4 md:pt-4 md:pb-3 lg:px-6 lg:pt-5 lg:pb-3 xl:px-8 xl:pt-6 xl:pb-4 2xl:px-10 2xl:pt-8 2xl:pb-6">
-          <h2 className="text-3xl font-bold text-gray-800 mb-4 md:text-2xl md:mb-3 lg:text-2xl lg:mb-2 xl:text-3xl xl:mb-4 2xl:text-5xl 2xl:mb-6 font-serif">
-            {location.name}
-          </h2>
-
-          {/* Location address */}
-          <div className="flex items-start gap-3 mb-2 md:gap-2 md:mb-1.5 lg:gap-2 lg:mb-1.5 xl:gap-3 xl:mb-2.5 2xl:mb-4 2xl:gap-4">
-            <div className="text-yellow-500 flex-shrink-0">
-              <svg
-                width="18"
-                height="18"
-                viewBox="0 0 24 24"
-                fill="currentColor"
-                className="md:w-4 md:h-4 lg:w-4 lg:h-4 xl:w-5 xl:h-5 2xl:scale-125"
-              >
-                <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zM12 11.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z" />
-              </svg>
-            </div>
-            <p className="text-sm text-gray-500 leading-tight md:text-xs lg:text-[10px] xl:text-sm 2xl:text-lg font-medium">
-              {address}
-            </p>
-          </div>
-
-          {/* Hours */}
-          <div className="flex items-center gap-3 mb-2 md:gap-2 md:mb-1.5 lg:gap-2 lg:mb-1.5 xl:gap-3 xl:mb-2.5 2xl:mb-4 2xl:gap-4">
-            <div className="text-yellow-500 flex-shrink-0">
-              <svg
-                width="18"
-                height="18"
-                viewBox="0 0 24 24"
-                fill="currentColor"
-                className="md:w-4 md:h-4 lg:w-4 lg:h-4 xl:w-5 xl:h-5 2xl:scale-125"
-              >
-                <path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8z" />
-                <path d="M12.5 7H11v6l5.25 3.15.75-1.23-4.5-2.67z" />
-              </svg>
-            </div>
-            <p className="text-sm text-gray-500 md:text-xs lg:text-xs xl:text-sm 2xl:text-lg font-medium">
-              {openHours}
-            </p>
-          </div>
-
-          {/* Price range */}
-          <div className="flex items-center gap-3 md:gap-2 lg:gap-2 xl:gap-3 2xl:gap-4">
-            <div className="text-yellow-500 flex-shrink-0">
-              <svg
-                width="18"
-                height="18"
-                viewBox="0 0 24 24"
-                fill="currentColor"
-                className="md:w-4 md:h-4 lg:w-4 lg:h-4 xl:w-5 xl:h-5 2xl:scale-125"
-              >
-                <path d="M11.8 10.9c-2.27-.59-3-1.2-3-2.15 0-1.09 1.01-1.85 2.7-1.85 1.78 0 2.44.85 2.5 2.1h2.21c-.07-1.72-1.12-3.3-3.21-3.81V3h-3v2.16c-1.94.42-3.5 1.68-3.5 3.61 0 2.31 1.91 3.46 4.7 4.13 2.5.6 3 1.48 3 2.41 0 .69-.49 1.79-2.7 1.79-2.06 0-2.87-.92-2.98-2.1h-2.2c.12 2.19 1.76 3.42 3.68 3.83V21h3v-2.15c1.95-.37 3.5-1.5 3.5-3.55 0-2.84-2.43-3.81-4.7-4.4z" />
-              </svg>
-            </div>
-            <p className="text-sm text-gray-500 md:text-xs lg:text-xs xl:text-sm 2xl:text-lg font-medium">
-              {priceRange}
-            </p>
-          </div>
-        </div>
-      </div>
-      {/* NEW DIV WRAPPER END */}
-
-      {/* Tabs - larger text and padding for bigger screens */}
-      <div className="border-b border-gray-200">
-        <div className="flex">
-          <button
-            className={`flex-1 text-center py-3 text-base relative cursor-pointer ${
-              activeTab === "photos"
-                ? "text-gray-800 font-bold"
-                : "text-gray-400 font bold"
-            } md:py-2 md:text-sm lg:py-2 lg:text-sm xl:py-3 xl:text-base 2xl:py-5 2xl:text-xl`}
-            onClick={() => setActiveTab("photos")}
+        <AnimatePresence mode="wait">
+        {isVisible && (
+          <motion.div
+            key="location-panel"
+            initial={{ y: "100%", opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            exit={{ 
+              y: "100%", 
+              opacity: 0,
+              transition: { 
+                duration: 0.4, 
+                ease: [0.4, 0, 0.2, 1] 
+              }
+            }}
+            transition={{ 
+              type: "spring", 
+              stiffness: 300, 
+              damping: 30,
+              duration: 0.5
+            }}
+            className="fixed"
           >
-            Photos
-            {activeTab === "photos" && (
-              <div className="absolute bottom-0 left-0 right-0 h-1 bg-yellow-400 md:h-0.5 lg:h-0.5 xl:h-0.75 2xl:h-1.5"></div>
-            )}
-          </button>
-          <button
-            className={`flex-1 text-center py-3 text-base relative cursor-pointer ${
-              activeTab === "menu"
-                ? "text-gray-800 font-bold"
-                : "text-gray-400 font-bold"
-            } md:py-2 md:text-sm lg:py-2 lg:text-sm xl:py-3 xl:text-base 2xl:py-5 2xl:text-xl`}
-            onClick={() => setActiveTab("menu")}
-          >
-            Menu
-            {activeTab === "menu" && (
-              <div className="absolute bottom-0 left-0 right-0 h-1 bg-yellow-400 md:h-0.5 lg:h-0.5 xl:h-0.75 2xl:h-1.5"></div>
-            )}
-          </button>
-        </div>
-      </div>
-
-      {/* Tab content container - consistent sizing for both tabs */}
-      <div className="h-[350px] overflow-y-auto md:h-[300px] lg:h-[320px] xl:h-[400px] 2xl:h-[500px]">
-        {/* Photos section */}
-        {activeTab === "photos" && (
-          <div className="p-4 md:p-3 lg:p-4 xl:p-5 2xl:p-8">
-            {/* <p className="text-gray-400 mb-3 md:text-xs md:mb-2 lg:text-xs lg:mb-2 xl:text-sm xl:mb-3 2xl:text-xl 2xl:mb-5">
-              See Photos
-            </p> */}
-            <div className="grid grid-cols-3 gap-2 md:gap-1.5 lg:gap-2 xl:gap-3 2xl:gap-4">
-              <div className="col-span-1 row-span-2 relative rounded overflow-hidden bg-gray-200">
-                <div className="aspect-square h-full">
-                  <Image
-                    src="/images/robertos/r2.jpeg"
-                    alt={`${location.name} Interior`}
-                    fill
-                    style={{ objectFit: "cover" }}
-                  />
-                </div>
-              </div>
-              <div className="col-span-1 relative rounded overflow-hidden bg-gray-200">
-                <div className="aspect-square">
-                  <Image
-                    src="/images/robertos/r3.jpg"
-                    alt={`${location.name} Sign`}
-                    fill
-                    style={{ objectFit: "cover" }}
-                  />
-                </div>
-              </div>
-              <div className="col-span-1 relative rounded overflow-hidden bg-gray-200">
-                <div className="aspect-square">
-                  <Image
-                    src="/images/robertos/r4.jpg"
-                    alt={`${location.name} Product`}
-                    fill
-                    style={{ objectFit: "cover" }}
-                  />
-                </div>
-              </div>
-              <div className="col-span-1 relative rounded overflow-hidden bg-gray-200">
-                <div className="aspect-square">
-                  <Image
-                    src="/images/robertos/r1.webp"
-                    alt={`${location.name} Ingredients`}
-                    fill
-                    style={{ objectFit: "cover" }}
-                  />
-                </div>
-              </div>
-              <div className="col-span-1 relative rounded overflow-hidden bg-gray-200">
-                <div className="aspect-square">
-                  <Image
-                    src="/images/robertos/r5.jpg"
-                    alt={`${location.name} Close-up`}
-                    fill
-                    style={{ objectFit: "cover" }}
-                  />
-                </div>
-              </div>
-            </div>
-          </div>
-        )}
-
-        {/* Menu section - exactly matching structure to Photos */}
-        {activeTab === "menu" && (
-          <div className="grid grid-cols-3 gap-2 md:gap-1.5 lg:gap-2 xl:gap-3 2xl:gap-4">
-            {/* <p className="text-gray-400 mb-3 md:text-xs md:mb-2 lg:text-xs lg:mb-2 xl:text-sm xl:mb-3 2xl:text-xl 2xl:mb-5">
-              Menu
-            </p>
-            <div className="flex items-center justify-center h-[250px] md:h-[210px] lg:h-[230px] xl:h-[300px] 2xl:h-[370px]">
-              <p className="text-gray-500 text-sm md:text-xs lg:text-xs xl:text-sm 2xl:text-lg">
-                Menu information not available
-              </p>
-            </div> */}
-            {location.menuPhotos?.slice(0, 5).map((photo, index) => (
-              <div
-                key={index}
-                className={`relative rounded overflow-hidden bg-gray-200 ${
-                  index === 0 ? "col-span-1 row-span-2" : ""
-                }`}
+            {/* Elegant top handle */}
+            
+            
+            {/* Floating action buttons */}
+            <div className="absolute top-6 right-6 z-50 flex gap-3">
+              <motion.div
+                whileHover={{ scale: 1.1 }}
+                whileTap={{ scale: 0.95 }}
               >
-                <div className="aspect-square h-full pb-5">
-                  <Image
-                    src={photo}
-                    alt={`${location.name} photo ${index + 1}`}
-                    layout="fill"
-                    objectFit="cover"
-                  />
-                </div>
-              </div>
-            ))}
-          </div>
-        )}
-      </div>
+                <CloseButton 
+                  onClick={onClose}
+                  className="p-2.5 bg-white/95 backdrop-blur-sm rounded-full shadow-lg hover:bg-white transition-all duration-300"
+                />
+              </motion.div>
+            </div>
 
-      {/* Action buttons with fade-out effect - improved sizing for larger screens */}
-      <div className="sticky bottom-0 left-0 right-0 bg-gradient-to-t from-white via-white to-transparent pt-20 pb-0 p-5 md:pt-16 md:p-3 lg:pt-18 lg:p-4 xl:pt-24 xl:p-5 2xl:pt-28 2xl:p-6">
-        <GetDirectionsButton
-          className="w-full bg-yellow-300 p-2"
-          onClick={() => window.open(location.mapLink, "_blank")}
-        />
+            {/* Enlarged Image Modal */}
+            <AnimatePresence>
+              {enlargedImage && (
+                <motion.div
+                  className="fixed inset-0 z-[60] bg-black bg-opacity-80 flex items-center justify-center"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  transition={{ duration: 0.3 }}
+                  onClick={() => setEnlargedImage(null)}
+                >
+                  <motion.div
+                    className="relative w-full h-full p-4"
+                    initial={{ scale: 0.8, opacity: 0 }}
+                    animate={{ scale: 1, opacity: 1 }}
+                    exit={{ scale: 0.8, opacity: 0 }}
+                    transition={{ duration: 0.3 }}
+                    onClick={(e) => e.stopPropagation()}
+                  >
+                    <Image
+                      src={enlargedImage}
+                      alt="Enlarged View"
+                      layout="fill"
+                      objectFit="contain"
+                      className="rounded-2xl"
+                    />
+                    <motion.div
+                      onClick={() => setEnlargedImage(null)}
+                      className="absolute top-8 right-8 p-3 bg-white/90 backdrop-blur-sm rounded-full shadow-lg hover:bg-white cursor-pointer"
+                      whileHover={{ scale: 1.1 }}
+                      whileTap={{ scale: 0.95 }}
+                    >
+                      <CloseButton />
+                    </motion.div>
+                  </motion.div>
+                </motion.div>
+              )}
+            </AnimatePresence>
+
+            {/* Scrollable Content */}
+            <div className="h-full overflow-y-auto scrollbar-hide">
+              {/* Header Image */}
+              <div className="relative w-full flex-shrink-0" style={{ height: "45vh" }}>
+                <Image
+                  src={location.photos?.[0]}
+                  alt={`${location.name} Image`}
+                  layout="fill"
+                  objectFit="cover"
+                  className="z-10 transition-transform duration-700 hover:scale-105"
+                />
+                {/* Subtle gradient overlay */}
+                <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent z-20" />
+              </div>
+
+              {/* Info Section with enhanced styling */}
+              <motion.div 
+                initial={{ y: 20, opacity: 0 }}
+                animate={{ y: 0, opacity: 1 }}
+                transition={{ delay: 0.2, duration: 0.5 }}
+                className="rounded-t-3xl bg-white w-full p-6 pt-8 gap-6 z-30 relative -mt-6 flex flex-col shadow-xl"
+              >
+                <h1 className="text-4xl font-black text-gray-900 leading-tight">
+                  {location.name}
+                </h1>
+
+                {/* Enhanced info cards */}
+                <div className="space-y-4">
+                  {[
+                    {
+                      icon: <MapPin className="h-5 w-5 text-yellow-500" />,
+                      text: address,
+                      label: "Location"
+                    },
+                    {
+                      icon: (
+                        <svg
+                          width="20"
+                          height="20"
+                          viewBox="0 0 24 24"
+                          fill="currentColor"
+                          className="text-yellow-500"
+                        >
+                          <path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8z" />
+                          <path d="M12.5 7H11v6l5.25 3.15.75-1.23-4.5-2.67z" />
+                        </svg>
+                      ),
+                      text: openHours,
+                      label: "Hours"
+                    },
+                    {
+                      icon: <Tag className="h-5 w-5 text-yellow-500" />,
+                      text: priceRange,
+                      label: "Price Range"
+                    },
+                  ].map(({ icon, text, label }, index) => (
+                    <motion.div 
+                      key={index}
+                      initial={{ x: -20, opacity: 0 }}
+                      animate={{ x: 0, opacity: 1 }}
+                      transition={{ delay: 0.3 + index * 0.1, duration: 0.4 }}
+                      className="bg-gray-50 rounded-2xl p-4"
+                    >
+                      <div className="flex items-start gap-4">
+                        <div className="p-2.5 bg-yellow-300 rounded-xl shadow-sm">
+                          {icon}
+                        </div>
+                        <div className="flex-1">
+                          <p className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-1">
+                            {label}
+                          </p>
+                          <p className="text-base text-gray-800 font-medium leading-relaxed">
+                            {text}
+                          </p>
+                        </div>
+                      </div>
+                    </motion.div>
+                  ))}
+                </div>
+
+                {/* Enhanced Tabs */}
+                <div className="mt-6">
+                  <div className="flex bg-gray-100 rounded-2xl p-1">
+                    {["photos", "menu"].map((tab) => (
+                      <motion.button
+                        key={tab}
+                        className={`flex-1 text-center py-3 px-4 text-base font-semibold rounded-xl transition-all duration-300 ${
+                          activeTab === tab
+                            ? "bg-yellow-300 text-gray-900 shadow-sm"
+                            : "text-gray-500 hover:text-gray-700"
+                        }`}
+                        onClick={() => setActiveTab(tab as "photos" | "menu")}
+                        whileHover={{ scale: 1.02 }}
+                        whileTap={{ scale: 0.98 }}
+                      >
+                        {tab.charAt(0).toUpperCase() + tab.slice(1)}
+                      </motion.button>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Enhanced Photo/Menu Grid */}
+                <motion.div 
+                  key={activeTab}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.4 }}
+                  className="grid grid-cols-2 gap-3 mt-4"
+                >
+                  {photosToShow && photosToShow.length > 0 ? (
+                    photosToShow.slice(0, 6).map((photo, index) => (
+                      <motion.div
+                        key={index}
+                        initial={{ opacity: 0, scale: 0.9 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        transition={{ delay: index * 0.1, duration: 0.3 }}
+                        className={`relative rounded-2xl overflow-hidden bg-gray-100 shadow-sm ${
+                          index === 0 ? "col-span-2" : ""
+                        }`}
+                        whileHover={{ scale: 1.03 }}
+                        whileTap={{ scale: 0.97 }}
+                      >
+                        <div className={`relative w-full ${index === 0 ? "aspect-[2/1]" : "aspect-square"}`}>
+                          <Image
+                            src={photo}
+                            alt={`${location.name} ${activeTab} ${index + 1}`}
+                            layout="fill"
+                            objectFit="cover"
+                            className="cursor-pointer hover:opacity-90 transition-opacity duration-300"
+                            onClick={() => setEnlargedImage(photo)}
+                          />
+                        </div>
+                      </motion.div>
+                    ))
+                  ) : (
+                    <div className="col-span-2 text-center text-gray-400 py-12 bg-gray-50 rounded-2xl">
+                      <p className="text-lg font-medium">
+                        No {activeTab === "menu" ? "menu items" : "photos"} available.
+                      </p>
+                    </div>
+                  )}
+                </motion.div>
+
+                {/* Enhanced Action Buttons */}
+                <motion.div 
+                  initial={{ y: 20, opacity: 0 }}
+                  animate={{ y: 0, opacity: 1 }}
+                  transition={{ delay: 0.4, duration: 0.5 }}
+                  className="sticky bottom-0 z-10 bg-gradient-to-t from-white via-white/95 to-transparent pt-6 pb-4 mt-6"
+                >
+                  <GetDirectionsButton
+                    className="w-full bg-yellow-300 pb-4 hover:bg-yellow-400 text-gray-900 font-bold py-4 px-6 rounded-2xl shadow-lg hover:shadow-xl transform hover:scale-[1.02] transition-all duration-300"
+                    onClick={() => window.open(location.mapLink, "_blank")}
+                  />
+                  
+                </motion.div>
+              </motion.div>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
       </div>
     </div>
   );

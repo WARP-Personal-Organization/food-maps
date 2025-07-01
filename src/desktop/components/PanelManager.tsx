@@ -118,10 +118,12 @@ const PanelManager: React.ForwardRefRenderFunction<
     },
     getCurrentPanel: () => currentPanel,
   }));
-  const handleClosePanel = () => {
-    // Only clear filters when Explore panel is being closed
-    if (currentPanel === "explore" && onFilterApply) {
-      onFilterApply([]);
+  const handleClosePanel = (options?: { preserveFilters?: boolean }) => {
+    if (
+      !options?.preserveFilters &&
+      currentPanel === "explore" &&
+      onFilterApply
+    ) {
     }
 
     if (onClose) onClose();
@@ -134,22 +136,6 @@ const PanelManager: React.ForwardRefRenderFunction<
     setCurrentPanel("dishDetails");
     onPanelChange?.("dishDetails");
   }, [onPanelChange]);
-
-  // const handleClosePanel = () => {
-  //   if (onClose) onClose();
-  //   setCurrentPanel(null);
-  //   onPanelChange?.(null);
-  //   setSelectedLocation(null);
-  //   setSelectedFoodPrint(null);
-  // };
-
-  const handleOpenExplore = () => {
-    if (onClose) onClose();
-    setSelectedLocation(null);
-    setSelectedFoodPrint(null);
-    setCurrentPanel("explore");
-    onPanelChange?.("explore");
-  };
 
   return (
     <>
@@ -203,8 +189,12 @@ const PanelManager: React.ForwardRefRenderFunction<
           if (onFilterApply) {
             onFilterApply(filters);
             setTimeout(() => {
-              if (filters.length > 0) handleOpenExplore();
-              else handleClosePanel();
+              if (filters.length > 0) {
+                setCurrentPanel("explore");
+                onPanelChange?.("explore");
+              } else {
+                handleClosePanel();
+              }
             }, 0);
           }
         }}
@@ -219,6 +209,9 @@ const PanelManager: React.ForwardRefRenderFunction<
         location={selectedLocation}
         isVisible={currentPanel === "locationDetail"}
         onClose={handleClosePanel}
+        onViewDetails={() => {
+          setCurrentPanel("locationDetail");
+        }}
       />
 
       <FoodPrintDetailPanel

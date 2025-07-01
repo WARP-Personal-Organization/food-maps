@@ -4,7 +4,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import Image from 'next/image';
 import MenuButton from '@/components/buttons/MenuButton';
 import { Dish } from '@/types/types';
-import { ChevronsUp } from 'lucide-react';
+import { ChevronsDown, MapPin, Star } from 'lucide-react';
 import { denormalizeKey } from '@/lib/utils';
 
 interface HomePanelProps {
@@ -16,6 +16,7 @@ interface HomePanelProps {
 }
 
 const HEADER_HEIGHT_PX = 72;
+const FADE_DURATION_MS = 200;
 
 const HomePanel: React.FC<HomePanelProps> = ({
   dishes,
@@ -25,238 +26,349 @@ const HomePanel: React.FC<HomePanelProps> = ({
   onFilterApply,
 }) => {
   const scrollContainerRef = useRef<HTMLDivElement>(null);
-  const dishSectionRef = useRef<HTMLElement>(null);
-
   const [isScrolledDown, setIsScrolledDown] = useState(false);
   const [activeIndex, setActiveIndex] = useState(0);
-  const [isTitleVisible, setIsTitleVisible] = useState(false);
+  const [isFading, setIsFading] = useState(false);
 
   const activeDish = dishes[activeIndex] ?? dishes[0];
 
+  // Reset panel state when opened
   useEffect(() => {
-    if (isVisible) {
-      if (scrollContainerRef.current) {
-        scrollContainerRef.current.scrollTo({ top: 0, behavior: 'auto' });
-      }
+    if (isVisible && scrollContainerRef.current) {
+      scrollContainerRef.current.scrollTo({ top: 0, behavior: 'auto' });
       setIsScrolledDown(false);
       setActiveIndex(0);
-      const timer = setTimeout(() => setIsTitleVisible(true), 100);
-      return () => clearTimeout(timer);
-    } else {
-      setIsTitleVisible(false);
+      setIsFading(false);
     }
   }, [isVisible]);
 
+  // Maintain scroll position when navigating dishes (mobile only)
   useEffect(() => {
-    if (isScrolledDown && scrollContainerRef.current && dishSectionRef.current) {
-      // This auto-scroll is for when activeIndex changes and isScrolledDown is true,
-      // not for the initial scroll trigger from the button.
-      scrollContainerRef.current.scrollTo({
-        top: dishSectionRef.current.offsetTop,
-        behavior: 'auto',
+    if (isScrolledDown && scrollContainerRef.current && window.innerWidth < 1024) {
+      requestAnimationFrame(() => {
+        scrollContainerRef.current?.scrollTo({
+          top: window.innerHeight,
+          behavior: 'auto',
+        });
       });
     }
   }, [activeIndex, isScrolledDown]);
 
   const handleScroll = () => {
+    if (window.innerWidth >= 1024) return; // No scroll behavior on desktop
     const scrollTop = scrollContainerRef.current?.scrollTop || 0;
-    setIsScrolledDown(scrollTop > 50);
+    setIsScrolledDown(scrollTop >= window.innerHeight - 1);
   };
 
-  // Custom scroll function for slower animation
   const scrollToDishes = () => {
-    const container = scrollContainerRef.current;
-    const targetElement = dishSectionRef.current;
-
-    if (!container || !targetElement) {
-      return;
-    }
-
-    const startPosition = container.scrollTop;
-    const targetPosition = targetElement.offsetTop;
-    const distance = targetPosition - startPosition;
-    const duration = 150; // Adjust this value to control scroll speed (in milliseconds)
-                          // 1000ms = 1 second, 2000ms = 2 seconds, etc.
-    let startTime: number | null = null;
-
-    const animateScroll = (currentTime: number) => {
-      if (!startTime) {
-        startTime = currentTime;
-      }
-
-      const elapsedTime = currentTime - startTime;
-      const progress = Math.min(elapsedTime / duration, 1); // Clamp progress between 0 and 1
-
-      // Linear interpolation for simplicity. You could add easing functions here for more natural movement.
-      const newScrollTop = startPosition + distance * progress;
-
-      container.scrollTop = newScrollTop;
-
-      if (elapsedTime < duration) {
-        requestAnimationFrame(animateScroll);
-      }
-    };
-
-    requestAnimationFrame(animateScroll);
+    if (window.innerWidth >= 1024) return; // No scroll on desktop
+    scrollContainerRef.current?.scrollTo({
+      top: window.innerHeight,
+      behavior: 'smooth',
+    });
   };
 
   const handleApplyFilter = () => {
-    if (activeDish?.name) {
-      onFilterApply([activeDish.name]);
-    }
+    if (activeDish?.name) onFilterApply([activeDish.name]);
     onClose();
   };
 
   const onNext = () => {
-    setActiveIndex((prev) => (prev + 1) % dishes.length);
+    setIsFading(true);
+    setTimeout(() => {
+      setActiveIndex((prev) => (prev + 1) % dishes.length);
+      setIsFading(false);
+    }, FADE_DURATION_MS);
   };
 
   const onPrev = () => {
-    setActiveIndex((prev) => (prev - 1 + dishes.length) % dishes.length);
+    setIsFading(true);
+    setTimeout(() => {
+      setActiveIndex((prev) => (prev - 1 + dishes.length) % dishes.length);
+      setIsFading(false);
+    }, FADE_DURATION_MS);
   };
+
+  if (!activeDish && isVisible) return null;
 
   return (
     <div
-      className={`fixed bottom-0 w-full h-full bg-white z-30 rounded-t-sm shadow-lg transition-transform duration-300 ${
-        isVisible ? 'translate-y-0' : 'translate-y-full'
-      } flex flex-col`}
+      className={`fixed bottom-0 w-full h-full bg-white z-40 shadow-2xl
+      transform transition-transform duration-500 ease-out
+      ${isVisible ? 'translate-y-0' : 'translate-y-full'}
+      lg:rounded-t-none lg:rounded-l-3xl`}
     >
-      {/* Header */}
-      <div
-        className="absolute top-0 left-0 right-0 px-6 py-4 flex items-center justify-between z-50"
-        style={{ height: `${HEADER_HEIGHT_PX}px` }}
-      >
-        <h1
-          className={`text-5xl font-bold font-['Faustina'] text-white transition-opacity duration-500 ease-in ${
-            isTitleVisible && !isScrolledDown ? 'opacity-100' : 'opacity-0'
-          }`}
+      {/* Mobile Layout */}
+      <div className="lg:hidden h-full">
+        {/* Mobile Header */}
+        <div
+          className="absolute top-3 sm:top-5 w-full px-4 sm:px-6 py-4 flex items-center justify-between z-50"
+          style={{ height: `${HEADER_HEIGHT_PX}px` }}
         >
-          foodprints
-        </h1>
-        <MenuButton onClick={openMenu} />
-      </div>
+          <h1
+            className={`text-3xl sm:text-4xl md:text-5xl font-bold font-['Faustina'] text-white transition-opacity duration-300
+            ${isScrolledDown ? 'opacity-0' : 'opacity-100'}`}
+          >
+            foodprints
+          </h1>
+          <MenuButton onClick={openMenu} />
+        </div>
 
-      {/* Scrollable Content */}
-      <div
-        ref={scrollContainerRef}
-        className="flex-grow overflow-y-scroll overflow-x-hidden"
-        onScroll={handleScroll}
-      >
-        {/* Hero Section */}
-        <section
-          className="relative min-h-screen w-full flex flex-col items-center justify-between text-center pb-12"
-          style={{ paddingTop: `${HEADER_HEIGHT_PX}px` }}
+        {/* Mobile Scrollable Container */}
+        <div
+          ref={scrollContainerRef}
+          className="h-full overflow-y-scroll overflow-x-hidden"
+          style={{ scrollBehavior: 'smooth' }}
+          onScroll={handleScroll}
         >
-          {/* Background */}
-          <div className="absolute inset-0 -mx-10 -my-10">
-            <Image
-              src="/images/map/FoodMapsMobile.svg"
-              alt="Map of Iloilo City"
-              fill
-              className="object-cover blur-sm"
-              priority
-            />
-            <div className="absolute inset-0 bg-black opacity-50" />
-          </div>
-
-          {/* Title */}
-          <div className="relative z-40 flex flex-col items-center px-8 mt-auto mb-auto">
-            <h1 className="text-white text-4xl sm:text-5xl font-['Faustina'] mb-4 py-2 px-6 text-center">
-              Trace the
-              <br />
-              <span className="mt-3 bg-gray-200 bg-opacity-80 py-2 px-6 rounded-md text-black inline-block">
-                Flavors of Iloilo City
-              </span>
-            </h1>
-          </div>
-
-          {/* Description */}
-          <div className="relative z-40 flex py-2 px-10">
-            <p className="text-white text-lg sm:text-xl leading-relaxed max-w-md">
-              Discover where to find the best Ilonggo dishes, check out the map,
-              and start your food adventure!
-            </p>
-          </div>
-
-          {/* Scroll Trigger */}
-          <div className="relative z-40 w-full flex justify-center mt-auto">
-            <button
-              onClick={scrollToDishes}
-              className="p-2 rounded-full shadow-lg hover:bg-gray-100 transition-colors"
-              aria-label="Scroll down to explore dishes"
-            >
-              <ChevronsUp size={70} className="text-gray-400" />
-            </button>
-          </div>
-        </section>
-
-        {/* Dish Section */}
-        <section ref={dishSectionRef} className="w-full bg-white pb-8 min-h-screen flex flex-col">
-          {/* Dish Image */}
-          <div className="relative w-full h-[60vw] sm:h-[50vw] md:h-[40vw] lg:h-[300px]">
-            {activeDish?.image ? (
+          {/* Mobile Intro Section */}
+          <section
+            className="relative h-screen w-full flex flex-col items-center justify-between text-center pb-8 sm:pb-12"
+            style={{ paddingTop: `${HEADER_HEIGHT_PX}px` }}
+          >
+            <div className="absolute inset-0 -mx-10 -my-10">
               <Image
-                src={activeDish.image}
-                alt={activeDish.name}
+                src="/images/map/FoodMapsMobile.svg"
+                alt="Map of Iloilo City"
                 fill
-                className="object-cover"
+                className="object-cover blur-sm"
                 priority
               />
-            ) : (
-              <div className="w-full h-full bg-gray-200 flex items-center justify-center text-gray-500">
-                No Image Available
-              </div>
-            )}
-          </div>
-
-          {/* Dish Info + Button */}
-          <div className="flex flex-col gap-8 px-6 pt-4 flex-grow">
-            <div className="flex items-center justify-between">
-              <h1 className="text-3xl sm:text-4xl md:text-8xl font-bold font-faustina text-[#202020]">
-                {denormalizeKey(activeDish.name)}
-              </h1>
-              <div className="flex items-center gap-2">
-              <button
-                  onClick={onPrev}
-                  disabled={activeIndex === 0}
-                  className={`h-10 w-10 p-2 rounded-full flex items-center justify-center transition-colors
-                    ${activeIndex === 0 ? "bg-gray-300 text-gray-500 cursor-not-allowed" : "bg-yellow-300 hover:bg-[#E6C207]"}`}
-                  aria-label="Previous dish"
-                >
-                  ❮
-                </button>
-               <button
-                    onClick={onNext}
-                    disabled={activeIndex === dishes.length - 1}
-                    className={`h-10 w-10 p-2 rounded-full flex items-center justify-center transition-colors
-                      ${activeIndex === dishes.length - 1 ? "bg-gray-300 text-gray-500 cursor-not-allowed" : "bg-yellow-300 hover:bg-[#E6C207]"}`}
-                    aria-label="Next dish"
-                  >
-                  ❯
-                </button>
-              </div>
+              <div className="absolute inset-0 bg-black opacity-60" />
             </div>
 
-            <h3 className="font-bold italic text-base sm:text-lg md:text-4xl text-[#7c7c7c]">
-              {activeDish?.tagline || 'A delicious culinary experience.'}
-            </h3>
+            <div className="relative z-40 flex flex-col items-center px-4 sm:px-8 mt-auto mb-auto">
+              <h1 className="text-white text-4xl sm:text-5xl md:text-6xl font-['Faustina'] mb-4 py-2 px-4 sm:px-6 text-center leading-tight">
+                Trace the
+                <br />
+                <span className="mt-2 sm:mt-3 bg-yellow-300 bg-opacity-95 py-2 px-4 sm:px-6 rounded-xl text-gray-900 inline-block font-black shadow-lg">
+                  Flavors of Iloilo City
+                </span>
+              </h1>
+            </div>
 
-            <p className="text-[#2a2a2a] text-base sm:text-lg md:text-4xl leading-relaxed">
-              {activeDish?.description || 'Description of the dish goes here.'}
-            </p>
+            <div className="relative z-40 flex px-4 sm:px-0">
+              <p className="text-white text-base sm:text-lg leading-relaxed max-w-sm sm:max-w-lg text-center">
+                Discover where to find the best Ilonggo dishes, check out the map,
+                and start your food adventure!
+              </p>
+            </div>
 
-            {/* "Where to Eat" Button - Back in its original position */}
-            <div className="static pt-10 mt-auto z-50">
+            <div className="relative z-40 w-full flex justify-center mt-auto">
               <button
+                onClick={scrollToDishes}
+                className="p-3 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center
+                shadow-lg hover:bg-white/30 transition-all duration-300 cursor-pointer touch-manipulation"
+                aria-label="Scroll down to explore dishes"
+              >
+                <ChevronsDown size={32} className="sm:hidden text-white" />
+                <ChevronsDown size={40} className="hidden sm:block text-white" />
+              </button>
+            </div>
+          </section>
+
+          {/* Mobile Dish Section */}
+          <section className="min-h-screen w-full bg-gradient-to-br from-white to-yellow-50 relative">
+            <div className="px-4 sm:px-6 pt-8 pb-8">
+              <div className="mb-6">
+                <Image
+                  src="/foodprints-home-logo.png"
+                  alt="FoodPrints Logo"
+                  width={150}
+                  height={42}
+                  className="sm:w-[180px] sm:h-[50px]"
+                  priority
+                />
+              </div>
+
+              <div
+                className={`transition-opacity duration-${FADE_DURATION_MS} ${isFading ? 'opacity-0' : 'opacity-100'}`}
+              >
+                <div className="mb-6">
+                  <div className="relative h-48 sm:h-64 w-full rounded-2xl overflow-hidden shadow-xl">
+                    <Image
+                      src={activeDish.image}
+                      alt={activeDish.name}
+                      fill
+                      className="object-cover"
+                      priority
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent" />
+                  </div>
+                </div>
+
+                <div className="bg-white rounded-2xl p-6 shadow-lg border border-yellow-100">
+                  <div className="flex items-center gap-2 mb-3">
+                    <Star className="w-4 h-4 text-yellow-500 fill-current" />
+                    <span className="text-sm font-semibold text-yellow-600 uppercase tracking-wide">
+                      Ilonggo&apos;s Best Dishes
+                    </span>
+                  </div>
+
+                  <h1 className="font-faustina text-3xl sm:text-4xl font-bold text-gray-900 mb-2 leading-tight">
+                    {denormalizeKey(activeDish.name)}
+                  </h1>
+
+                  <h3 className="font-faustina italic text-gray-600 text-lg mb-4">
+                    {activeDish.tagline}
+                  </h3>
+
+                  <p className="text-gray-700 text-base leading-relaxed mb-6">
+                    {activeDish.description}
+                  </p>
+
+                  <button
+                    className="w-full bg-gradient-to-r from-yellow-400 to-yellow-500 hover:from-yellow-500 hover:to-yellow-600 text-gray-900 font-bold py-4 rounded-xl text-center transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-[1.02] touch-manipulation"
+                    onClick={handleApplyFilter}
+                  >
+                    Where to Eat
+                  </button>
+                </div>
+
+                <div className="mt-6 flex justify-center">
+                  <div className="flex items-center gap-4">
+                    <button
+                      onClick={onPrev}
+                      className="w-12 h-12 bg-yellow-300 hover:bg-yellow-400 rounded-full flex items-center justify-center shadow-lg transition-all duration-300 touch-manipulation"
+                    >
+                      <span className="text-lg">❮</span>
+                    </button>
+
+                    <div className="flex gap-2">
+                      {dishes.map((_, index) => (
+                        <button
+                          key={index}
+                          onClick={() => setActiveIndex(index)}
+                          className={`w-2 h-2 rounded-full transition-all duration-300 ${
+                            activeIndex === index ? 'bg-yellow-500 w-4' : 'bg-gray-300'
+                          }`}
+                        />
+                      ))}
+                    </div>
+
+                    <button
+                      onClick={onNext}
+                      className="w-12 h-12 bg-yellow-300 hover:bg-yellow-400 rounded-full flex items-center justify-center shadow-lg transition-all duration-300 touch-manipulation"
+                    >
+                      <span className="text-lg">❯</span>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+        </div>
+      </div>
+
+      {/* Desktop Layout - Always Split View */}
+      <div className="hidden lg:flex h-full">
+        {/* Left Panel - Always Visible Carousel */}
+        <div className="w-[400px] xl:w-[450px] 2xl:w-[500px] h-full bg-gradient-to-br from-white to-yellow-50 border-r-4 border-yellow-300 flex flex-col">
+          {/* Desktop Header */}
+          <div className="flex items-center justify-between p-6 xl:p-8 border-b border-yellow-200">
+            <Image
+              src="/foodprints-home-logo.png"
+              alt="FoodPrints Logo"
+              width={180}
+              height={50}
+              priority
+            />
+            <MenuButton onClick={openMenu} />
+          </div>
+
+          {/* Desktop Content */}
+          <div className="flex-1 flex flex-col">
+            <div
+              className={`flex-1 p-6 xl:p-8 transition-opacity duration-${FADE_DURATION_MS} ${isFading ? 'opacity-0' : 'opacity-100'}`}
+            >
+              <div className="flex items-center gap-2 mb-4">
+                <Star className="w-5 h-5 text-yellow-500 fill-current" />
+                <span className="text-sm font-bold text-yellow-600 uppercase tracking-wide">
+                  Ilonggo&apos;s Best Dishes
+                </span>
+              </div>
+
+              <h1 className="font-faustina text-4xl xl:text-5xl 2xl:text-6xl font-bold text-gray-900 mb-3 xl:mb-4 leading-tight">
+                {denormalizeKey(activeDish.name)}
+              </h1>
+
+              <h3 className="font-faustina italic text-gray-600 text-xl xl:text-2xl mb-4 xl:mb-6">
+                {activeDish.tagline}
+              </h3>
+
+              <p className="text-gray-700 text-base xl:text-lg leading-relaxed mb-6 xl:mb-8">
+                {activeDish.description}
+              </p>
+
+              <div className="flex items-center gap-2 text-gray-600 mb-6">
+                <MapPin className="w-4 h-4 text-yellow-500" />
+                <span className="text-sm">
+                  {activeDish.locations?.length || 0} locations available
+                </span>
+              </div>
+
+              <button
+                className="w-full bg-gradient-to-r from-yellow-400 to-yellow-500 hover:from-yellow-500 hover:to-yellow-600 text-gray-900 font-bold py-4 xl:py-5 rounded-xl text-lg transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-[1.02]"
                 onClick={handleApplyFilter}
-                className="w-full bg-[#F9D408] text-[#3b3b3b] font-bold dont text-base py-2
-                rounded-[8px] text-center hover:bg-[#E6C207] transition-colors shadow-sm md:text-4xl"
               >
                 Where to Eat
               </button>
             </div>
+
+            {/* Desktop Navigation */}
+            <div className="p-6 xl:p-8 bg-white border-t border-yellow-200">
+              <div className="flex items-center justify-between">
+                <button
+                  onClick={onPrev}
+                  className="w-14 h-14 xl:w-16 xl:h-16 bg-yellow-300 hover:bg-yellow-400 rounded-full flex items-center justify-center shadow-lg transition-all duration-300"
+                  aria-label="Previous dish"
+                >
+                  <span className="text-xl xl:text-2xl">❮</span>
+                </button>
+
+                <div className="flex flex-col items-center gap-3">
+                  <div className="flex gap-2">
+                    {dishes.map((_, index) => (
+                      <button
+                        key={index}
+                        onClick={() => setActiveIndex(index)}
+                        className={`w-3 h-3 rounded-full transition-all duration-300 ${
+                          activeIndex === index ? 'bg-yellow-500 w-6' : 'bg-gray-300'
+                        }`}
+                        aria-label={`Go to dish ${index + 1}`}
+                      />
+                    ))}
+                  </div>
+                  <span className="text-sm text-gray-600 font-medium">
+                    {activeIndex + 1} of {dishes.length}
+                  </span>
+                </div>
+
+                <button
+                  onClick={onNext}
+                  className="w-14 h-14 xl:w-16 xl:h-16 bg-yellow-300 hover:bg-yellow-400 rounded-full flex items-center justify-center shadow-lg transition-all duration-300"
+                  aria-label="Next dish"
+                >
+                  <span className="text-xl xl:text-2xl">❯</span>
+                </button>
+              </div>
+            </div>
           </div>
-        </section>
+        </div>
+
+        {/* Right Panel - Image */}
+        <div
+          className={`flex-1 relative transition-opacity duration-${FADE_DURATION_MS} ${isFading ? 'opacity-0' : 'opacity-100'}`}
+        >
+          <Image
+            src={activeDish.image}
+            alt={activeDish.name}
+            fill
+            className="object-cover"
+            priority
+          />
+          <div className="absolute inset-0 bg-gradient-to-l from-transparent to-black/10" />
+        </div>
       </div>
     </div>
   );
