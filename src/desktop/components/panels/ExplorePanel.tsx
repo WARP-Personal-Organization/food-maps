@@ -140,6 +140,7 @@ const ExplorePanel: React.FC<ExplorePanelProps> = ({
                         src={location.iconUrl || '/images/filter-dish/siopao.png'}
                         alt={location.name}
                         className="w-full h-full object-cover"
+                        fill
                       />
                     </div>
                     <div className="flex-1 min-w-0">

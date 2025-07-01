@@ -14,26 +14,42 @@
   height: 100%;
   width: 100%;
   background-color: #3b3b3f !important;
-  background-image: url('/images/map/FoodPrints-Map.png');
-  background-size: cover;
-  background-repeat: no-repeat;
-  background-position: center;
+  background-image: url("/images/map/background-2.png");
+  background-size: fill;         /* Cover the whole container */
+  background-repeat: no-repeat;   /* Do not repeat */
+  background-position: center center; /* Center the image both ways */
   position: relative;
+  z-index: 0;
 }
 
-.map-container::after {
-  content: '';
+/* Compass (below) */
+/* .map-container::before {
+  content: "";
   position: absolute;
-  bottom: 120;
-  right: 10;
-  width: 100px;
-  height: 100px;
-  background-image: url('/images/map/Compass.png');
+  bottom: 120px;
+  right: 2%;
+  width: 256px;
+  height: 2560px;
+  background-image: url("/images/dg-elements/Dg-logo.png");
   background-size: contain;
   background-repeat: no-repeat;
   background-position: bottom right;
   pointer-events: none;
 }
+.map-container::before {
+  content: "";
+  position: absolute;
+  bottom: 120px;
+  right: 2%;
+  width: 256px;
+  height: 2560px;
+  background-image: url("/images/dg-elements/foodmaps-logo.png");
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: bottom right;
+  pointer-events: none;
+} */
+
 
 .mapboxgl-canvas {
   width: 100% !important;
@@ -142,6 +158,7 @@
   justify-content: center;
   align-items: center;
   position: relative;
+  pointer-events: none;
 }
 
 /* Hide Mapbox logo and attribution */

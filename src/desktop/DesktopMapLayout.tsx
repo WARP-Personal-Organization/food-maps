@@ -12,7 +12,7 @@ import {
 import { IoClose } from "react-icons/io5";
 import MenuButton from "@/components/buttons/MenuButton";
 import FilterButton from "@/components/buttons/FilterButton";
-import HomeButton from "@/components/buttons/HomeButton";
+// import HomeButton from "@/components/buttons/HomeButton";
 import { FoodPrintData } from "@/lib/FoodPrintData";
 import { denormalizeKey } from "@/lib/utils";
 
@@ -131,13 +131,13 @@ const DesktopMapLayout: React.FC<DesktopMapLayoutProps> = ({
         >
           <div className="flex items-center gap-4 px-4 py-3 overflow-x-auto pt-10">
             <div className="flex items-center gap-2 shrink-0">
-              <HomeButton
+              {/* <HomeButton
                 className="z-10"
                 onClick={() => {
                   panelRef.current?.openDishDetails();
                   setPanelOpen(true);
                 }}
-              />
+              /> */}
               <FilterButton
                 isDesktop={true}
                 onClick={() => {

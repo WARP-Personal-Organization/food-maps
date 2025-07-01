@@ -95,7 +95,7 @@ const AboutPanel: React.FC<AboutPanelProps> = ({ onClose, isVisible }) => {
                 </div>
 
                 {/* Feature highlights */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-6">
+                {/* <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-6">
                   <div className="bg-yellow-50 rounded-xl p-4 border border-yellow-200">
                     <h4 className="font-semibold text-gray-900 mb-2">Interactive Mapping</h4>
                     <p className="text-sm text-gray-600">Precise locations with detailed information</p>
@@ -104,13 +104,13 @@ const AboutPanel: React.FC<AboutPanelProps> = ({ onClose, isVisible }) => {
                     <h4 className="font-semibold text-gray-900 mb-2">Community Reviews</h4>
                     <p className="text-sm text-gray-600">Authentic experiences from locals</p>
                   </div>
-                </div>
+                </div> */}
               </div>
             </div>
 
             {/* Enhanced Partners Section */}
-            <div className="w-full mt-8 lg:mt-12">
-              <div className="text-center lg:text-left mb-6">
+            <div className="w-full mt-8 lg:mt-12 mb-20">
+              <div className="text-center lg:text-left pb-6">
                 <h2 className="font-bold text-lg sm:text-xl text-gray-900 mb-2 flex items-center justify-center lg:justify-start gap-2">
                   <Users className="w-5 h-5 text-yellow-500" />
                   Our Partners
