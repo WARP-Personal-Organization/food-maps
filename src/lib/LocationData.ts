@@ -16,7 +16,7 @@ export const LocationData: Record<string, Location[]> = {
         "/images/location-photos/robertos-3.jpg",
         "/images/location-photos/robertos-4.jpg",
       ],
-      iconUrl: "/images/pin-marker-icons/siopao.png",
+      iconUrl: "/images/pin-marker-icons/siopao.webp",
     },
     {
       name: "Dinagyang Siopao",
@@ -33,7 +33,7 @@ export const LocationData: Record<string, Location[]> = {
         "/images/location-photos/dinagyang-3.jpg",
         "/images/location-photos/dinagyang-4.jpg",
       ],
-      iconUrl: "/images/pin-marker-icons/siopao.png",
+      iconUrl: "/images/pin-marker-icons/siopao.webp",
     },
     {
       name: "Nang Pat's Siopawan",
@@ -49,7 +49,7 @@ export const LocationData: Record<string, Location[]> = {
         "/images/location-photos/nang-3.jpg",
         "/images/location-photos/nang-4.jpg",
       ],
-      iconUrl: "/images/pin-marker-icons/siopao.png",
+      iconUrl: "/images/pin-marker-icons/siopao.webp",
     },
     {
       name: "Deocampo Barquillos",
@@ -65,7 +65,7 @@ export const LocationData: Record<string, Location[]> = {
         "/images/location-photos/deocampo-3.jpg",
         "/images/location-photos/deocampo-4.jpg",
       ],
-      iconUrl: "/images/pin-marker-icons/siopao.png",
+      iconUrl: "/images/pin-marker-icons/siopao.webp",
     },
   ],
   Batchoy: [
@@ -83,7 +83,7 @@ export const LocationData: Record<string, Location[]> = {
         "/images/location-photos/netong’s-3.jpg",
         "/images/location-photos/netong’s-4.jpg",
       ],
-      iconUrl: "/images/pin-marker-icons/batchoy.png",
+      iconUrl: "/images/pin-marker-icons/batchoy.webp",
     },
     {
       name: "Inggo’s",
@@ -99,7 +99,7 @@ export const LocationData: Record<string, Location[]> = {
         "/images/location-photos/inggo’s-3.jpg",
         "/images/location-photos/inggo’s-4.jpg",
       ],
-      iconUrl: "/images/pin-marker-icons/batchoy.png",
+      iconUrl: "/images/pin-marker-icons/batchoy.webp",
     },
     {
       name: "Deco’s",
@@ -116,7 +116,7 @@ export const LocationData: Record<string, Location[]> = {
         "/images/location-photos/deco’s-3.jpg",
         "/images/location-photos/deco’s-4.jpg",
       ],
-      iconUrl: "/images/pin-marker-icons/batchoy.png",
+      iconUrl: "/images/pin-marker-icons/batchoy.webp",
     },
     {
       name: "Alicia’s",
@@ -133,7 +133,7 @@ export const LocationData: Record<string, Location[]> = {
         "/images/location-photos/alicia’s-3.jpg",
         "/images/location-photos/alicia’s-4.jpg",
       ],
-      iconUrl: "/images/pin-marker-icons/batchoy.png",
+      iconUrl: "/images/pin-marker-icons/batchoy.webp",
     },
     {
       name: "Ted’s",
@@ -149,7 +149,7 @@ export const LocationData: Record<string, Location[]> = {
         "/images/location-photos/ted’s-3.jpg",
         "/images/location-photos/ted’s-4.jpg",
       ],
-      iconUrl: "/images/pin-marker-icons/batchoy.png",
+      iconUrl: "/images/pin-marker-icons/batchoy.webp",
     },
     {
       name: "Doming's",
@@ -165,7 +165,7 @@ export const LocationData: Record<string, Location[]> = {
         "/images/location-photos/doming's-3.jpg",
         "/images/location-photos/doming's-4.jpg",
       ],
-      iconUrl: "/images/pin-marker-icons/batchoy.png",
+      iconUrl: "/images/pin-marker-icons/batchoy.webp",
     },
   ],
   Cansi: [
@@ -183,7 +183,7 @@ export const LocationData: Record<string, Location[]> = {
         "/images/location-photos/patpat’s-3.jpg",
         "/images/location-photos/patpat’s-4.jpg",
       ],
-      iconUrl: "/images/pin-marker-icons/cansi.png",
+      iconUrl: "/images/pin-marker-icons/cansi.webp",
     },
     {
       name: "Tatay Andres",
@@ -200,7 +200,7 @@ export const LocationData: Record<string, Location[]> = {
         "/images/location-photos/tatay-3.jpg",
         "/images/location-photos/tatay-4.jpg",
       ],
-      iconUrl: "/images/pin-marker-icons/cansi.png",
+      iconUrl: "/images/pin-marker-icons/cansi.webp",
     },
     {
       name: "Pedbacs",
@@ -216,7 +216,7 @@ export const LocationData: Record<string, Location[]> = {
         "/images/location-photos/pedbacs-3.jpg",
         "/images/location-photos/pedbacs-4.jpg",
       ],
-      iconUrl: "/images/pin-marker-icons/cansi.png",
+      iconUrl: "/images/pin-marker-icons/cansi.webp",
     },
   ],
   KBL: [
@@ -234,7 +234,7 @@ export const LocationData: Record<string, Location[]> = {
         "/images/location-photos/doming's-3.jpg",
         "/images/location-photos/doming's-4.jpg",
       ],
-      iconUrl: "/images/pin-marker-icons/kbl.png",
+      iconUrl: "/images/pin-marker-icons/kbl.webp",
     },
     {
       name: "Punot",
@@ -258,7 +258,7 @@ export const LocationData: Record<string, Location[]> = {
         "images/menu/kbl/punot/punot_menu_4.jpg",
         "images/menu/kbl/punot/punot_menu_5.jpg",
       ],
-      iconUrl: "/images/pin-marker-icons/kbl.png",
+      iconUrl: "/images/pin-marker-icons/kbl.webp",
     },
     {
       name: "Breakthrough",
@@ -275,7 +275,7 @@ export const LocationData: Record<string, Location[]> = {
         "images/menu/kbl/breakthrough/breakthrough_menu_4.jpg",
       ],
       photos: ["/images/food/kbl/kbl-breakthrough.jpg"],
-      iconUrl: "/images/pin-marker-icons/kbl.png",
+      iconUrl: "/images/pin-marker-icons/kbl.webp",
     },
   ],
   PancitMolo: [
@@ -294,7 +294,7 @@ export const LocationData: Record<string, Location[]> = {
         "/images/location-photos/kap-3.jpg",
         "/images/location-photos/kap-4.jpg",
       ],
-      iconUrl: "/images/pin-marker-icons/pancit-molo.png",
+      iconUrl: "/images/pin-marker-icons/pancit-molo.webp",
     },
     {
       name: "Panaderia de Molo",
@@ -310,7 +310,7 @@ export const LocationData: Record<string, Location[]> = {
         "/images/location-photos/panaderia-3.jpg",
         "/images/location-photos/panaderia-4.jpg",
       ],
-      iconUrl: "/images/pin-marker-icons/pancit-molo.png",
+      iconUrl: "/images/pin-marker-icons/pancit-molo.webp",
     },
     {
       name: "Hotel del Rio",
@@ -326,7 +326,7 @@ export const LocationData: Record<string, Location[]> = {
         "/images/location-photos/hotel-3.jpg",
         "/images/location-photos/hotel-4.jpg",
       ],
-      iconUrl: "/images/pin-marker-icons/pancit-molo.png",
+      iconUrl: "/images/pin-marker-icons/pancit-molo.webp",
     },
   ],
   ChickenInasal: [
@@ -345,7 +345,7 @@ export const LocationData: Record<string, Location[]> = {
         "/images/location-photos/barrio-3.jpg",
         "/images/location-photos/barrio-4.jpg",
       ],
-      iconUrl: "/images/pin-marker-icons/inasal.png",
+      iconUrl: "/images/pin-marker-icons/inasal.webp",
     },
     {
       name: "Arturo’s Barbeque",
@@ -362,7 +362,7 @@ export const LocationData: Record<string, Location[]> = {
         "/images/location-photos/arturo’s-3.jpg",
         "/images/location-photos/arturo’s-4.jpg",
       ],
-      iconUrl: "/images/pin-marker-icons/inasal.png",
+      iconUrl: "/images/pin-marker-icons/inasal.webp",
     },
     {
       name: "Chicken Sari-Sari",
@@ -378,7 +378,7 @@ export const LocationData: Record<string, Location[]> = {
         "/images/location-photos/chicken-3.jpg",
         "/images/location-photos/chicken-4.jpg",
       ],
-      iconUrl: "/images/pin-marker-icons/inasal.png",
+      iconUrl: "/images/pin-marker-icons/inasal.webp",
     },
     {
       name: "Raac's Unli Rice",
@@ -394,7 +394,7 @@ export const LocationData: Record<string, Location[]> = {
         "/images/location-photos/raac's-3.jpg",
         "/images/location-photos/raac's-4.jpg",
       ],
-      iconUrl: "/images/pin-marker-icons/inasal.png",
+      iconUrl: "/images/pin-marker-icons/inasal.webp",
     },
   ],
   Seafood: [
@@ -412,7 +412,7 @@ export const LocationData: Record<string, Location[]> = {
         "/images/location-photos/tatoy's-3.jpg",
         "/images/location-photos/tatoy's-4.jpg",
       ],
-      iconUrl: "/images/pin-marker-icons/seafood.png",
+      iconUrl: "/images/pin-marker-icons/seafood.webp",
     },
     {
       name: "Breakthrough Restaurant Iloilo",
@@ -428,7 +428,7 @@ export const LocationData: Record<string, Location[]> = {
         "/images/location-photos/breakthrough-3.jpg",
         "/images/location-photos/breakthrough-4.jpg",
       ],
-      iconUrl: "/images/pin-marker-icons/seafood.png",
+      iconUrl: "/images/pin-marker-icons/seafood.webp",
     },
     {
       name: "Erning’s Manokan & Seafood Restaurant",
@@ -445,7 +445,7 @@ export const LocationData: Record<string, Location[]> = {
         "/images/location-photos/erning’s-3.jpg",
         "/images/location-photos/erning’s-4.jpg",
       ],
-      iconUrl: "/images/pin-marker-icons/seafood.png",
+      iconUrl: "/images/pin-marker-icons/seafood.webp",
     },
     {
       name: "Annie's Place",
@@ -462,7 +462,7 @@ export const LocationData: Record<string, Location[]> = {
         "/images/location-photos/annie's-3.jpg",
         "/images/location-photos/annie's-4.jpg",
       ],
-      iconUrl: "/images/pin-marker-icons/seafood.png",
+      iconUrl: "/images/pin-marker-icons/seafood.webp",
     },
     {
       name: "Bulljack’s Talabahan",
@@ -478,7 +478,7 @@ export const LocationData: Record<string, Location[]> = {
         "/images/location-photos/bulljack’s-3.jpg",
         "/images/location-photos/bulljack’s-4.jpg",
       ],
-      iconUrl: "/images/pin-marker-icons/seafood.png",
+      iconUrl: "/images/pin-marker-icons/seafood.webp",
     },
     {
       name: "Matmat Talabahan Seafood and Restaurant",
@@ -495,7 +495,7 @@ export const LocationData: Record<string, Location[]> = {
         "/images/location-photos/matmat-3.jpg",
         "/images/location-photos/matmat-4.jpg",
       ],
-      iconUrl: "/images/pin-marker-icons/seafood.png",
+      iconUrl: "/images/pin-marker-icons/seafood.webp",
     },
     {
       name: "Igma Seafood Restaurant",
@@ -511,7 +511,7 @@ export const LocationData: Record<string, Location[]> = {
         "/images/location-photos/igma-3.jpg",
         "/images/location-photos/igma-4.jpg",
       ],
-      iconUrl: "/images/pin-marker-icons/seafood.png",
+      iconUrl: "/images/pin-marker-icons/seafood.webp",
     },
   ],
 };
