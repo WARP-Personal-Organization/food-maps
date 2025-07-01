@@ -4,11 +4,12 @@ import React, { useEffect, useMemo, useRef, useState } from "react";
 import mapboxgl from "mapbox-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
 import "@/styles/map.css";
-import { FoodPrint, Location } from "@/types/types";
+import { FoodPrint, Location, District } from "@/types/types";
 
 interface MapComponentProps {
   locations: Location[];
   foodPrintMarkers?: FoodPrint[];
+  districts?: District[];
   mapImageUrl?: string;
   mapBounds: [[number, number], [number, number]];
   defaultZoom?: number;
@@ -42,6 +43,7 @@ const xyToLngLat = (
 const MapComponent: React.FC<MapComponentProps> = ({
   locations = [],
   foodPrintMarkers = [],
+  districts = [],
   mapImageUrl = "/images/map/FoodPrints-Map.png",
   mapBounds = [
     [0, 0],
@@ -110,7 +112,21 @@ const MapComponent: React.FC<MapComponentProps> = ({
         attributionControl: false,
         renderWorldCopies: false,
         interactive: true,
+        // Enable 3D tilt and rotation for desktop only
+        dragRotate: isDesktop,
+        pitch: isDesktop ? 45 : 0,
+        bearing: isDesktop ? 0 : 0,
       });
+
+      // Limit the maximum pitch (tilt) for desktop by clamping to 60
+      if (isDesktop) {
+        map.on("load", () => {
+          if (map.getPitch() > 60) map.setPitch(60);
+          map.on("pitch", () => {
+            if (map.getPitch() > 60) map.setPitch(60);
+          });
+        });
+      }
 
       // Function to add markers to the map
       const addMarkers = () => {
@@ -174,6 +190,8 @@ const MapComponent: React.FC<MapComponentProps> = ({
           }
           const markerElement = document.createElement("div");
           markerElement.className = "custom-marker location-marker"; // Class for locations
+          markerElement.tabIndex = 0;
+          markerElement.setAttribute("role", "button");
 
           if (location.iconUrl) {
             markerElement.innerHTML = `
@@ -195,7 +213,7 @@ const MapComponent: React.FC<MapComponentProps> = ({
             .addTo(map);
 
           marker.getElement().addEventListener("click", (e) => {
-            e.stopPropagation(); // Prevent map click event when clicking marker
+            e.stopPropagation();
             if (popupRef.current) {
               popupRef.current.remove();
             }
@@ -236,7 +254,7 @@ const MapComponent: React.FC<MapComponentProps> = ({
 
           // Add popup for food print marker
           marker.getElement().addEventListener("click", (e) => {
-            e.stopPropagation(); // Prevent map click event
+            e.stopPropagation(); //Prevent map click event
             if (popupRef.current) {
               popupRef.current.remove();
             }
@@ -247,6 +265,35 @@ const MapComponent: React.FC<MapComponentProps> = ({
             }
           });
 
+          markersRef.current.push(marker);
+        });
+
+        // Add area label markers
+        districts.forEach((district) => {
+          if (
+            typeof district.x !== "number" ||
+            typeof district.y !== "number" ||
+            isNaN(district.x) ||
+            isNaN(district.y)
+          ) {
+            return;
+          }
+          const labelElement = document.createElement("div");
+          labelElement.className = "custom-marker area-label-marker";
+          // Use clearly smaller text on mobile, larger on desktop
+          const fontSizeClass = isDesktop ? "text-3xl" : "text-base";
+          labelElement.innerHTML = `
+            <span class="text-white font-extrabold ${fontSizeClass} select-none pointer-events-none drop-shadow-lg opacity-80">
+              ${district.name}
+            </span>
+          `;
+          const [lng, lat] = xyToLngLat(district.x, district.y, mapBounds);
+          const marker = new mapboxgl.Marker({
+            element: labelElement,
+            anchor: "bottom",
+          })
+            .setLngLat([lng, lat])
+            .addTo(map);
           markersRef.current.push(marker);
         });
 
@@ -265,7 +312,13 @@ const MapComponent: React.FC<MapComponentProps> = ({
       // Add controls
       if (isDesktop) {
         map.addControl(new mapboxgl.AttributionControl(), "bottom-left");
-        map.addControl(new mapboxgl.NavigationControl(), "bottom-right");
+        map.addControl(
+          new mapboxgl.NavigationControl({
+            showCompass: true,
+            visualizePitch: true,
+          }),
+          "bottom-right"
+        );
       }
 
       // Save reference to map
@@ -363,6 +416,7 @@ const MapComponent: React.FC<MapComponentProps> = ({
     onLocationClick,
     onFoodPrintClick,
     customMapSourceId,
+    districts,
   ]);
 
   return (

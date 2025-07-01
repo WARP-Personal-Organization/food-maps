@@ -38,6 +38,12 @@ export type Location = {
   iconUrl: string;
 };
 
+export type District = {
+  name: string;
+  x: number;
+  y: number;
+};
+
 export type FoodPrint = {
   name: string;
   location: string;

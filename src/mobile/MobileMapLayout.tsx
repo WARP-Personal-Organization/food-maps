@@ -8,7 +8,6 @@ import {
   MapComponent,
   EmptyState,
 } from "../components/map/MapUtilComponents";
-
 import { IoClose, IoReturnUpBackSharp } from "react-icons/io5";
 import MenuButton from "@/components/buttons/MenuButton";
 import FilterButton from "@/components/buttons/FilterButton";
@@ -25,6 +24,7 @@ interface MobileMapLayoutProps {
   activeFilters?: string[];
   onFilterChange?: (filters: string[]) => void;
 }
+import { districts } from "@/lib/DistrictCoordinatesData";
 
 const MobileMapLayout: React.FC<MobileMapLayoutProps> = ({
   dishData,
@@ -158,6 +158,7 @@ const MobileMapLayout: React.FC<MobileMapLayoutProps> = ({
               onLocationClick={handleLocationClick}
               onFoodPrintClick={handleFoodprintClick}
               useCustomMap
+              districts={districts}
             />
           </div>
         </ClientOnly>

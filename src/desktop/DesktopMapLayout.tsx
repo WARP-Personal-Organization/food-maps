@@ -25,6 +25,7 @@ interface DesktopMapLayoutProps {
   activeFilters: string[];
   onFilterChange: (filters: string[] | ((prev: string[]) => string[])) => void;
 }
+import { districts } from "@/lib/DistrictCoordinatesData";
 
 const DesktopMapLayout: React.FC<DesktopMapLayoutProps> = ({
   dishData,
@@ -195,6 +196,7 @@ const DesktopMapLayout: React.FC<DesktopMapLayoutProps> = ({
               onFoodPrintClick={handleFoodprintClick}
               useCustomMap
               isDesktop={true}
+              districts={districts}
             />
           </div>
         </ClientOnly>
