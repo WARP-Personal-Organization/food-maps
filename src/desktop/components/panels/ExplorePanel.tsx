@@ -1,10 +1,10 @@
-import React from 'react';
-import { Location } from '@/types/types';
-import { LocationData } from '@/lib/LocationData';
-import CloseButton from '@/components/buttons/CloseButton';
-import { denormalizeKey } from '@/lib/utils';
-import { MapPin, Search, X, Compass } from 'lucide-react';
-import Image from 'next/image';
+import React from "react";
+import { Location } from "@/types/types";
+import { LocationData } from "@/lib/LocationData";
+import CloseButton from "@/components/buttons/CloseButton";
+import { denormalizeKey } from "@/lib/utils";
+import { MapPin, Search, X, Compass } from "lucide-react";
+import Image from "next/image";
 interface ExplorePanelProps {
   activeFilters: string[];
   onFilterChange?: (filters: string[]) => void;
@@ -40,11 +40,14 @@ const ExplorePanel: React.FC<ExplorePanelProps> = ({
 
   return (
     <>
-
       {/* Explore Panel */}
       <div
         className={`fixed top-0 left-0 w-[300px] min-w-[300px] md:w-[320px] lg:w-[350px] xl:w-[400px] h-full bg-white shadow-2xl z-50 transform transition-all duration-500 ease-out border-r-4 border-yellow-300
-          ${isVisible ? 'translate-x-0 opacity-100' : '-translate-x-full opacity-0'} flex flex-col`}
+          ${
+            isVisible
+              ? "translate-x-0 opacity-100"
+              : "-translate-x-full opacity-0"
+          } flex flex-col`}
       >
         {/* Enhanced Header */}
         <div className="bg-gradient-to-r from-yellow-50 to-yellow-100 p-4 sm:p-6 border-b-2 border-yellow-200">
@@ -58,22 +61,26 @@ const ExplorePanel: React.FC<ExplorePanelProps> = ({
                 <p className="text-sm text-gray-600">Discover local spots</p>
               </div>
             </div>
-            <CloseButton 
+            <CloseButton
               onClick={onClose}
               className="p-2.5 hover:bg-white/80 rounded-full transition-all duration-300 shadow-sm"
             />
           </div>
-          
+
           {/* Stats indicator */}
           <div className="bg-white rounded-xl p-3 shadow-sm border border-yellow-200">
             <div className="flex justify-between items-center">
               <div className="text-center flex-1">
-                <p className="text-base sm:text-lg font-bold text-gray-900">{activeFilters.length}</p>
+                <p className="text-base sm:text-lg font-bold text-gray-900">
+                  {activeFilters.length}
+                </p>
                 <p className="text-xs text-gray-600">Active Filters</p>
               </div>
               <div className="w-px h-6 sm:h-8 bg-yellow-200"></div>
               <div className="text-center flex-1">
-                <p className="text-base sm:text-lg font-bold text-yellow-600">{filteredLocations.length}</p>
+                <p className="text-base sm:text-lg font-bold text-yellow-600">
+                  {filteredLocations.length}
+                </p>
                 <p className="text-xs text-gray-600">Locations Found</p>
               </div>
             </div>
@@ -123,7 +130,8 @@ const ExplorePanel: React.FC<ExplorePanelProps> = ({
               Locations Found
             </h3>
             <span className="bg-yellow-100 text-yellow-700 px-3 py-1 rounded-full text-sm font-semibold">
-              {filteredLocations.length} result{filteredLocations.length !== 1 ? 's' : ''}
+              {filteredLocations.length} result
+              {filteredLocations.length !== 1 ? "s" : ""}
             </span>
           </div>
         </div>
@@ -133,13 +141,18 @@ const ExplorePanel: React.FC<ExplorePanelProps> = ({
           {filteredLocations.length > 0 ? (
             <div className="space-y-3 pt-4">
               {filteredLocations.map((location, index) => (
-                <div key={`${location.name}-${index}`} className="bg-white rounded-2xl p-4 shadow-sm border border-gray-100 hover:border-yellow-300 transition-all duration-300 hover:shadow-md">
+                <div
+                  key={`${location.name}-${index}`}
+                  className="bg-white rounded-2xl p-4 shadow-sm border border-gray-100 hover:border-yellow-300 transition-all duration-300 hover:shadow-md"
+                >
                   <div className="flex items-start gap-3">
                     <div className="relative w-16 h-16 rounded-xl overflow-hidden flex-shrink-0">
                       <Image
-                        src={location.iconUrl || '/images/filter-dish/siopao.png'}
+                        src={
+                          location.iconUrl || "/images/filter-dish/siopao.png"
+                        }
                         alt={location.name}
-                        className="w-full h-full object-cover"
+                        className="w-full h-full object-contain"
                         fill
                       />
                     </div>
@@ -150,7 +163,9 @@ const ExplorePanel: React.FC<ExplorePanelProps> = ({
                       <div className="flex items-center gap-1 mb-2">
                         <MapPin className="w-3 h-3 text-gray-400" />
                         <p className="text-xs text-gray-600 line-clamp-1">
-                          {location.address ? location.address.split(',')[0] : 'Iloilo City Proper'}
+                          {location.address
+                            ? location.address.split(",")[0]
+                            : "Iloilo City Proper"}
                         </p>
                       </div>
                       <div className="flex items-center justify-between">
@@ -160,21 +175,28 @@ const ExplorePanel: React.FC<ExplorePanelProps> = ({
                           <span className="text-xs text-gray-500">⭐ 4.2</span>
                         </div>
                         <div className="flex flex-wrap gap-1">
-                          {activeFilters.filter((filter) =>
-                            LocationData[filter]?.some((loc) => loc.name === location.name)
-                          ).slice(0, 2).map((tag) => (
-                            <span
-                              key={tag}
-                              className="bg-yellow-100 text-yellow-700 px-2 py-0.5 rounded-full text-xs font-medium"
-                            >
-                              {denormalizeKey(tag)}
-                            </span>
-                          ))}
+                          {activeFilters
+                            .filter((filter) =>
+                              LocationData[filter]?.some(
+                                (loc) => loc.name === location.name
+                              )
+                            )
+                            .slice(0, 2)
+                            .map((tag) => (
+                              <span
+                                key={tag}
+                                className="bg-yellow-100 text-yellow-700 px-2 py-0.5 rounded-full text-xs font-medium"
+                              >
+                                {denormalizeKey(tag)}
+                              </span>
+                            ))}
                         </div>
                       </div>
                     </div>
                     <div className="bg-yellow-100 rounded-full w-6 h-6 flex items-center justify-center">
-                      <span className="text-xs font-bold text-yellow-700">{index + 1}</span>
+                      <span className="text-xs font-bold text-yellow-700">
+                        {index + 1}
+                      </span>
                     </div>
                   </div>
                 </div>
@@ -187,9 +209,12 @@ const ExplorePanel: React.FC<ExplorePanelProps> = ({
                   <div className="w-20 h-20 bg-gray-100 rounded-full flex items-center justify-center mb-4">
                     <MapPin className="w-10 h-10 text-gray-400" />
                   </div>
-                  <h4 className="text-lg font-bold text-gray-900 mb-2">No locations found</h4>
+                  <h4 className="text-lg font-bold text-gray-900 mb-2">
+                    No locations found
+                  </h4>
                   <p className="text-gray-600 text-sm max-w-64 leading-relaxed mb-4">
-                    No locations match your current filters. Try adjusting your selection.
+                    No locations match your current filters. Try adjusting your
+                    selection.
                   </p>
                   <button
                     onClick={() => onFilterChange?.([])}
@@ -203,9 +228,12 @@ const ExplorePanel: React.FC<ExplorePanelProps> = ({
                   <div className="w-20 h-20 bg-gray-100 rounded-full flex items-center justify-center mb-4">
                     <Compass className="w-10 h-10 text-gray-400" />
                   </div>
-                  <h4 className="text-lg font-bold text-gray-900 mb-2">Start exploring</h4>
+                  <h4 className="text-lg font-bold text-gray-900 mb-2">
+                    Start exploring
+                  </h4>
                   <p className="text-gray-600 text-sm max-w-64 leading-relaxed">
-                    Apply some filters to discover amazing local food spots in your area.
+                    Apply some filters to discover amazing local food spots in
+                    your area.
                   </p>
                 </>
               )}
