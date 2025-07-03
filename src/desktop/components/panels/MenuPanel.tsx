@@ -55,37 +55,39 @@ const MenuPanel: React.FC<MenuPanelProps> = ({
         </ul>
 
         <section className="text-sm font-medium">
-          <div className="flex flex-col gap-y-3">
-            <h2 className="text-amber-300 font-bold">WEBSITE</h2>
-            <a
-              href="https://dailyguardian.com.ph/"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-black hover:underline"
-            >
-              dailyguardian.com.ph
-            </a>
-          </div>
-          <div className="flex flex-col my-8 gap-y-3">
-            <h2 className="text-amber-300 font-bold">EXPLORE</h2>
-            <div className="flex gap-4">
+          <div className="flex flex-row gap-x-16 my-8">
+            <div className="flex flex-col gap-y-3">
+              <h2 className="text-amber-300 font-bold">WEBSITE</h2>
               <a
-                href="https://www.facebook.com/DailyGuardianPH/"
+                href="https://dailyguardian.com.ph/"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-black hover:underline"
               >
-                FACEBOOK
+                dailyguardian.com.ph
               </a>
-              <span>/</span>
-              <a
-                href="https://instagram.com"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-black hover:underline"
-              >
-                INSTAGRAM
-              </a>
+            </div>
+            <div className="flex flex-col gap-y-3">
+              <h2 className="text-amber-300 font-bold">EXPLORE</h2>
+              <div className="flex gap-4">
+                <a
+                  href="https://www.facebook.com/DailyGuardianPH/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-black hover:underline"
+                >
+                  FACEBOOK
+                </a>
+                <span>/</span>
+                <a
+                  href="https://instagram.com"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-black hover:underline"
+                >
+                  INSTAGRAM
+                </a>
+              </div>
             </div>
           </div>
         </section>
