@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useRef, useMemo, useState, useEffect } from "react";
+import React, { useRef, useMemo, useState } from "react";
 import PanelManager, { PanelManagerRef } from "./components/PanelManager";
 import { Location, FoodPrint, Dish, PanelType } from "@/types/types";
 import {
@@ -26,6 +26,7 @@ interface DesktopMapLayoutProps {
   onFilterChange: (filters: string[] | ((prev: string[]) => string[])) => void;
 }
 import { districts } from "@/lib/DistrictCoordinatesData";
+import HomeButton from "@/components/buttons/HomeButton";
 
 const DesktopMapLayout: React.FC<DesktopMapLayoutProps> = ({
   dishData,
@@ -35,14 +36,9 @@ const DesktopMapLayout: React.FC<DesktopMapLayoutProps> = ({
   onFilterChange,
 }) => {
   const panelRef = useRef<PanelManagerRef | null>(null);
-  const [panelOpen, setPanelOpen] = useState(true);
+  const [panelOpen, setPanelOpen] = useState(false);
   const [currentPanel, setCurrentPanel] = useState<PanelType | null>(null);
-  useEffect(() => {
-    if (currentPanel === null && panelRef.current) {
-      panelRef.current.openDishDetails(); // or openHome(), depending on which one your HomeButton triggers
-      setPanelOpen(true);
-    }
-  }, [currentPanel]);
+
   const handleFilterChange = (
     filters: string[] | ((prev: string[]) => string[])
   ) => {
@@ -121,7 +117,7 @@ const DesktopMapLayout: React.FC<DesktopMapLayoutProps> = ({
         />
       </div>
 
-      {(!currentPanel || !["explore", "filter"].includes(currentPanel)) && (
+      {(!currentPanel || !["explore", "filter","dishDetails","locationDetail","about"].includes(currentPanel)) && (
         <div
           className={`absolute z-30 w-full transition-transform duration-300 ease-in-out ${
             panelOpen
@@ -129,15 +125,23 @@ const DesktopMapLayout: React.FC<DesktopMapLayoutProps> = ({
               : "translate-x-0"
           }`}
         >
-          <div className="flex items-center gap-4 px-4 py-3 overflow-x-auto pt-10">
+          <div className="flex  items-center gap-4 px-4 py-3 overflow-x-auto pt-10">
             <div className="flex items-center gap-2 shrink-0">
-              {/* <HomeButton
+              <HomeButton
+                 isDesktop={true}
                 className="z-10"
                 onClick={() => {
-                  panelRef.current?.openDishDetails();
-                  setPanelOpen(true);
+                  if (panelOpen && currentPanel === "dishDetails") {
+                    panelRef.current?.closeAllPanels();
+                    setPanelOpen(false);
+                    setCurrentPanel(null);
+                  } else {
+                    panelRef.current?.openDishDetails();
+                    setPanelOpen(true);
+                    setCurrentPanel("dishDetails");
+                  }
                 }}
-              /> */}
+              />
               <FilterButton
                 isDesktop={true}
                 onClick={() => {

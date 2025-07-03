@@ -40,32 +40,32 @@ const LocationSummaryPanel: React.FC<LocationSummaryPanelProps> = ({
             key="location-panel"
             initial={{ y: "100%", opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
-            exit={{ 
-              y: "100%", 
+            exit={{
+              y: "100%",
               opacity: 0,
-              transition: { 
-                duration: 0.4, 
-                ease: [0.4, 0, 0.2, 1] 
-              }
+              transition: {
+                duration: 0.4,
+                ease: [0.4, 0, 0.2, 1],
+              },
             }}
-            transition={{ 
-              type: "spring", 
-              stiffness: 300, 
+            transition={{
+              type: "spring",
+              stiffness: 300,
               damping: 30,
-              duration: 0.5
+              duration: 0.5,
             }}
             className="fixed bottom-0 left-0 right-0 w-full h-[80vh] bg-white z-50 rounded-t-3xl shadow-2xl overflow-hidden"
           >
             {/* Elegant top handle */}
             <div className="absolute top-3 left-1/2 transform -translate-x-1/2 w-12 h-1.5 bg-gray-300 rounded-full z-50" />
-            
+
             {/* Floating action buttons */}
             <div className="absolute top-6 right-6 z-50 flex gap-3">
               <motion.div
                 whileHover={{ scale: 1.1 }}
                 whileTap={{ scale: 0.95 }}
               >
-                <CloseButton 
+                <CloseButton
                   onClick={onClose}
                   className="p-2.5 bg-white/95 backdrop-blur-sm rounded-full shadow-lg hover:bg-white transition-all duration-300"
                 />
@@ -114,7 +114,10 @@ const LocationSummaryPanel: React.FC<LocationSummaryPanelProps> = ({
             {/* Scrollable Content */}
             <div className="h-full overflow-y-auto scrollbar-hide">
               {/* Header Image */}
-              <div className="relative w-full flex-shrink-0" style={{ height: "45vh" }}>
+              <div
+                className="relative w-full flex-shrink-0"
+                style={{ height: "45vh" }}
+              >
                 <Image
                   src={location.photos?.[0]}
                   alt={`${location.name} Image`}
@@ -128,7 +131,7 @@ const LocationSummaryPanel: React.FC<LocationSummaryPanelProps> = ({
               </div>
 
               {/* Info Section with enhanced styling */}
-              <motion.div 
+              <motion.div
                 initial={{ y: 20, opacity: 0 }}
                 animate={{ y: 0, opacity: 1 }}
                 transition={{ delay: 0.2, duration: 0.5 }}
@@ -144,7 +147,7 @@ const LocationSummaryPanel: React.FC<LocationSummaryPanelProps> = ({
                     {
                       icon: <MapPin className="h-5 w-5 text-yellow-500" />,
                       text: address,
-                      label: "Location"
+                      label: "Location",
                     },
                     {
                       icon: (
@@ -160,15 +163,15 @@ const LocationSummaryPanel: React.FC<LocationSummaryPanelProps> = ({
                         </svg>
                       ),
                       text: openHours,
-                      label: "Hours"
+                      label: "Hours",
                     },
                     {
                       icon: <Tag className="h-5 w-5 text-yellow-500" />,
                       text: priceRange,
-                      label: "Price Range"
+                      label: "Price Range",
                     },
                   ].map(({ icon, text, label }, index) => (
-                    <motion.div 
+                    <motion.div
                       key={index}
                       initial={{ x: -20, opacity: 0 }}
                       animate={{ x: 0, opacity: 1 }}
@@ -214,27 +217,25 @@ const LocationSummaryPanel: React.FC<LocationSummaryPanelProps> = ({
                 </div>
 
                 {/* Enhanced Photo/Menu Grid */}
-                <motion.div 
+                <motion.div
                   key={activeTab}
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.4 }}
-                  className="grid grid-cols-2 gap-3 mt-4"
+                  className="mt-4"
                 >
                   {photosToShow && photosToShow.length > 0 ? (
-                    photosToShow.slice(0, 6).map((photo, index) => (
-                      <motion.div
-                        key={index}
-                        initial={{ opacity: 0, scale: 0.9 }}
-                        animate={{ opacity: 1, scale: 1 }}
-                        transition={{ delay: index * 0.1, duration: 0.3 }}
-                        className={`relative rounded-2xl overflow-hidden bg-gray-100 shadow-sm ${
-                          index === 0 ? "col-span-2" : ""
-                        }`}
-                        whileHover={{ scale: 1.03 }}
-                        whileTap={{ scale: 0.97 }}
-                      >
-                        <div className={`relative w-full ${index === 0 ? "aspect-[2/1]" : "aspect-square"}`}>
+                    <div className="flex gap-4 overflow-x-auto scrollbar-hide snap-x snap-mandatory px-1">
+                      {photosToShow.slice(0, 10).map((photo, index) => (
+                        <motion.div
+                          key={index}
+                          initial={{ opacity: 0, scale: 0.95 }}
+                          animate={{ opacity: 1, scale: 1 }}
+                          transition={{ delay: index * 0.1, duration: 0.3 }}
+                          className="relative flex-shrink-0 w-64 h-44 rounded-2xl overflow-hidden bg-gray-100 shadow-sm snap-center"
+                          whileHover={{ scale: 1.03 }}
+                          whileTap={{ scale: 0.97 }}
+                        >
                           <Image
                             src={photo}
                             alt={`${location.name} ${activeTab} ${index + 1}`}
@@ -243,20 +244,21 @@ const LocationSummaryPanel: React.FC<LocationSummaryPanelProps> = ({
                             className="cursor-pointer hover:opacity-90 transition-opacity duration-300"
                             onClick={() => setEnlargedImage(photo)}
                           />
-                        </div>
-                      </motion.div>
-                    ))
+                        </motion.div>
+                      ))}
+                    </div>
                   ) : (
-                    <div className="col-span-2 text-center text-gray-400 py-12 bg-gray-50 rounded-2xl">
+                    <div className="text-center text-gray-400 py-12 bg-gray-50 rounded-2xl">
                       <p className="text-lg font-medium">
-                        No {activeTab === "menu" ? "menu items" : "photos"} available.
+                        No {activeTab === "menu" ? "menu items" : "photos"}{" "}
+                        available.
                       </p>
                     </div>
                   )}
                 </motion.div>
 
                 {/* Enhanced Action Buttons */}
-                <motion.div 
+                <motion.div
                   initial={{ y: 20, opacity: 0 }}
                   animate={{ y: 0, opacity: 1 }}
                   transition={{ delay: 0.4, duration: 0.5 }}
@@ -266,7 +268,7 @@ const LocationSummaryPanel: React.FC<LocationSummaryPanelProps> = ({
                     className="w-full bg-yellow-300 hover:bg-yellow-400 text-gray-900 font-bold py-4 px-6 rounded-2xl shadow-lg hover:shadow-xl transform hover:scale-[1.02] transition-all duration-300"
                     onClick={() => window.open(location.mapLink, "_blank")}
                   />
-                  
+
                   {/* Bottom handle */}
                   <div className="flex justify-center mt-4">
                     <div className="w-16 h-1 bg-gray-300 rounded-full" />

@@ -93,12 +93,22 @@ const FoodPrintSummaryPanel: React.FC<FoodPrintSummaryPanelProps> = ({
 
           {/* Enhanced description with better spacing and typography */}
           <div className="space-y-5">
-            <div className="prose prose-base max-w-none">
-              <p className="text-gray-800 text-base leading-relaxed first-letter:text-4xl first-letter:font-bold first-letter:text-gray-900 first-letter:float-left first-letter:mr-3 first-letter:mt-1">
-                {selectedFoodPrint.description ||
-                  "Roberto's Siopao is an iconic delicacy from Iloilo City, known for its generous size, flavorful fillings, and unique, homemade taste."}
-              </p>
-            </div>
+   <div className="bg-yellow-50 border-l-4 border-yellow-400 p-4 rounded-xl">
+  <div className="flex items-start gap-3">
+    <div className="w-6 h-6 bg-yellow-400 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+      <span className="text-black text-xs font-bold">📝</span>
+    </div>
+    <div>
+      <p className="text-xs font-medium text-gray-500 uppercase tracking-wide mb-2">
+        ABOUT
+      </p>
+      <p className="text-gray-800 text-base leading-relaxed">
+        {selectedFoodPrint.description ||
+          "beloved siopao spot in Iloilo known for its large size and flavorful fillings."}
+      </p>
+    </div>
+  </div>
+</div>
             
             {selectedFoodPrint.extendedDescription?.map((paragraph, idx) => (
               <div key={idx} className="p-5 bg-gray-50 rounded-xl border-l-4 border-yellow-300">

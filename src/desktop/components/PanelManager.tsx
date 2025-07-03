@@ -4,7 +4,7 @@ import React, {
   useState,
   useImperativeHandle,
   forwardRef,
-  useEffect,
+  // useEffect,
 } from "react";
 import MenuPanel from "./panels/MenuPanel";
 import FilterPanel from "./panels/FilterPanel";
@@ -15,7 +15,7 @@ import DishDetailsPanel from "./panels/DishDetails/DishDetailsPanel";
 import LocationDetailPanel from "./panels/LocationDetailPanel";
 import FoodPrintDetailPanel from "./panels/FoodPrintDetailPanel";
 import ExplorePanel from "./panels/ExplorePanel";
-import HomePanel from "./panels/HomePanel";
+// import HomePanel from "./panels/HomePanel";
 // import HomePanel from "./panels/HomePanel";
 
 interface PanelManagerProps {
@@ -132,11 +132,6 @@ const PanelManager: React.ForwardRefRenderFunction<
     setSelectedLocation(null);
     setSelectedFoodPrint(null);
   };
-  useEffect(() => {
-    setCurrentPanel("dishDetails");
-    onPanelChange?.("dishDetails");
-  }, [onPanelChange]);
-
   return (
     <>
       <PanelOverlay
@@ -164,7 +159,7 @@ const PanelManager: React.ForwardRefRenderFunction<
         activeFilters={selectedDishes}
         onClose={handleClosePanel}
       />
-
+{/* 
       <HomePanel
         isVisible={currentPanel === "home"}
         dishes={dishData}
@@ -178,7 +173,7 @@ const PanelManager: React.ForwardRefRenderFunction<
             onFilterApply(filters);
           }
         }}
-      />
+      /> */}
 
       <FilterPanel
         isVisible={currentPanel === "filter"}
