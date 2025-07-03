@@ -60,7 +60,10 @@ const DishDetailsPanel: React.FC<DishDetailsPanelProps> = ({
           transition={{ type: "spring", stiffness: 300, damping: 30 }}
           className="fixed top-0 left-0 w-[300px] min-w-[300px] md:w-[320px] lg:w-[350px] xl:w-[400px] h-full bg-white shadow-lg z-10"
         >
-          <CloseButton onClick={onClose} className="absolute top-5 right-5 z-40" />
+          <CloseButton
+            onClick={onClose}
+            className="absolute top-5 right-5 z-40"
+          />
 
           <div className="relative top-0 left-0 h-full w-full shadow-2xl border-r-4 border-yellow-300 flex flex-col">
             {/* Header */}
@@ -73,7 +76,9 @@ const DishDetailsPanel: React.FC<DishDetailsPanelProps> = ({
                   <h2 className="text-lg lg:text-xl font-black text-gray-900">
                     Dish Details
                   </h2>
-                  <p className="text-sm text-gray-600">Discover local flavors</p>
+                  <p className="text-sm text-gray-600">
+                    Discover local flavors
+                  </p>
                 </div>
               </div>
             </div>
@@ -94,38 +99,40 @@ const DishDetailsPanel: React.FC<DishDetailsPanelProps> = ({
                 </div>
               )}
               <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent" />
-              <div className="absolute top-4 right-4 flex space-x-2">
-                <button
-                  onClick={hasPrev ? handlePrevDish : undefined}
-                  className={`rounded-full w-10 h-10 flex items-center justify-center transition-all duration-300 shadow-lg ${
-                    hasPrev
-                      ? "bg-yellow-400 hover:bg-yellow-500 text-gray-900"
-                      : "bg-gray-200 text-gray-400 cursor-not-allowed"
-                  }`}
-                  aria-label="Previous dish"
-                >
-                  <ChevronLeft size={20} />
-                </button>
-                <button
-                  onClick={hasNext ? handleNextDish : undefined}
-                  className={`rounded-full w-10 h-10 flex items-center justify-center transition-all duration-300 shadow-lg ${
-                    hasNext
-                      ? "bg-yellow-400 hover:bg-yellow-500 text-gray-900"
-                      : "bg-gray-200 text-gray-400 cursor-not-allowed"
-                  }`}
-                  aria-label="Next dish"
-                >
-                  <ChevronRight size={20} />
-                </button>
-              </div>
             </div>
 
             {/* Scrollable Content */}
             <div className="overflow-y-auto bg-gray-50 flex-1 max-h-[calc(100vh-25vh-120px)]">
               <div className="bg-white p-4 lg:p-6 shadow-sm">
-                <h1 className="text-2xl lg:text-3xl font-black text-gray-900 mb-2 leading-tight">
-                  {denormalizeKey(dish.name)}
-                </h1>
+                <div className="flex items-center justify-between mb-2">
+                  <h1 className="text-2xl lg:text-3xl font-black text-gray-900 leading-tight">
+                    {denormalizeKey(dish.name)}
+                  </h1>
+                  <div className="flex gap-2">
+                    <button
+                      onClick={hasPrev ? handlePrevDish : undefined}
+                      className={`rounded-full w-10 h-10 flex items-center justify-center transition-all duration-300 shadow-lg ${
+                        hasPrev
+                          ? "bg-yellow-400 hover:bg-yellow-500 text-gray-900"
+                          : "bg-gray-200 text-gray-400 cursor-not-allowed"
+                      }`}
+                      aria-label="Previous dish"
+                    >
+                      <ChevronLeft size={20} />
+                    </button>
+                    <button
+                      onClick={hasNext ? handleNextDish : undefined}
+                      className={`rounded-full w-10 h-10 flex items-center justify-center transition-all duration-300 shadow-lg ${
+                        hasNext
+                          ? "bg-yellow-400 hover:bg-yellow-500 text-gray-900"
+                          : "bg-gray-200 text-gray-400 cursor-not-allowed"
+                      }`}
+                      aria-label="Next dish"
+                    >
+                      <ChevronRight size={20} />
+                    </button>
+                  </div>
+                </div>
                 <div className="space-y-3">
                   <p className="text-yellow-600 text-sm lg:text-base font-semibold italic">
                     {dish.tagline}
@@ -191,9 +198,13 @@ const DishDetailsPanel: React.FC<DishDetailsPanelProps> = ({
                             <div className="flex items-center justify-between">
                               <div className="flex items-center gap-1">
                                 <Star className="w-3 h-3 text-yellow-500 fill-current" />
-                                <span className="text-xs text-gray-600">4.5</span>
+                                <span className="text-xs text-gray-600">
+                                  4.5
+                                </span>
                               </div>
-                              <span className="text-xs text-gray-500">10 min</span>
+                              <span className="text-xs text-gray-500">
+                                10 min
+                              </span>
                             </div>
                           </div>
                           <div className="bg-yellow-100 rounded-full w-6 h-6 flex items-center justify-center">
