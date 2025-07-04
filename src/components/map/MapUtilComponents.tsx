@@ -1,58 +1,21 @@
-'use client';
+"use client";
 
-import React, { memo, useState, useEffect } from 'react';
-import dynamic from 'next/dynamic';
-
-// Function to preload an image
-const preloadImage = (src: string): Promise<void> => {
-  return new Promise((resolve) => {
-    const img = new Image();
-    img.onload = () => resolve();
-    img.onerror = () => {
-      console.error(`Failed to preload image: ${src}`);
-      // Resolve anyway to not block the UI
-      resolve();
-    };
-    img.src = src;
-  });
-};
+import React, { memo, useState, useEffect } from "react";
+import dynamic from "next/dynamic";
 
 // Client Component wrapper for map
 export const ClientOnly = ({ children }: { children: React.ReactNode }) => {
   const [hasMounted, setHasMounted] = useState(false);
-  const [imagesPreloaded, setImagesPreloaded] = useState(false);
-
-  // Preload map and marker images
-  useEffect(() => {
-    const preloadMapImages = async () => {
-      try {
-        // Wait for all images to load
-        await Promise.all([
-          preloadImage('/images/map/Map.png'),
-          preloadImage('/images/location-markers/siopao-1.png'),
-          preloadImage('/images/location-markers/siopao-2.png'),
-          preloadImage('/images/location-markers/siopao-3.png'),
-        ]);
-        console.log('Map images preloaded successfully');
-      } catch (err) {
-        console.error('Error preloading map images:', err);
-      } finally {
-        setImagesPreloaded(true);
-      }
-    };
-
-    preloadMapImages();
-  }, []);
 
   useEffect(() => {
     setHasMounted(true);
   }, []);
 
-  if (!hasMounted || !imagesPreloaded) {
+  if (!hasMounted) {
     return (
       <div
         className="h-full w-full flex items-center justify-center"
-        style={{ backgroundColor: '#3b3b3f' }}
+        style={{ backgroundColor: "#3b3b3f" }}
       >
         <p className="text-white">Loading map...</p>
       </div>
@@ -65,13 +28,13 @@ export const ClientOnly = ({ children }: { children: React.ReactNode }) => {
 // Dynamically import the Map component to avoid SSR issues with Mapbox
 // Using a stable key and memoization to prevent re-renders
 const DynamicMapComponent = dynamic(
-  () => import('@/components/map/MapComponent'),
+  () => import("@/components/map/MapComponent"),
   {
     ssr: false,
     loading: () => (
       <div
         className="h-full w-full flex items-center justify-center"
-        style={{ backgroundColor: '#3b3b3f' }}
+        style={{ backgroundColor: "#3b3b3f" }}
       >
         <p className="text-white">Loading map...</p>
       </div>
@@ -97,7 +60,7 @@ export const MapComponent = memo(
 export const EmptyState = () => (
   <div
     className="h-full w-full flex flex-col items-center justify-center"
-    style={{ backgroundColor: '#3b3b3f' }}
+    style={{ backgroundColor: "#3b3b3f" }}
   >
     <svg
       className="w-16 h-16 text-gray-400 mb-4"
