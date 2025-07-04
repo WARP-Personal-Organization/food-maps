@@ -166,3 +166,12 @@
 .mapboxgl-ctrl-attrib {
   display: none !important;
 }
+
+@media (max-width: 768px) {
+  .map-container {
+      background-image: url("/images/map/background-2-mobile.png");
+      background-size: cover;
+      background-repeat: no-repeat;
+      background-position: center center;
+    }
+}
