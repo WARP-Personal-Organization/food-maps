@@ -172,7 +172,7 @@ const FilterPanel: React.FC<FilterPanelProps> = ({
 
                     {/* Mobile-friendly selection indicator */}
                     {isSelected && (
-                      <div className="absolute top-2 right-2 bg-yellow-400 text-gray-900 p-2 rounded-full shadow-lg">
+                      <div className="absolute top-2 right-2 w-7 h-7 bg-yellow-400 text-gray-900 rounded-full shadow-lg flex items-center justify-center">
                         <span className="text-xs font-bold">✓</span>
                       </div>
                     )}
