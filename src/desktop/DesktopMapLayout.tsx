@@ -117,7 +117,7 @@ const DesktopMapLayout: React.FC<DesktopMapLayoutProps> = ({
         />
       </div>
 
-      {(!currentPanel || !["explore", "filter","dishDetails","locationDetail","about"].includes(currentPanel)) && (
+      {(!currentPanel || !["explore", "filter","dishDetails","locationDetail","about","foodPrintDetail"].includes(currentPanel)) && (
         <div
           className={`absolute z-30 w-full transition-transform duration-300 ease-in-out ${
             panelOpen
