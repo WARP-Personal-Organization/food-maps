@@ -22,6 +22,7 @@ const LocationSummaryPanel: React.FC<LocationSummaryPanelProps> = ({
 }) => {
   const [activeTab, setActiveTab] = useState<"photos" | "menu">("photos");
   const [enlargedImage, setEnlargedImage] = useState<string | null>(null);
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
   if (!location) return null;
 
@@ -31,6 +32,33 @@ const LocationSummaryPanel: React.FC<LocationSummaryPanelProps> = ({
 
   const photosToShow =
     activeTab === "menu" ? location.menuPhotos : location.photos;
+
+  // Navigation handlers
+  const handleImageClick = (photo: string, index: number) => {
+    setEnlargedImage(photo);
+    setCurrentImageIndex(index);
+  };
+
+  const handleNext = () => {
+    if (photosToShow && currentImageIndex < photosToShow.length - 1) {
+      const nextIndex = currentImageIndex + 1;
+      setCurrentImageIndex(nextIndex);
+      setEnlargedImage(photosToShow[nextIndex]);
+    }
+  };
+
+  const handlePrevious = () => {
+    if (photosToShow && currentImageIndex > 0) {
+      const prevIndex = currentImageIndex - 1;
+      setCurrentImageIndex(prevIndex);
+      setEnlargedImage(photosToShow[prevIndex]);
+    }
+  };
+
+  const handleCloseModal = () => {
+    setEnlargedImage(null);
+    setCurrentImageIndex(0);
+  };
 
   return (
     <>
@@ -74,14 +102,14 @@ const LocationSummaryPanel: React.FC<LocationSummaryPanelProps> = ({
 
             {/* Enlarged Image Modal */}
             <AnimatePresence>
-              {enlargedImage && (
+              {enlargedImage && photosToShow && (
                 <motion.div
                   className="fixed inset-0 z-[60] bg-black bg-opacity-80 flex items-center justify-center"
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   exit={{ opacity: 0 }}
                   transition={{ duration: 0.3 }}
-                  onClick={() => setEnlargedImage(null)}
+                  onClick={handleCloseModal}
                 >
                   <motion.div
                     className="relative w-full h-full p-4"
@@ -98,9 +126,65 @@ const LocationSummaryPanel: React.FC<LocationSummaryPanelProps> = ({
                       objectFit="contain"
                       className="rounded-2xl"
                     />
+
+                    {/* Navigation Buttons */}
+                    {currentImageIndex > 0 && (
+                      <motion.button
+                        onClick={handlePrevious}
+                        className="absolute left-4 top-1/2 -translate-y-1/2 p-3 bg-white/90 backdrop-blur-sm rounded-full shadow-lg hover:bg-white cursor-pointer z-50"
+                        whileHover={{ scale: 1.1 }}
+                        whileTap={{ scale: 0.95 }}
+                        aria-label="Previous image"
+                        tabIndex={0}
+                        role="button"
+                      >
+                        <svg
+                          width="24"
+                          height="24"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          strokeWidth="2"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          className="text-gray-800"
+                        >
+                          <polyline points="15,18 9,12 15,6" />
+                        </svg>
+                      </motion.button>
+                    )}
+
+                    {photosToShow &&
+                      currentImageIndex < photosToShow.length - 1 && (
+                        <motion.button
+                          onClick={handleNext}
+                          className="absolute right-4 top-1/2 -translate-y-1/2 p-3 bg-white/90 backdrop-blur-sm rounded-full shadow-lg hover:bg-white cursor-pointer z-50"
+                          whileHover={{ scale: 1.1 }}
+                          whileTap={{ scale: 0.95 }}
+                          aria-label="Next image"
+                          tabIndex={0}
+                          role="button"
+                        >
+                          <svg
+                            width="24"
+                            height="24"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            strokeWidth="2"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            className="text-gray-800"
+                          >
+                            <polyline points="9,18 15,12 9,6" />
+                          </svg>
+                        </motion.button>
+                      )}
+
+                    {/* Close Button */}
                     <motion.div
-                      onClick={() => setEnlargedImage(null)}
-                      className="absolute top-8 right-8 p-3 bg-white/90 backdrop-blur-sm rounded-full shadow-lg hover:bg-white cursor-pointer"
+                      onClick={handleCloseModal}
+                      className="absolute top-8 right-8 p-3 bg-white/90 backdrop-blur-sm rounded-full shadow-lg hover:bg-white cursor-pointer z-50"
                       whileHover={{ scale: 1.1 }}
                       whileTap={{ scale: 0.95 }}
                     >
@@ -242,7 +326,7 @@ const LocationSummaryPanel: React.FC<LocationSummaryPanelProps> = ({
                             layout="fill"
                             objectFit="cover"
                             className="cursor-pointer hover:opacity-90 transition-opacity duration-300"
-                            onClick={() => setEnlargedImage(photo)}
+                            onClick={() => handleImageClick(photo, index)}
                           />
                         </motion.div>
                       ))}

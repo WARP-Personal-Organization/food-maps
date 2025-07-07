@@ -22,13 +22,28 @@ interface LocationDetailPanelProps {
 type EnlargedImageModalProps = {
   imageUrl: string;
   onClose: () => void;
+  onNext: () => void;
+  onPrevious: () => void;
+  hasNext: boolean;
+  hasPrevious: boolean;
 };
 
 const EnlargedImageModal: React.FC<EnlargedImageModalProps> = ({
   imageUrl,
   onClose,
+  onNext,
+  onPrevious,
+  hasNext,
+  hasPrevious,
 }) => {
   if (typeof window === "undefined") return null;
+
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === "Escape") onClose();
+    if (e.key === "ArrowRight" && hasNext) onNext();
+    if (e.key === "ArrowLeft" && hasPrevious) onPrevious();
+  };
+
   return ReactDOM.createPortal(
     <motion.div
       className="fixed inset-0 z-[9999] bg-black bg-opacity-80 flex items-center justify-center"
@@ -40,6 +55,7 @@ const EnlargedImageModal: React.FC<EnlargedImageModalProps> = ({
       aria-modal="true"
       role="dialog"
       tabIndex={0}
+      onKeyDown={handleKeyDown}
     >
       <motion.div
         className="relative w-full h-full p-4 flex items-center justify-center"
@@ -56,9 +72,64 @@ const EnlargedImageModal: React.FC<EnlargedImageModalProps> = ({
           objectFit="contain"
           className="rounded-2xl"
         />
+
+        {/* Navigation Buttons */}
+        {hasPrevious && (
+          <motion.button
+            onClick={onPrevious}
+            className="absolute left-8 top-1/2 -translate-y-1/2 p-3 bg-white/90 backdrop-blur-sm rounded-full shadow-lg hover:bg-white cursor-pointer z-50"
+            whileHover={{ scale: 1.1 }}
+            whileTap={{ scale: 0.95 }}
+            aria-label="Previous image"
+            tabIndex={0}
+            role="button"
+          >
+            <svg
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              className="text-gray-800"
+            >
+              <polyline points="15,18 9,12 15,6" />
+            </svg>
+          </motion.button>
+        )}
+
+        {hasNext && (
+          <motion.button
+            onClick={onNext}
+            className="absolute right-8 top-1/2 -translate-y-1/2 p-3 bg-white/90 backdrop-blur-sm rounded-full shadow-lg hover:bg-white cursor-pointer z-50"
+            whileHover={{ scale: 1.1 }}
+            whileTap={{ scale: 0.95 }}
+            aria-label="Next image"
+            tabIndex={0}
+            role="button"
+          >
+            <svg
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              className="text-gray-800"
+            >
+              <polyline points="9,18 15,12 9,6" />
+            </svg>
+          </motion.button>
+        )}
+
+        {/* Close Button */}
         <motion.div
           onClick={onClose}
-          className="absolute top-8 right-8 p-3 bg-white/90 backdrop-blur-sm rounded-full shadow-lg hover:bg-white cursor-pointer"
+          className="absolute top-8 right-8 p-3 bg-white/90 backdrop-blur-sm rounded-full shadow-lg hover:bg-white cursor-pointer z-50"
           whileHover={{ scale: 1.1 }}
           whileTap={{ scale: 0.95 }}
           aria-label="Close enlarged image"
@@ -83,6 +154,7 @@ const LocationDetailPanel: React.FC<LocationDetailPanelProps> = ({
 }) => {
   const [activeTab, setActiveTab] = useState("photos");
   const [enlargedImage, setEnlargedImage] = useState<string | null>(null);
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
   if (!location) return null;
 
   // Default data if not provided
@@ -91,14 +163,47 @@ const LocationDetailPanel: React.FC<LocationDetailPanelProps> = ({
   const priceRange = location.priceRange || "₱100-200";
   const photosToShow =
     activeTab === "menu" ? location.menuPhotos : location.photos;
+
+  // Navigation handlers
+  const handleImageClick = (photo: string, index: number) => {
+    setEnlargedImage(photo);
+    setCurrentImageIndex(index);
+  };
+
+  const handleNext = () => {
+    if (photosToShow && currentImageIndex < photosToShow.length - 1) {
+      const nextIndex = currentImageIndex + 1;
+      setCurrentImageIndex(nextIndex);
+      setEnlargedImage(photosToShow[nextIndex]);
+    }
+  };
+
+  const handlePrevious = () => {
+    if (photosToShow && currentImageIndex > 0) {
+      const prevIndex = currentImageIndex - 1;
+      setCurrentImageIndex(prevIndex);
+      setEnlargedImage(photosToShow[prevIndex]);
+    }
+  };
+
+  const handleCloseModal = () => {
+    setEnlargedImage(null);
+    setCurrentImageIndex(0);
+  };
   return (
     <>
       {/* Enlarged Image Modal rendered at the top level using portal */}
       <AnimatePresence>
-        {enlargedImage && (
+        {enlargedImage && photosToShow && (
           <EnlargedImageModal
             imageUrl={enlargedImage}
-            onClose={() => setEnlargedImage(null)}
+            onClose={handleCloseModal}
+            onNext={handleNext}
+            onPrevious={handlePrevious}
+            hasNext={
+              photosToShow ? currentImageIndex < photosToShow.length - 1 : false
+            }
+            hasPrevious={currentImageIndex > 0}
           />
         )}
       </AnimatePresence>
@@ -288,7 +393,7 @@ const LocationDetailPanel: React.FC<LocationDetailPanelProps> = ({
                                 layout="fill"
                                 objectFit="cover"
                                 className="cursor-pointer hover:opacity-90 transition-opacity duration-300"
-                                onClick={() => setEnlargedImage(photo)}
+                                onClick={() => handleImageClick(photo, index)}
                               />
                             </div>
                           </motion.div>
