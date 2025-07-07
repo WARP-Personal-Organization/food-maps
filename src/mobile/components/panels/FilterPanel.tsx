@@ -60,7 +60,7 @@ const FilterPanel: React.FC<FilterPanelProps> = ({
 
       {/* Mobile-optimized Filter Panel */}
       <div
-        className={`fixed top-0 left-0 h-full w-full sm:w-5/6 md:w-2/3 lg:w-1/2 xl:w-1/3 bg-white shadow-2xl z-50 transform transition-all duration-500 ease-out border-r-4 border-yellow-300
+        className={`fixed top-0 left-0 h-full w-full sm:w-5/6 md:w-2/3 lg:w-1/2 xl:w-1/3 bg-white shadow-2xl z-50 transform transition-all duration-500 ease-out
         ${
           isVisible
             ? "translate-x-0 opacity-100"
@@ -68,7 +68,7 @@ const FilterPanel: React.FC<FilterPanelProps> = ({
         } flex flex-col`}
       >
         {/* Mobile-optimized Header */}
-        <div className="bg-gradient-to-r p-4 sm:p-6 border-b-2 border-yellow-200">
+        <div className="bg-gradient-to-r p-4 sm:p-6">
           <div className="flex items-center justify-between mb-3 sm:mb-4">
             <div className="flex items-center gap-2 sm:gap-3">
               <div className="p-2 sm:p-2.5 bg-yellow-300 rounded-xl shadow-sm">
@@ -90,7 +90,7 @@ const FilterPanel: React.FC<FilterPanelProps> = ({
           </div>
 
           {/* Mobile-optimized Stats indicator */}
-          <div className="bg-white rounded-xl p-3 shadow-sm border border-yellow-200">
+          <div className="bg-white rounded-xl p-3 shadow-sm">
             <div className="flex justify-between items-center">
               <div className="text-center flex-1">
                 <p className="text-base sm:text-lg font-bold text-gray-900">
@@ -98,7 +98,7 @@ const FilterPanel: React.FC<FilterPanelProps> = ({
                 </p>
                 <p className="text-xs text-gray-600">Total Dishes</p>
               </div>
-              <div className="w-px h-6 sm:h-8 bg-yellow-200"></div>
+              <div className="w-px h-6 sm:h-8 bg-gray-200"></div>
               <div className="text-center flex-1">
                 <p className="text-base sm:text-lg font-bold text-yellow-600">
                   {selectedDishes.length}
@@ -245,7 +245,7 @@ const FilterPanel: React.FC<FilterPanelProps> = ({
         </div>
 
         {/* Mobile-optimized Footer */}
-        <div className="p-4 sm:p-6 border-t-2 border-yellow-200 bg-gradient-to-r safe-area-inset-bottom">
+        <div className="p-4 sm:p-6 bg-gradient-to-r safe-area-inset-bottom">
           <button
             className={`w-full font-black py-4 sm:py-4 rounded-xl shadow-lg transition-all duration-300 text-sm sm:text-base touch-manipulation ${
               selectedDishes.length > 0
