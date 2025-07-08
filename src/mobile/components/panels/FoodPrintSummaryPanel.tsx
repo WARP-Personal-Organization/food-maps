@@ -31,19 +31,22 @@ const FoodPrintSummaryPanel: React.FC<FoodPrintSummaryPanelProps> = ({
     >
       {/* Elegant top handle */}
       <div className="absolute top-3 left-1/2 transform -translate-x-1/2 w-12 h-1.5 bg-gray-300 rounded-full z-50" />
-      
+
       {/* Floating action buttons */}
       <div className="absolute top-6 right-6 z-50 flex gap-3">
-        <CloseButton 
-          onClick={onClose} 
-          className="p-2.5 bg-white/95 backdrop-blur-sm rounded-full shadow-lg hover:bg-white transition-all duration-300 hover:scale-110"
+        <CloseButton
+          onClick={onClose}
+          className="p-2 hover:bg-white/80 rounded-full transition-all duration-300 shadow-sm touch-manipulation"
         />
       </div>
 
       {/* Scrollable content container */}
       <div className="h-full overflow-y-auto scrollbar-hide">
         {/* Hero image with enhanced styling */}
-        <div className="relative w-full flex-shrink-0" style={{ height: "45vh" }}>
+        <div
+          className="relative w-full flex-shrink-0"
+          style={{ height: "45vh" }}
+        >
           <Image
             src={imageUrl || "/images/robertos/r1.webp"}
             alt={`${selectedFoodPrint.name} Image`}
@@ -57,7 +60,6 @@ const FoodPrintSummaryPanel: React.FC<FoodPrintSummaryPanelProps> = ({
 
         {/* Content section with beautiful curved overlay */}
         <div className="rounded-t-3xl bg-white w-full p-6 pt-8 gap-6 z-30 relative -mt-6 flex flex-col shadow-xl">
-          
           {/* FOODPRINT badge - keeping original yellow */}
           <div className="pt-0 pb-2">
             <span className="inline-block bg-yellow-300 rounded-xl px-5 py-2.5 text-sm font-bold uppercase shadow-sm">
@@ -67,7 +69,8 @@ const FoodPrintSummaryPanel: React.FC<FoodPrintSummaryPanelProps> = ({
 
           {/* Enhanced title with better typography */}
           <h1 className="text-3xl font-black text-gray-900 leading-tight -mt-2">
-            {selectedFoodPrint.name || "Roberto's Siopao: The Queen of All Siopaos in PH"}
+            {selectedFoodPrint.name ||
+              "Roberto's Siopao: The Queen of All Siopaos in PH"}
           </h1>
 
           {/* Enhanced location section */}
@@ -93,49 +96,52 @@ const FoodPrintSummaryPanel: React.FC<FoodPrintSummaryPanelProps> = ({
 
           {/* Enhanced description with better spacing and typography */}
           <div className="space-y-5">
-   <div className="bg-yellow-50 border-l-4 border-yellow-400 p-4 rounded-xl">
-  <div className="flex items-start gap-3">
-    <div className="w-6 h-6 bg-yellow-400 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
-      <span className="text-black text-xs font-bold">📝</span>
-    </div>
-    <div>
-      <p className="text-xs font-medium text-gray-500 uppercase tracking-wide mb-2">
-        ABOUT
-      </p>
-      <p className="text-gray-800 text-base leading-relaxed">
-        {selectedFoodPrint.description ||
-          "beloved siopao spot in Iloilo known for its large size and flavorful fillings."}
-      </p>
-    </div>
-  </div>
-</div>
-            
+            <div className="bg-yellow-50 border-l-4 border-yellow-400 p-4 rounded-xl">
+              <div className="flex items-start gap-3">
+                <div className="w-6 h-6 bg-yellow-400 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+                  <span className="text-black text-xs font-bold">📝</span>
+                </div>
+                <div>
+                  <p className="text-xs font-medium text-gray-500 uppercase tracking-wide mb-2">
+                    ABOUT
+                  </p>
+                  <p className="text-gray-800 text-base leading-relaxed">
+                    {selectedFoodPrint.description ||
+                      "beloved siopao spot in Iloilo known for its large size and flavorful fillings."}
+                  </p>
+                </div>
+              </div>
+            </div>
+
             {selectedFoodPrint.extendedDescription?.map((paragraph, idx) => (
-              <div key={idx} className="p-5 bg-gray-50 rounded-xl border-l-4 border-yellow-300">
+              <div
+                key={idx}
+                className="p-5 bg-gray-50 rounded-xl border-l-4 border-yellow-300"
+              >
                 <p className="text-gray-800 text-base leading-relaxed">
                   {paragraph}
                 </p>
               </div>
             ))}
-            
+
             {!selectedFoodPrint.extendedDescription && (
               <div className="space-y-4">
                 <div className="p-5 bg-gray-50 rounded-xl border-l-4 border-yellow-300">
                   <p className="text-gray-800 text-base leading-relaxed">
-                    A must-visit spot for both locals and tourists, Roberto&apos;s
-                    has built a strong reputation over the decades for serving
-                    siopao that&apos;s packed with a rich combination of ingredients
-                    — from savory pork and chicken to Chinese sausage and
-                    hard-boiled egg.
+                    A must-visit spot for both locals and tourists,
+                    Roberto&apos;s has built a strong reputation over the
+                    decades for serving siopao that&apos;s packed with a rich
+                    combination of ingredients — from savory pork and chicken to
+                    Chinese sausage and hard-boiled egg.
                   </p>
                 </div>
-                
+
                 <div className="p-5 bg-gray-50 rounded-xl border-l-4 border-yellow-300">
                   <p className="text-gray-800 text-base leading-relaxed">
-                    Their famous &quot;Queen Siopao&quot; stands out as the ultimate
-                    indulgence, stuffed with a hefty portion of meat, sausage, and
-                    egg, making it a satisfying meal on its own that&apos;s well
-                    worth the experience.
+                    Their famous &quot;Queen Siopao&quot; stands out as the
+                    ultimate indulgence, stuffed with a hefty portion of meat,
+                    sausage, and egg, making it a satisfying meal on its own
+                    that&apos;s well worth the experience.
                   </p>
                 </div>
               </div>
@@ -148,7 +154,7 @@ const FoodPrintSummaryPanel: React.FC<FoodPrintSummaryPanelProps> = ({
               className="w-full bg-gray-200 hover:bg-gray-300 text-gray-800 font-semibold py-4 px-6 rounded-2xl shadow-lg hover:shadow-xl transform hover:scale-[1.02] transition-all duration-300"
               onClick={() => window.open(mapLink, "_blank")}
             />
-            
+
             {/* Bottom handle for better UX */}
             <div className="flex justify-center mt-4">
               <div className="w-16 h-1 bg-gray-300 rounded-full" />

@@ -62,7 +62,7 @@ const DishDetailsPanel: React.FC<DishDetailsPanelProps> = ({
         >
           <CloseButton
             onClick={onClose}
-            className="absolute top-5 right-5 z-40"
+            className="absolute top-5 right-5 z-40 rounded-full"
           />
 
           <div className="relative top-0 left-0 h-full w-full shadow-2xl border-r-4 border-yellow-300 flex flex-col">
