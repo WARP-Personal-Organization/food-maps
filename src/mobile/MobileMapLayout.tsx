@@ -8,7 +8,7 @@ import {
   MapComponent,
   EmptyState,
 } from "../components/map/MapUtilComponents";
-import { IoClose, IoReturnUpBackSharp } from "react-icons/io5";
+import { IoClose } from "react-icons/io5";
 import MenuButton from "@/components/buttons/MenuButton";
 import FilterButton from "@/components/buttons/FilterButton";
 import { FoodPrintData } from "@/lib/FoodPrintData";
@@ -192,16 +192,6 @@ const MobileMapLayout: React.FC<MobileMapLayoutProps> = ({
                 </div>
               ))}
             </div>
-          </div>
-
-          <div className="w-full mt-2">
-            <button
-              onClick={() => panelRef.current?.openHome()}
-              className="w-full bg-white py-3 px-4 rounded-lg shadow text-gray-800 font-semibold flex items-center justify-center"
-            >
-              <IoReturnUpBackSharp className="w-5 h-5 mr-2" />
-              Back to Dishes
-            </button>
           </div>
         </div>
       )}
