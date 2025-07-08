@@ -21,7 +21,7 @@ const HomeButton: React.FC<FilterButtonProps> = ({
       }`}
     >
       <Home/>
-      {isDesktop && <span className="inline text-black">Filter Dishes</span>}
+      {isDesktop && <span className="inline text-black">Home</span>}
     </button>
   );
 };

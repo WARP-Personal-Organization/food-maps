@@ -4,7 +4,7 @@ import React, {
   useState,
   useImperativeHandle,
   forwardRef,
-  useEffect,
+  // useEffect,
 } from "react";
 import MenuPanel from "./panels/MenuPanel";
 import FilterPanel from "./panels/FilterPanel";
@@ -15,7 +15,8 @@ import DishDetailsPanel from "./panels/DishDetails/DishDetailsPanel";
 import LocationDetailPanel from "./panels/LocationDetailPanel";
 import FoodPrintDetailPanel from "./panels/FoodPrintDetailPanel";
 import ExplorePanel from "./panels/ExplorePanel";
-import HomePanel from "./panels/HomePanel";
+// import HomePanel from "./panels/HomePanel";
+// import HomePanel from "./panels/HomePanel";
 
 interface PanelManagerProps {
   dishData?: Dish[];
@@ -117,28 +118,20 @@ const PanelManager: React.ForwardRefRenderFunction<
     },
     getCurrentPanel: () => currentPanel,
   }));
+  const handleClosePanel = (options?: { preserveFilters?: boolean }) => {
+    if (
+      !options?.preserveFilters &&
+      currentPanel === "explore" &&
+      onFilterApply
+    ) {
+    }
 
-  useEffect(() => {
-    setCurrentPanel("home");
-    onPanelChange?.("home");
-  }, [onPanelChange]);
-
-  const handleClosePanel = () => {
     if (onClose) onClose();
     setCurrentPanel(null);
     onPanelChange?.(null);
     setSelectedLocation(null);
     setSelectedFoodPrint(null);
   };
-
-  const handleOpenExplore = () => {
-    if (onClose) onClose();
-    setSelectedLocation(null);
-    setSelectedFoodPrint(null);
-    setCurrentPanel("explore");
-    onPanelChange?.("explore");
-  };
-
   return (
     <>
       <PanelOverlay
@@ -166,7 +159,7 @@ const PanelManager: React.ForwardRefRenderFunction<
         activeFilters={selectedDishes}
         onClose={handleClosePanel}
       />
-
+{/* 
       <HomePanel
         isVisible={currentPanel === "home"}
         dishes={dishData}
@@ -175,15 +168,30 @@ const PanelManager: React.ForwardRefRenderFunction<
           setIsMenuVisible(false);
           setCurrentPanel(null);
         }}
-      />
+        onFilterApply={(filters) => {
+          if (onFilterApply) {
+            onFilterApply(filters);
+          }
+        }}
+      /> */}
 
       <FilterPanel
         isVisible={currentPanel === "filter"}
         dishData={dishData}
         initialSelectedDishes={selectedDishes}
-        onClose={handleOpenExplore}
+        onClose={handleClosePanel}
         onFilterApply={(filters) => {
-          if (onFilterApply) onFilterApply(filters);
+          if (onFilterApply) {
+            onFilterApply(filters);
+            setTimeout(() => {
+              if (filters.length > 0) {
+                setCurrentPanel("explore");
+                onPanelChange?.("explore");
+              } else {
+                handleClosePanel();
+              }
+            }, 0);
+          }
         }}
       />
 
@@ -196,6 +204,9 @@ const PanelManager: React.ForwardRefRenderFunction<
         location={selectedLocation}
         isVisible={currentPanel === "locationDetail"}
         onClose={handleClosePanel}
+        onViewDetails={() => {
+          setCurrentPanel("locationDetail");
+        }}
       />
 
       <FoodPrintDetailPanel

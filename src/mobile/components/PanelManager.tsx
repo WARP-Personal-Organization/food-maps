@@ -12,10 +12,9 @@ import AboutPanel from "./panels/AboutPanel";
 import { Dish, Location, FoodPrint, PanelType } from "@/types/types";
 import PanelOverlay from "./panels/PanelOverlay";
 import LocationSummaryPanel from "./panels/LocationSummaryPanel";
-import LocationDetailPanel from "./panels/LocationDetailPanel";
+// import LocationDetailPanel from "./panels/LocationDetailPanel";
 import FoodPrintSummaryPanel from "./panels/FoodPrintSummaryPanel";
-import FoodPrintDetailPanel from "./panels/FoodPrintDetailPanel";
-import HomePanel from "./panels/HomePanel";
+// import HomePanel from "./panels/HomePanel";
 
 interface PanelManagerProps {
   dishData?: Dish[];
@@ -93,7 +92,7 @@ const PanelManager: React.ForwardRefRenderFunction<
       {isMenuVisible && (
         <PanelOverlay
           isVisible={isModalVisible}
-          onClose={() => setCurrentPanel(null)}
+          onClose={() => { setCurrentPanel(null); setIsMenuVisible(false); }}
           withBlur={isMenuVisible || currentPanel === "filter"}
         />
       )}
@@ -111,12 +110,17 @@ const PanelManager: React.ForwardRefRenderFunction<
         }}
       />
 
-      <HomePanel
+      {/* <HomePanel
         isVisible={currentPanel === "home"}
         dishes={dishData}
         openMenu={() => setIsMenuVisible(true)}
         onClose={() => setCurrentPanel(null)}
-      />
+        onFilterApply={(filters) => {
+          if (onFilterApply) {
+            onFilterApply(filters);
+          }
+        }}
+      /> */}
 
       <FilterPanel
         isVisible={currentPanel === "filter"}
@@ -146,14 +150,14 @@ const PanelManager: React.ForwardRefRenderFunction<
         }}
       />
 
-      <LocationDetailPanel
+      {/* <LocationDetailPanel
         location={selectedLocation}
         isVisible={currentPanel === "locationDetail"}
         onClose={() => {
           setSelectedLocation(null);
           setCurrentPanel(null);
         }}
-      />
+      /> */}
 
       <FoodPrintSummaryPanel
         selectedFoodPrint={selectedFoodPrint}
@@ -167,14 +171,6 @@ const PanelManager: React.ForwardRefRenderFunction<
         }}
       />
 
-      <FoodPrintDetailPanel
-        selectedFoodPrint={selectedFoodPrint}
-        isVisible={currentPanel === "foodPrintDetail"}
-        onClose={() => {
-          setSelectedFoodPrint(null);
-          setCurrentPanel(null);
-        }}
-      />
     </>
   );
 };

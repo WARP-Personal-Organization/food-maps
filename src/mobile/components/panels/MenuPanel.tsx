@@ -23,7 +23,7 @@ const MenuPanel: React.FC<MenuPanelProps> = ({
 
   return (
     <div
-      className={`fixed top-0 right-0 w-5/6 md:w-1/3 h-full bg-white shadow-lg z-40 transition-transform duration-300 ${
+      className={`fixed top-0 right-0 w-full h-full bg-white shadow-lg z-40 transition-transform duration-300 ${
         isVisible ? "translate-x-0" : "translate-x-full"
       }`}
     >
@@ -35,7 +35,10 @@ const MenuPanel: React.FC<MenuPanelProps> = ({
             width={100}
             height={110}
           />
-          <CloseButton onClick={onClose} />
+          <CloseButton
+            onClick={onClose}
+            className="p-2 hover:bg-white/80 rounded-full transition-all duration-300 shadow-sm touch-manipulation"
+          />
         </div>
 
         <ul className="space-y-4 flex-grow">

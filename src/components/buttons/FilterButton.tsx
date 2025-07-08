@@ -20,7 +20,7 @@ const FilterButton: React.FC<FilterButtonProps> = ({
         isDesktop ? "px-4" : "w-10"
       }`}
     >
-      <Image src="/filter-icon.png" alt="Filter" width={20} height={20} />
+      <Image src="/filter-icon.png" alt="Filter" width={20} height={120} />
       {isDesktop && <span className="inline text-black">Filter Dishes</span>}
     </button>
   );

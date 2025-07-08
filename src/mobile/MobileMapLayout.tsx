@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useRef, useEffect, useMemo } from "react";
+import React, { useRef, useMemo, useState } from "react";
 import PanelManager, { PanelManagerRef } from "./components/PanelManager";
 import { Location, FoodPrint, Dish } from "@/types/types";
 import {
@@ -8,12 +8,13 @@ import {
   MapComponent,
   EmptyState,
 } from "../components/map/MapUtilComponents";
-
-import { IoClose, IoReturnUpBackSharp } from "react-icons/io5";
+import { IoClose } from "react-icons/io5";
 import MenuButton from "@/components/buttons/MenuButton";
 import FilterButton from "@/components/buttons/FilterButton";
 import { FoodPrintData } from "@/lib/FoodPrintData";
-
+import { denormalizeKey } from "@/lib/utils";
+import HomeButton from "@/components/buttons/HomeButton";
+import HomePanel from "./components/panels/HomePanel";
 interface MobileMapLayoutProps {
   dishData: Dish[];
   foodPrintData: FoodPrintData;
@@ -23,6 +24,7 @@ interface MobileMapLayoutProps {
   activeFilters?: string[];
   onFilterChange?: (filters: string[]) => void;
 }
+import { districts } from "@/lib/DistrictCoordinatesData";
 
 const MobileMapLayout: React.FC<MobileMapLayoutProps> = ({
   dishData,
@@ -41,7 +43,7 @@ const MobileMapLayout: React.FC<MobileMapLayoutProps> = ({
 
   // Helper to determine if we have dishes to display
   const hasDishes = filteredDishes && filteredDishes.length > 0;
-
+  const [currentPanel, setCurrentPanel] = useState<"home" | null>(null);
   // Helper to get locations based on active filters
   const getFilteredLocations = () => {
     // Collect all locations for the active filters
@@ -67,8 +69,8 @@ const MobileMapLayout: React.FC<MobileMapLayoutProps> = ({
   // Foodprint markers filtered by active filters
   const foodprintMarkers = activeFilters.length
     ? foodPrintData.markers.filter((marker) =>
-      activeFilters.includes(marker.dishName)
-    )
+        activeFilters.includes(marker.dishType)
+      )
     : foodPrintData.markers;
 
   // Get all locations
@@ -103,21 +105,6 @@ const MobileMapLayout: React.FC<MobileMapLayoutProps> = ({
     }
   };
 
-  // Update filters based on search params
-  useEffect(() => {
-    if (!window.location.search) return;
-
-    const searchParams = new URLSearchParams(window.location.search);
-    const dishParam = searchParams.get("dish");
-
-    if (dishParam && onFilterChange) {
-      const newFilters = dishParam.split(",");
-      if (JSON.stringify(activeFilters) !== JSON.stringify(newFilters)) {
-        onFilterChange(newFilters);
-      }
-    }
-  }, [onFilterChange, activeFilters]);
-
   return (
     <div className="hidden max-[899px]:flex flex-col h-screen">
       <PanelManager
@@ -126,9 +113,28 @@ const MobileMapLayout: React.FC<MobileMapLayoutProps> = ({
         selectedDishes={activeFilters}
         onFilterApply={updateFilters}
       />
-
-      {/* Filter Button */}
-      <FilterButton className="z-20 absolute" onClick={() => panelRef.current?.openFilter()} />
+      <div className="relative w-full">
+        <HomeButton
+          className="absolute left-[5%] z-10"
+          onClick={() => {
+            setCurrentPanel("home"); // open the panel
+          }}
+        />
+        <HomePanel
+          isVisible={currentPanel === "home"}
+          dishes={dishData}
+          openMenu={() => panelRef.current?.openMenu()}
+          onClose={() => setCurrentPanel(null)}
+          onFilterApply={(filters) => {
+            updateFilters(filters);
+            setCurrentPanel(null);
+          }}
+        />
+        <FilterButton
+          className="absolute left-[18%] z-20"
+          onClick={() => panelRef.current?.openFilter()}
+        />
+      </div>
 
       {/* Menu Button */}
       <MenuButton onClick={() => panelRef.current?.openMenu()} />
@@ -138,8 +144,9 @@ const MobileMapLayout: React.FC<MobileMapLayoutProps> = ({
         <ClientOnly>
           <div className="h-full w-full bg-[#3b3b3f]">
             <MapComponent
-              key={`mobile-map-${activeFilters.join("-")}-${allLocations.length
-                }`}
+              key={`mobile-map-${activeFilters.join("-")}-${
+                allLocations.length
+              }`}
               locations={filteredLocations}
               foodPrintMarkers={foodprintMarkers}
               mapImageUrl="/images/map/Map.png"
@@ -151,6 +158,7 @@ const MobileMapLayout: React.FC<MobileMapLayoutProps> = ({
               onLocationClick={handleLocationClick}
               onFoodPrintClick={handleFoodprintClick}
               useCustomMap
+              districts={districts}
             />
           </div>
         </ClientOnly>
@@ -171,7 +179,7 @@ const MobileMapLayout: React.FC<MobileMapLayoutProps> = ({
                   key={filter}
                   className="bg-yellow-300 border border-blue-400 rounded-full flex items-center text-sm text-gray-900 font-medium px-2 py-2 shadow-sm"
                 >
-                  <span className="pl-2 pr-1">{filter}</span>
+                  <span className="pl-2 pr-1">{denormalizeKey(filter)}</span>
                   <button
                     onClick={() =>
                       updateFilters(activeFilters.filter((f) => f !== filter))
@@ -187,13 +195,13 @@ const MobileMapLayout: React.FC<MobileMapLayoutProps> = ({
           </div>
 
           <div className="w-full mt-2">
-            <button
+            {/* <button
               onClick={() => panelRef.current?.openHome()}
               className="w-full bg-white py-3 px-4 rounded-lg shadow text-gray-800 font-semibold flex items-center justify-center"
             >
               <IoReturnUpBackSharp className="w-5 h-5 mr-2" />
               Back to Dishes
-            </button>
+            </button> */}
           </div>
         </div>
       )}

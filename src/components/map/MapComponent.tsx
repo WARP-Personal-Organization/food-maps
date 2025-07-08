@@ -1,14 +1,15 @@
-'use client';
+"use client";
 
-import React, { useEffect, useRef, useState } from 'react';
-import mapboxgl from 'mapbox-gl';
-import 'mapbox-gl/dist/mapbox-gl.css';
-import '@/styles/map.css';
-import { FoodPrint, Location } from '@/types/types';
+import React, { useEffect, useMemo, useRef, useState } from "react";
+import mapboxgl from "mapbox-gl";
+import "mapbox-gl/dist/mapbox-gl.css";
+import "@/styles/map.css";
+import { FoodPrint, Location, District } from "@/types/types";
 
 interface MapComponentProps {
   locations: Location[];
   foodPrintMarkers?: FoodPrint[];
+  districts?: District[];
   mapImageUrl?: string;
   mapBounds: [[number, number], [number, number]];
   defaultZoom?: number;
@@ -39,11 +40,11 @@ const xyToLngLat = (
   return [lng, lat];
 };
 
-
 const MapComponent: React.FC<MapComponentProps> = ({
   locations = [],
   foodPrintMarkers = [],
-  mapImageUrl = '/images/map/FoodPrints-Map.png',
+  districts = [],
+  mapImageUrl = "/images/map/FoodPrints-Map.png",
   mapBounds = [
     [0, 0],
     [1000, 1000],
@@ -52,11 +53,11 @@ const MapComponent: React.FC<MapComponentProps> = ({
   onLocationClick,
   onFoodPrintClick,
   mapboxToken = process.env.NEXT_PUBLIC_MAPBOX_TOKEN ||
-  process.env.NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN ||
-  '',
-  mapStyle = 'mapbox://styles/mapbox/streets-v12',
+    process.env.NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN ||
+    "",
+  mapStyle = "mapbox://styles/mapbox/streets-v12",
   useCustomMap = true,
-  isDesktop = false
+  isDesktop = false,
 }) => {
   const mapContainerRef = useRef<HTMLDivElement>(null);
   const mapInstanceRef = useRef<mapboxgl.Map | null>(null);
@@ -65,7 +66,7 @@ const MapComponent: React.FC<MapComponentProps> = ({
   const popupRef = useRef<mapboxgl.Popup | null>(null);
   const customMapRef = useRef<string | null>(null);
   const mapInitializedRef = useRef<boolean>(false);
-
+  const customMapSourceId = useMemo(() => `custom-map-${Date.now()}`, []);
   // Set Mapbox access token
   mapboxgl.accessToken = mapboxToken;
 
@@ -89,29 +90,43 @@ const MapComponent: React.FC<MapComponentProps> = ({
 
     const initializeMap = () => {
       console.log(
-        'Initializing map with',
+        "Initializing map with",
         locations.length,
-        'locations and',
+        "locations and",
         foodPrintMarkers.length,
-        'food prints'
+        "food prints"
       );
 
       // Clean up existing map if it exists
       if (mapInstanceRef.current) {
-        console.log('Removing existing map instance');
+        console.log("Removing existing map instance");
         mapInstanceRef.current.remove();
       }
 
       // Create a new map instance
       const map = new mapboxgl.Map({
         container: mapContainerRef.current!,
-        style: useCustomMap ? 'mapbox://styles/mapbox/empty-v9' : mapStyle,
+        style: useCustomMap ? "mapbox://styles/mapbox/empty-v9" : mapStyle,
         zoom: defaultZoom,
         center: [0, 0],
         attributionControl: false,
         renderWorldCopies: false,
         interactive: true,
+        // Enable 3D tilt and rotation for desktop only
+        dragRotate: isDesktop,
+        pitch: isDesktop ? 45 : 0,
+        bearing: isDesktop ? 0 : 0,
       });
+
+      // Limit the maximum pitch (tilt) for desktop by clamping to 60
+      if (isDesktop) {
+        map.on("load", () => {
+          if (map.getPitch() > 60) map.setPitch(60);
+          map.on("pitch", () => {
+            if (map.getPitch() > 60) map.setPitch(60);
+          });
+        });
+      }
 
       // Function to add markers to the map
       const addMarkers = () => {
@@ -127,22 +142,22 @@ const MapComponent: React.FC<MapComponentProps> = ({
         const allPoints = [
           ...locations.filter(
             (loc) =>
-              typeof loc.x === 'number' &&
-              typeof loc.y === 'number' &&
+              typeof loc.x === "number" &&
+              typeof loc.y === "number" &&
               !isNaN(loc.x) &&
               !isNaN(loc.y)
           ),
           ...foodPrintMarkers.filter(
             (fp) =>
-              typeof fp.x === 'number' &&
-              typeof fp.y === 'number' &&
+              typeof fp.x === "number" &&
+              typeof fp.y === "number" &&
               !isNaN(fp.x) &&
               !isNaN(fp.y)
           ),
         ];
 
         if (allPoints.length === 0) {
-          console.warn('No valid points found');
+          console.warn("No valid points found");
           return;
         }
 
@@ -166,66 +181,30 @@ const MapComponent: React.FC<MapComponentProps> = ({
         // Add location markers
         locations.forEach((location) => {
           if (
-            typeof location.x !== 'number' ||
-            typeof location.y !== 'number' ||
+            typeof location.x !== "number" ||
+            typeof location.y !== "number" ||
             isNaN(location.x) ||
             isNaN(location.y)
           ) {
             return; // Skip invalid locations
           }
-          const markerElement = document.createElement('div');
-          markerElement.className = 'custom-marker location-marker'; // Class for locations
+          const markerElement = document.createElement("div");
+          markerElement.className = "custom-marker location-marker"; // Class for locations
+          markerElement.tabIndex = 0;
+          markerElement.setAttribute("role", "button");
 
-          // Add appropriate icon based on location type
-          switch (location.iconType) {
-            case 'siopao':
-              // Use siopao variant or default to variant 1
-              const siopaoVariant = location.siopaoVariant || 1;
-              markerElement.innerHTML = `
-                <div class="marker-icon siopao-marker">
-                  <img src="/images/location-markers/siopao-${siopaoVariant}.png" alt="Siopao Marker" style="width: 36px; height: auto; filter: drop-shadow(0px 3px 3px rgba(0, 0, 0, 0.4));" />
-                </div>
-              `;
-              break;
-            case 'restaurant':
-              markerElement.innerHTML = `
-                <div class="marker-icon restaurant-marker">
-                  <img src="${location.iconUrl || '/siopao-1.png'}" alt="${location.name
-                } Marker" style="width: 36px; height: auto; filter: drop-shadow(0px 3px 3px rgba(0, 0, 0, 0.4));" />
-                </div>
-              `;
-              break;
-            case 'shop':
-              markerElement.innerHTML = `
-                <div class="marker-icon shop-marker">
-                  <img src="${location.iconUrl || '/shop-icon.png'}" alt="${location.name
-                } Marker" style="width: 36px; height: auto; filter: drop-shadow(0px 3px 3px rgba(0, 0, 0, 0.4));" />
-                </div>
-              `;
-              break;
-            case 'attraction':
-              markerElement.innerHTML = `
-                <div class="marker-icon attraction-marker">
-                  <img src="${location.iconUrl || '/attraction-icon.png'
-                }" alt="${location.name
-                } Marker" style="width: 36px; height: auto; filter: drop-shadow(0px 3px 3px rgba(0, 0, 0, 0.4));" />
-                </div>
-              `;
-              break;
-            default:
-              if (location.iconUrl) {
-                markerElement.innerHTML = `
+          if (location.iconUrl) {
+            markerElement.innerHTML = `
                   <div class="marker-icon custom-icon-marker">
                     <img src="${location.iconUrl}" alt="${location.name}" style="width: 36px; height: auto; filter: drop-shadow(0px 3px 3px rgba(0, 0, 0, 0.4));" />
                   </div>
                 `;
-              } else {
-                markerElement.innerHTML = `
+          } else {
+            markerElement.innerHTML = `
                   <div class="marker-icon default-marker">
                     <img src="/siopao-1.png" alt="${location.name} Marker" style="width: 36px; height: auto; filter: drop-shadow(0px 3px 3px rgba(0, 0, 0, 0.4));" />
                   </div>
                 `;
-              }
           }
 
           const [lng, lat] = xyToLngLat(location.x, location.y, mapBounds);
@@ -233,8 +212,8 @@ const MapComponent: React.FC<MapComponentProps> = ({
             .setLngLat([lng, lat])
             .addTo(map);
 
-          marker.getElement().addEventListener('click', (e) => {
-            e.stopPropagation(); // Prevent map click event when clicking marker
+          marker.getElement().addEventListener("click", (e) => {
+            e.stopPropagation();
             if (popupRef.current) {
               popupRef.current.remove();
             }
@@ -251,19 +230,20 @@ const MapComponent: React.FC<MapComponentProps> = ({
         // Add food print markers
         foodPrintMarkers.forEach((fp) => {
           if (
-            typeof fp.x !== 'number' ||
-            typeof fp.y !== 'number' ||
+            typeof fp.x !== "number" ||
+            typeof fp.y !== "number" ||
             isNaN(fp.x) ||
             isNaN(fp.y)
           ) {
             return; // Skip invalid food prints
           }
-          const markerElement = document.createElement('div');
-          markerElement.className = 'custom-marker foodprint-marker'; // Class for food prints
+          const markerElement = document.createElement("div");
+          markerElement.className = "custom-marker foodprint-marker"; // Class for food prints
           markerElement.innerHTML = `
             <div class="marker-icon foodprint-icon">
-              <img src="${fp.iconUrl || '/siopao-foodprint-marker.png'}" alt="${fp.name
-            }" style="width: 40px; height: auto; filter: drop-shadow(0px 3px 3px rgba(0, 0, 0, 0.4));" />
+              <img src="${fp.iconUrl || "/siopao-foodprint-marker.png"}" alt="${
+            fp.name
+          }" style="width: 40px; height: auto; filter: drop-shadow(0px 3px 3px rgba(0, 0, 0, 0.4));" />
             </div>
           `;
 
@@ -273,8 +253,8 @@ const MapComponent: React.FC<MapComponentProps> = ({
             .addTo(map);
 
           // Add popup for food print marker
-          marker.getElement().addEventListener('click', (e) => {
-            e.stopPropagation(); // Prevent map click event
+          marker.getElement().addEventListener("click", (e) => {
+            e.stopPropagation(); //Prevent map click event
             if (popupRef.current) {
               popupRef.current.remove();
             }
@@ -288,22 +268,57 @@ const MapComponent: React.FC<MapComponentProps> = ({
           markersRef.current.push(marker);
         });
 
+        // Add area label markers
+        districts.forEach((district) => {
+          if (
+            typeof district.x !== "number" ||
+            typeof district.y !== "number" ||
+            isNaN(district.x) ||
+            isNaN(district.y)
+          ) {
+            return;
+          }
+          const labelElement = document.createElement("div");
+          labelElement.className = "custom-marker area-label-marker";
+          // Use clearly smaller text on mobile, larger on desktop
+          const fontSizeClass = isDesktop ? "text-3xl" : "text-base";
+          labelElement.innerHTML = `
+            <span class="text-white font-extrabold ${fontSizeClass} select-none pointer-events-none drop-shadow-lg opacity-80">
+              ${district.name}
+            </span>
+          `;
+          const [lng, lat] = xyToLngLat(district.x, district.y, mapBounds);
+          const marker = new mapboxgl.Marker({
+            element: labelElement,
+            anchor: "bottom",
+          })
+            .setLngLat([lng, lat])
+            .addTo(map);
+          markersRef.current.push(marker);
+        });
+
         // Ensure the map fits all points with padding
-        console.log('Fitting to bounds with', allPoints.length, 'points');
+        console.log("Fitting to bounds with", allPoints.length, "points");
         try {
           map.fitBounds(expandedBounds, {
             padding: 100,
             maxZoom: defaultZoom < 3 ? defaultZoom : 3, // Limit zoom to ensure wider view
           });
         } catch (e) {
-          console.error('Error fitting to bounds:', e);
+          console.error("Error fitting to bounds:", e);
         }
       };
 
       // Add controls
       if (isDesktop) {
-        map.addControl(new mapboxgl.AttributionControl(), 'bottom-left');
-        map.addControl(new mapboxgl.NavigationControl(), 'bottom-right');
+        map.addControl(new mapboxgl.AttributionControl(), "bottom-left");
+        map.addControl(
+          new mapboxgl.NavigationControl({
+            showCompass: true,
+            visualizePitch: true,
+          }),
+          "bottom-right"
+        );
       }
 
       // Save reference to map
@@ -311,14 +326,22 @@ const MapComponent: React.FC<MapComponentProps> = ({
       mapInitializedRef.current = true;
 
       // Wait for map to load before adding markers and custom map
-      map.on('load', () => {
+      map.on("load", () => {
         if (useCustomMap) {
           // Convert bounds for custom map
-          const swCoord = xyToLngLat(mapBounds[0][1], mapBounds[0][0], mapBounds);
-          const neCoord = xyToLngLat(mapBounds[1][1], mapBounds[1][0], mapBounds);
+          const swCoord = xyToLngLat(
+            mapBounds[0][1],
+            mapBounds[0][0],
+            mapBounds
+          );
+          const neCoord = xyToLngLat(
+            mapBounds[1][1],
+            mapBounds[1][0],
+            mapBounds
+          );
 
           // Generate unique source ID
-          const customMapSourceId = 'custom-map-' + Date.now();
+
           customMapRef.current = customMapSourceId;
 
           // Load the FoodPrints-Map.png as the only background
@@ -326,9 +349,9 @@ const MapComponent: React.FC<MapComponentProps> = ({
           mapImage.onload = () => {
             try {
               // Add the image as the only background
-              map.addImage('custom-map-image', mapImage);
+              map.addImage("custom-map-image", mapImage);
               map.addSource(customMapSourceId, {
-                type: 'image',
+                type: "image",
                 url: mapImageUrl, // Using FoodPrints-Map.png
                 coordinates: [
                   [swCoord[0], neCoord[1]], // Top left
@@ -338,24 +361,24 @@ const MapComponent: React.FC<MapComponentProps> = ({
                 ],
               });
               map.addLayer({
-                id: 'custom-map-layer',
-                type: 'raster',
+                id: "custom-map-layer",
+                type: "raster",
                 source: customMapSourceId,
                 paint: {
-                  'raster-opacity': 1, // Full opacity
+                  "raster-opacity": 1, // Full opacity
                 },
               });
 
               // Add markers after map is loaded
               addMarkers();
             } catch (error) {
-              console.error('Error setting up map:', error);
+              console.error("Error setting up map:", error);
               addMarkers(); // Still try to add markers
             }
           };
 
           mapImage.onerror = () => {
-            console.error('Failed to load map image');
+            console.error("Failed to load map image");
             addMarkers(); // Still try to add markers
           };
 
@@ -392,6 +415,8 @@ const MapComponent: React.FC<MapComponentProps> = ({
     mapBounds,
     onLocationClick,
     onFoodPrintClick,
+    customMapSourceId,
+    districts,
   ]);
 
   return (
