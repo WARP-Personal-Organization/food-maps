@@ -2,7 +2,7 @@
 
 import React, { useEffect, useRef, useState } from 'react';
 import Image from 'next/image';
-import MenuButton from '@/components/buttons/MenuButton';
+
 import { Dish } from '@/types/types';
 import { ChevronsDown, MapPin, Star } from 'lucide-react';
 import { denormalizeKey } from '@/lib/utils';
@@ -21,7 +21,7 @@ const FADE_DURATION_MS = 200;
 const HomePanel: React.FC<HomePanelProps> = ({
   dishes,
   isVisible,
-  openMenu,
+
   onClose,
   onFilterApply,
 }) => {
@@ -111,7 +111,7 @@ const HomePanel: React.FC<HomePanelProps> = ({
           >
             foodprints
           </h1>
-          <MenuButton onClick={openMenu} />
+          {/* <MenuButton onClick={openMenu} /> */}
         </div>
 
         {/* Mobile Scrollable Container */}
@@ -273,7 +273,7 @@ const HomePanel: React.FC<HomePanelProps> = ({
               height={50}
               priority
             />
-            <MenuButton onClick={openMenu} />
+            {/* <MenuButton onClick={openMenu} /> */}
           </div>
 
           {/* Desktop Content */}

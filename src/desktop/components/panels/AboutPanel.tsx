@@ -3,6 +3,7 @@
 import React from 'react';
 import Image from 'next/image';
 import { Target, Users } from 'lucide-react';
+import CloseButton from '@/components/buttons/CloseButton';
 
 interface AboutPanelProps {
   onClose: () => void;
@@ -12,11 +13,7 @@ interface AboutPanelProps {
 const AboutPanel: React.FC<AboutPanelProps> = ({ onClose, isVisible }) => {
   if (!isVisible) return null;
 
-  const handleKeyDown = (e: React.KeyboardEvent) => {
-    if (e.key === 'Enter' || e.key === 'Space') {
-      onClose();
-    }
-  };
+
 
   return (
     <div className="fixed inset-0 z-50 bg-black bg-opacity-80">
@@ -32,15 +29,10 @@ const AboutPanel: React.FC<AboutPanelProps> = ({ onClose, isVisible }) => {
               className="object-contain"
             />
           </div>
-          <button
-            onClick={onClose}
-            className="bg-yellow-400 hover:bg-yellow-500 rounded-lg w-10 h-10 flex items-center justify-center text-xl font-bold cursor-pointer transition-colors duration-200"
-            aria-label="Close panel"
-            tabIndex={0}
-            onKeyDown={handleKeyDown}
-          >
-            ×
-          </button>
+    <CloseButton
+              onClick={onClose}
+              className="p-2 hover:bg-white/80 rounded-full transition-all duration-300 shadow-sm touch-manipulation"
+            />
         </div>
 
         {/* Main content container - scrollable */}

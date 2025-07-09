@@ -1,8 +1,9 @@
-'use client';
+"use client";
 
-import React from 'react';
-import Image from 'next/image';
-import { X, Users, Award, MapPin, Heart } from 'lucide-react';
+import React from "react";
+import Image from "next/image";
+import { Users, Award, MapPin, Heart } from "lucide-react";
+import CloseButton from "@/components/buttons/CloseButton";
 
 interface AboutPanelProps {
   onClose: () => void;
@@ -26,23 +27,28 @@ const AboutPanel: React.FC<AboutPanelProps> = ({ onClose, isVisible }) => {
               className="object-contain sm:w-[140px] sm:h-[52px]"
             />
             <div className="hidden sm:block">
-              <h1 className="text-lg font-bold text-gray-900">About FoodPrints</h1>
+              <h1 className="text-lg font-bold text-gray-900">
+                About FoodPrints
+              </h1>
               <p className="text-sm text-gray-600">Discover Local Flavors</p>
             </div>
           </div>
-          <button
+          <CloseButton
             onClick={onClose}
-            className="bg-gradient-to-r from-yellow-400 to-yellow-500 hover:from-yellow-500 hover:to-yellow-600 rounded-xl w-10 h-10 sm:w-12 sm:h-12 flex items-center justify-center shadow-lg transition-all duration-300 hover:scale-105 group"
-            aria-label="Close panel"
-          >
-            <X className="w-5 h-5 sm:w-6 sm:h-6 text-gray-900 group-hover:rotate-90 transition-transform duration-300" />
-          </button>
+            className="p-2 hover:bg-white/80 rounded-full transition-all duration-300 shadow-sm touch-manipulation"
+          />
         </div>
 
         {/* Main content container */}
         <div className="flex-1 flex flex-col lg:flex-row overflow-auto">
           {/* Food Banner Image - Fixed Height to Ensure Visibility */}
-          <div className="w-full lg:w-1/2 relative" style={{ height: window.innerWidth >= 1024 ? '100%' : '28vh', minHeight: '280px' }}>
+          <div
+            className="w-full lg:w-1/2 relative"
+            style={{
+              height: window.innerWidth >= 1024 ? "100%" : "28vh",
+              minHeight: "280px",
+            }}
+          >
             <Image
               src="/images/about-page/dg-about-image.png"
               alt="Filipino food showcase"
@@ -52,11 +58,9 @@ const AboutPanel: React.FC<AboutPanelProps> = ({ onClose, isVisible }) => {
             />
             {/* Subtle gradient overlay for stats readability */}
             <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent" />
-            
+
             {/* Floating stats on image */}
-            <div className="absolute bottom-4 left-4 right-4 lg:bottom-8 lg:left-8">
-              
-            </div>
+            <div className="absolute bottom-4 left-4 right-4 lg:bottom-8 lg:left-8"></div>
           </div>
 
           {/* Content Panel - Responsive */}
@@ -80,7 +84,10 @@ const AboutPanel: React.FC<AboutPanelProps> = ({ onClose, isVisible }) => {
                     Discover Iloilo&apos;s Culinary Heritage
                   </h2>
                   <p className="text-sm sm:text-base text-gray-700 leading-relaxed">
-                    FoodPrints is your gateway to discovering authentic Ilonggo cuisine. From Roberto&apos;s legendary siopao to hidden gems in La Paz market, we map out the rich culinary heritage that makes Iloilo City a food destination worth exploring.
+                    FoodPrints is your gateway to discovering authentic Ilonggo
+                    cuisine. From Roberto&apos;s legendary siopao to hidden gems
+                    in La Paz market, we map out the rich culinary heritage that
+                    makes Iloilo City a food destination worth exploring.
                   </p>
                 </div>
 
@@ -90,7 +97,11 @@ const AboutPanel: React.FC<AboutPanelProps> = ({ onClose, isVisible }) => {
                     Our Mission
                   </h3>
                   <p className="text-sm sm:text-base text-gray-700 leading-relaxed">
-                    We believe every dish tells a story, and every location holds memories. Our mission is to connect food lovers with authentic local flavors, supporting community businesses while preserving Iloilo&apos;s culinary traditions for future generations.
+                    We believe every dish tells a story, and every location
+                    holds memories. Our mission is to connect food lovers with
+                    authentic local flavors, supporting community businesses
+                    while preserving Iloilo&apos;s culinary traditions for
+                    future generations.
                   </p>
                 </div>
 
@@ -115,7 +126,9 @@ const AboutPanel: React.FC<AboutPanelProps> = ({ onClose, isVisible }) => {
                   <Users className="w-5 h-5 text-yellow-500" />
                   Our Partners
                 </h2>
-                <p className="text-sm text-gray-600">Supporting local food businesses and communities</p>
+                <p className="text-sm text-gray-600">
+                  Supporting local food businesses and communities
+                </p>
               </div>
 
               <div className="bg-white rounded-2xl p-6 shadow-lg border border-yellow-100">
@@ -126,13 +139,16 @@ const AboutPanel: React.FC<AboutPanelProps> = ({ onClose, isVisible }) => {
                       className="bg-gradient-to-br from-yellow-100 to-yellow-200 rounded-full w-14 h-14 sm:w-16 sm:h-16 flex items-center justify-center shadow-md hover:shadow-lg transition-all duration-300 hover:scale-105 border-2 border-yellow-300"
                     >
                       <div className="w-8 h-8 sm:w-10 sm:h-10 bg-white rounded-full flex items-center justify-center">
-                        <span className="text-xs font-bold text-yellow-600">{idx + 1}</span>
+                        <span className="text-xs font-bold text-yellow-600">
+                          {idx + 1}
+                        </span>
                       </div>
                     </div>
                   ))}
                 </div>
                 <p className="text-center text-xs sm:text-sm text-gray-500 mt-4">
-                  Partnering with local restaurants, markets, and food communities
+                  Partnering with local restaurants, markets, and food
+                  communities
                 </p>
               </div>
 

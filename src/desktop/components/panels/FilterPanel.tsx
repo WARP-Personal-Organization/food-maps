@@ -77,9 +77,9 @@ const FilterPanel: React.FC<FilterPanelProps> = ({
                 </p>
               </div>
             </div>
-            <CloseButton
+         <CloseButton
               onClick={onClose}
-              className="p-2.5 hover:bg-white/80 rounded-full transition-all duration-300 shadow-sm touch-manipulation"
+              className="p-2 hover:bg-white/80 rounded-full transition-all duration-300 shadow-sm touch-manipulation"
             />
           </div>
 

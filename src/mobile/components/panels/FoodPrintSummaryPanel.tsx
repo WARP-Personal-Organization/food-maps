@@ -126,7 +126,6 @@ const FoodPrintSummaryPanel: React.FC<FoodPrintSummaryPanelProps> = ({
         onKeyDown={handleHandleKeyDown}
         style={{ WebkitTapHighlightColor: "transparent" }}
       />
-
       {/* Floating action buttons */}
       <div className="absolute top-6 right-6 z-50 flex gap-3">
         <CloseButton
