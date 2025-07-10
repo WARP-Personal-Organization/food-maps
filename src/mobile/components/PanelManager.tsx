@@ -92,7 +92,10 @@ const PanelManager: React.ForwardRefRenderFunction<
       {isMenuVisible && (
         <PanelOverlay
           isVisible={isModalVisible}
-          onClose={() => { setCurrentPanel(null); setIsMenuVisible(false); }}
+          onClose={() => {
+            setCurrentPanel(null);
+            setIsMenuVisible(false);
+          }}
           withBlur={isMenuVisible || currentPanel === "filter"}
         />
       )}
@@ -166,11 +169,7 @@ const PanelManager: React.ForwardRefRenderFunction<
           setSelectedFoodPrint(null);
           setCurrentPanel(null);
         }}
-        onReadArticle={() => {
-          setCurrentPanel("foodPrintDetail");
-        }}
       />
-
     </>
   );
 };
