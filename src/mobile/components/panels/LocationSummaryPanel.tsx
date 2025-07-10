@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import Image from "next/image";
 import { Location } from "@/types/types";
 import { MapPin, Tag } from "lucide-react";
@@ -23,6 +23,16 @@ const LocationSummaryPanel: React.FC<LocationSummaryPanelProps> = ({
   const [activeTab, setActiveTab] = useState<"photos" | "menu">("photos");
   const [enlargedImage, setEnlargedImage] = useState<string | null>(null);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
+
+  // Drag-to-close state and handlers (from FoodPrintSummaryPanel)
+  const panelRef = useRef<HTMLDivElement>(null);
+  const [dragStartY, setDragStartY] = useState<number | null>(null);
+  const [dragOffset, setDragOffset] = useState(0);
+  const [lastDragTime, setLastDragTime] = useState<number | null>(null);
+  const [lastDragY, setLastDragY] = useState<number | null>(null);
+  const [justDragged, setJustDragged] = useState(false);
+  const DRAG_CLOSE_THRESHOLD = 80;
+  const VELOCITY_CLOSE_THRESHOLD = 0.7; // px/ms
 
   if (!location) return null;
 
@@ -60,14 +70,75 @@ const LocationSummaryPanel: React.FC<LocationSummaryPanelProps> = ({
     setCurrentImageIndex(0);
   };
 
+  // Touch/mouse event handlers
+  const handleDragStart = (e: React.TouchEvent | React.MouseEvent) => {
+    const clientY =
+      "touches" in e ? e.touches[0].clientY : (e as React.MouseEvent).clientY;
+    setDragStartY(clientY);
+    setDragOffset(0);
+    setLastDragTime(Date.now());
+    setLastDragY(clientY);
+    setJustDragged(false);
+    document.body.style.overflow = "hidden";
+  };
+
+  const handleDragMove = (e: React.TouchEvent | React.MouseEvent) => {
+    if (dragStartY === null) return;
+    const clientY =
+      "touches" in e ? e.touches[0].clientY : (e as React.MouseEvent).clientY;
+    const offset = Math.max(0, clientY - dragStartY);
+    setDragOffset(offset);
+    setLastDragTime(Date.now());
+    setLastDragY(clientY);
+  };
+
+  const handleDragEnd = () => {
+    document.body.style.overflow = "";
+    if (dragStartY !== null && lastDragY !== null && lastDragTime !== null) {
+      const dragDistance = lastDragY - dragStartY;
+      const dragDuration = Date.now() - lastDragTime;
+      const velocity = dragDistance / (dragDuration || 1); // px/ms
+      if (
+        dragOffset > DRAG_CLOSE_THRESHOLD ||
+        velocity > VELOCITY_CLOSE_THRESHOLD
+      ) {
+        setDragOffset(0);
+        setDragStartY(null);
+        setJustDragged(true);
+        onClose();
+        return;
+      }
+    }
+    setDragOffset(0);
+    setDragStartY(null);
+    setJustDragged(true);
+  };
+
+  // Prevent accidental click after drag
+  const handleHandleClick = () => {
+    if (justDragged) {
+      setJustDragged(false);
+      return;
+    }
+    onClose();
+  };
+
+  // Keyboard accessibility for handle
+  const handleHandleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === "Enter" || e.key === " " || e.key === "ArrowDown") {
+      onClose();
+    }
+  };
+
   return (
     <>
       <AnimatePresence mode="wait">
         {isVisible && (
           <motion.div
+            ref={panelRef}
             key="location-panel"
             initial={{ y: "100%", opacity: 0 }}
-            animate={{ y: 0, opacity: 1 }}
+            animate={{ y: dragOffset, opacity: 1 }}
             exit={{
               y: "100%",
               opacity: 0,
@@ -83,9 +154,32 @@ const LocationSummaryPanel: React.FC<LocationSummaryPanelProps> = ({
               duration: 0.5,
             }}
             className="fixed bottom-0 left-0 right-0 w-full h-[80vh] bg-white z-50 rounded-t-3xl shadow-2xl overflow-hidden"
+            style={{
+              transform: `translateY(${isVisible ? dragOffset : 0}px) ${
+                isVisible ? "" : "translateY(100%)"
+              }`,
+              transition: dragStartY
+                ? "none"
+                : "transform 0.45s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.5s",
+              opacity: isVisible ? 1 : 0,
+              willChange: "transform",
+            }}
+            onTouchMove={dragStartY !== null ? handleDragMove : undefined}
+            onTouchEnd={dragStartY !== null ? handleDragEnd : undefined}
+            onMouseMove={dragStartY !== null ? handleDragMove : undefined}
+            onMouseUp={dragStartY !== null ? handleDragEnd : undefined}
           >
-            {/* Elegant top handle */}
-            <div className="absolute top-3 left-1/2 transform -translate-x-1/2 w-12 h-1.5 bg-gray-300 rounded-full z-50" />
+            {/* Elegant top handle - now interactive */}
+            <button
+              className="absolute top-3 left-1/2 transform -translate-x-1/2 w-12 h-1.5 bg-gray-300 rounded-full z-50 cursor-pointer focus:outline-none"
+              aria-label="Close panel"
+              tabIndex={0}
+              onTouchStart={handleDragStart}
+              onMouseDown={handleDragStart}
+              onClick={handleHandleClick}
+              onKeyDown={handleHandleKeyDown}
+              style={{ WebkitTapHighlightColor: "transparent" }}
+            />
 
             {/* Floating action buttons */}
             <div className="absolute top-6 right-6 z-50 flex gap-3">

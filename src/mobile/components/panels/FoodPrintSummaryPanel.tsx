@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useRef, useState } from "react";
 import Image from "next/image";
 import { FoodPrint } from "@/types/types";
 import CloseButton from "@/components/buttons/CloseButton";
@@ -9,34 +9,128 @@ interface FoodPrintSummaryPanelProps {
   selectedFoodPrint: FoodPrint | null;
   isVisible: boolean;
   onClose: () => void;
-  onReadArticle: () => void;
+  // onReadArticle: () => void; // Remove unused prop
 }
 
 const FoodPrintSummaryPanel: React.FC<FoodPrintSummaryPanelProps> = ({
   selectedFoodPrint,
   onClose,
   isVisible,
+  // onReadArticle,
 }) => {
+  // Move hooks above early return
+  const panelRef = useRef<HTMLDivElement>(null);
+  const [dragStartY, setDragStartY] = useState<number | null>(null);
+  const [dragOffset, setDragOffset] = useState(0);
+  const [lastDragTime, setLastDragTime] = useState<number | null>(null);
+  const [lastDragY, setLastDragY] = useState<number | null>(null);
+  const [justDragged, setJustDragged] = useState(false);
+  const DRAG_CLOSE_THRESHOLD = 80;
+  const VELOCITY_CLOSE_THRESHOLD = 0.7; // px/ms
+
   if (!selectedFoodPrint) return null;
 
   const imageUrl = selectedFoodPrint.heroImage;
   const mapLink = selectedFoodPrint.mapLink || "";
 
+  // Touch/mouse event handlers
+  const handleDragStart = (e: React.TouchEvent | React.MouseEvent) => {
+    const clientY =
+      "touches" in e ? e.touches[0].clientY : (e as React.MouseEvent).clientY;
+    setDragStartY(clientY);
+    setDragOffset(0);
+    setLastDragTime(Date.now());
+    setLastDragY(clientY);
+    setJustDragged(false);
+    document.body.style.overflow = "hidden";
+  };
+
+  const handleDragMove = (e: React.TouchEvent | React.MouseEvent) => {
+    if (dragStartY === null) return;
+    const clientY =
+      "touches" in e ? e.touches[0].clientY : (e as React.MouseEvent).clientY;
+    const offset = Math.max(0, clientY - dragStartY);
+    setDragOffset(offset);
+    setLastDragTime(Date.now());
+    setLastDragY(clientY);
+  };
+
+  const handleDragEnd = () => {
+    document.body.style.overflow = "";
+    if (dragStartY !== null && lastDragY !== null && lastDragTime !== null) {
+      const dragDistance = lastDragY - dragStartY;
+      const dragDuration = Date.now() - lastDragTime;
+      const velocity = dragDistance / (dragDuration || 1); // px/ms
+      if (
+        dragOffset > DRAG_CLOSE_THRESHOLD ||
+        velocity > VELOCITY_CLOSE_THRESHOLD
+      ) {
+        setDragOffset(0);
+        setDragStartY(null);
+        setJustDragged(true);
+        onClose();
+        return;
+      }
+    }
+    setDragOffset(0);
+    setDragStartY(null);
+    setJustDragged(true);
+  };
+
+  // Prevent accidental click after drag
+  const handleHandleClick = () => {
+    if (justDragged) {
+      setJustDragged(false);
+      return;
+    }
+    onClose();
+  };
+
+  // Keyboard accessibility for handle
+  const handleHandleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === "Enter" || e.key === " " || e.key === "ArrowDown") {
+      onClose();
+    }
+  };
+
   return (
     <div
+      ref={panelRef}
       className={`fixed bottom-0 left-0 right-0 w-full h-[65vh] bg-white z-50 rounded-t-3xl shadow-2xl overflow-hidden
         transform transition-all duration-500 ease-out ${
           isVisible ? "translate-y-0 opacity-100" : "translate-y-full opacity-0"
         }`}
+      style={{
+        transform: `translateY(${isVisible ? dragOffset : 0}px) ${
+          isVisible ? "" : "translateY(100%)"
+        }`,
+        transition: dragStartY
+          ? "none"
+          : "transform 0.45s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.5s",
+        opacity: isVisible ? 1 : 0,
+        willChange: "transform",
+      }}
+      onTouchMove={dragStartY !== null ? handleDragMove : undefined}
+      onTouchEnd={dragStartY !== null ? handleDragEnd : undefined}
+      onMouseMove={dragStartY !== null ? handleDragMove : undefined}
+      onMouseUp={dragStartY !== null ? handleDragEnd : undefined}
     >
-      {/* Elegant top handle */}
-      <div className="absolute top-3 left-1/2 transform -translate-x-1/2 w-12 h-1.5 bg-gray-300 rounded-full z-50" />
-
+      {/* Elegant top handle - now interactive */}
+      <button
+        className="absolute top-3 left-1/2 transform -translate-x-1/2 w-12 h-1.5 bg-gray-300 rounded-full z-50 cursor-pointer focus:outline-none"
+        aria-label="Close panel"
+        tabIndex={0}
+        onTouchStart={handleDragStart}
+        onMouseDown={handleDragStart}
+        onClick={handleHandleClick}
+        onKeyDown={handleHandleKeyDown}
+        style={{ WebkitTapHighlightColor: "transparent" }}
+      />
       {/* Floating action buttons */}
       <div className="absolute top-6 right-6 z-50 flex gap-3">
         <CloseButton
           onClick={onClose}
-          className="p-2 hover:bg-white/80 rounded-full transition-all duration-300 shadow-sm touch-manipulation"
+          className="p-2.5 bg-white/95 backdrop-blur-sm rounded-full shadow-lg hover:bg-white transition-all duration-300 hover:scale-110"
         />
       </div>
 

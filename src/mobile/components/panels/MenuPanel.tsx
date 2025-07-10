@@ -23,11 +23,11 @@ const MenuPanel: React.FC<MenuPanelProps> = ({
 
   return (
     <div
-      className={`fixed top-0 right-0 w-full h-full bg-white shadow-lg z-40 transition-transform duration-300 ${
+      className={`fixed top-0 right-0 w-3/4 h-full bg-white shadow-lg z-40 transition-transform duration-300 ${
         isVisible ? "translate-x-0" : "translate-x-full"
       }`}
     >
-      <div className="p-6 h-full flex flex-col">
+      <div className="p-6 h-full flex flex-col overflow-y-auto">
         <div className="flex justify-between items-center mb-8">
           <Image
             src="/images/foodprints-logo-menu.png"
