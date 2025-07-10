@@ -243,10 +243,10 @@ const LocationDetailPanel: React.FC<LocationDetailPanelProps> = ({
                     whileHover={{ scale: 1.1 }}
                     whileTap={{ scale: 0.95 }}
                   >
-                    <CloseButton
-                      onClick={onClose}
-                      className="p-2.5 bg-white/95 backdrop-blur-sm rounded-full shadow-lg hover:bg-white transition-all duration-300"
-                    />
+                  <CloseButton
+              onClick={onClose}
+              className="p-2 hover:bg-white/80 rounded-full transition-all duration-300 shadow-sm touch-manipulation"
+            />
                   </motion.div>
                 </div>
 

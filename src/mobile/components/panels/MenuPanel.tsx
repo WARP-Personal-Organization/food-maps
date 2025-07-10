@@ -35,7 +35,10 @@ const MenuPanel: React.FC<MenuPanelProps> = ({
             width={100}
             height={110}
           />
-          <CloseButton onClick={onClose} />
+          <CloseButton
+            onClick={onClose}
+            className="p-2 hover:bg-white/80 rounded-full transition-all duration-300 shadow-sm touch-manipulation"
+          />
         </div>
 
         <ul className="space-y-4 flex-grow">

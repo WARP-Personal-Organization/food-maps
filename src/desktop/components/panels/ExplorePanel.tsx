@@ -61,9 +61,9 @@ const ExplorePanel: React.FC<ExplorePanelProps> = ({
                 <p className="text-sm text-gray-600">Discover local spots</p>
               </div>
             </div>
-            <CloseButton
+        <CloseButton
               onClick={onClose}
-              className="p-2.5 hover:bg-white/80 rounded-full transition-all duration-300 shadow-sm"
+              className="p-2 hover:bg-white/80 rounded-full transition-all duration-300 shadow-sm touch-manipulation"
             />
           </div>
 
