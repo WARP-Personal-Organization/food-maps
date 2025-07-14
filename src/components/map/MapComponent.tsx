@@ -67,6 +67,8 @@ const MapComponent: React.FC<MapComponentProps> = ({
   const customMapRef = useRef<string | null>(null);
   const mapInitializedRef = useRef<boolean>(false);
   const customMapSourceId = useMemo(() => `custom-map-${Date.now()}`, []);
+  const [selectedMarkerId, setSelectedMarkerId] = useState<string | null>(null);
+
   // Set Mapbox access token
   mapboxgl.accessToken = mapboxToken;
 
@@ -82,6 +84,40 @@ const MapComponent: React.FC<MapComponentProps> = ({
       }
     };
   }, []);
+
+  // Update marker styles when selection changes
+  useEffect(() => {
+    if (mapInitializedRef.current) {
+      markersRef.current.forEach((marker) => {
+        const element = marker.getElement();
+        const markerId = element.getAttribute("data-marker-id");
+        if (markerId) {
+          const imgElement = element.querySelector("img");
+          if (imgElement) {
+            if (selectedMarkerId === markerId) {
+              // Selected marker: larger and normal color
+              imgElement.style.filter =
+                "drop-shadow(0px 4px 6px rgba(0, 0, 0, 0.6))";
+              imgElement.style.transform = "scale(1.3)";
+              imgElement.style.transition = "all 0.3s ease";
+            } else if (selectedMarkerId) {
+              // Other markers when one is selected: grey and smaller
+              imgElement.style.filter =
+                "grayscale(100%) brightness(0.6) drop-shadow(0px 2px 3px rgba(0, 0, 0, 0.3))";
+              imgElement.style.transform = "scale(0.8)";
+              imgElement.style.transition = "all 0.3s ease";
+            } else {
+              // No selection: normal state
+              imgElement.style.filter =
+                "drop-shadow(0px 3px 3px rgba(0, 0, 0, 0.4))";
+              imgElement.style.transform = "scale(1)";
+              imgElement.style.transition = "all 0.3s ease";
+            }
+          }
+        }
+      });
+    }
+  }, [selectedMarkerId]);
 
   // Main effect to initialize map or update markers
   useEffect(() => {
@@ -112,21 +148,19 @@ const MapComponent: React.FC<MapComponentProps> = ({
         attributionControl: false,
         renderWorldCopies: false,
         interactive: true,
-        // Enable 3D tilt and rotation for desktop only
-        dragRotate: isDesktop,
-        pitch: isDesktop ? 45 : 0,
-        bearing: isDesktop ? 0 : 0,
+        // Completely disable rotation and tilt for stable view
+        dragRotate: false,
+        pitch: 0,
+        bearing: 0,
+        // Add bounds to prevent over-scrolling without bouncing
+        maxBounds: [
+          [-60, -60], // Southwest coordinates - custom map area
+          [60, 60], // Northeast coordinates - custom map area
+        ],
+        // Set zoom limits
+        minZoom: 1,
+        maxZoom: 15,
       });
-
-      // Limit the maximum pitch (tilt) for desktop by clamping to 60
-      if (isDesktop) {
-        map.on("load", () => {
-          if (map.getPitch() > 60) map.setPitch(60);
-          map.on("pitch", () => {
-            if (map.getPitch() > 60) map.setPitch(60);
-          });
-        });
-      }
 
       // Function to add markers to the map
       const addMarkers = () => {
@@ -192,17 +226,19 @@ const MapComponent: React.FC<MapComponentProps> = ({
           markerElement.className = "custom-marker location-marker"; // Class for locations
           markerElement.tabIndex = 0;
           markerElement.setAttribute("role", "button");
+          const markerId = `location-${location.name}-${location.x}-${location.y}`;
+          markerElement.setAttribute("data-marker-id", markerId);
 
           if (location.iconUrl) {
             markerElement.innerHTML = `
                   <div class="marker-icon custom-icon-marker">
-                    <img src="${location.iconUrl}" alt="${location.name}" style="width: 36px; height: auto; filter: drop-shadow(0px 3px 3px rgba(0, 0, 0, 0.4));" />
+                    <img src="${location.iconUrl}" alt="${location.name}" style="width: 36px; height: auto; filter: drop-shadow(0px 3px 3px rgba(0, 0, 0, 0.4)); transition: all 0.3s ease;" />
                   </div>
                 `;
           } else {
             markerElement.innerHTML = `
                   <div class="marker-icon default-marker">
-                    <img src="/siopao-1.png" alt="${location.name} Marker" style="width: 36px; height: auto; filter: drop-shadow(0px 3px 3px rgba(0, 0, 0, 0.4));" />
+                    <img src="/siopao-1.png" alt="${location.name} Marker" style="width: 36px; height: auto; filter: drop-shadow(0px 3px 3px rgba(0, 0, 0, 0.4)); transition: all 0.3s ease;" />
                   </div>
                 `;
           }
@@ -217,6 +253,9 @@ const MapComponent: React.FC<MapComponentProps> = ({
             if (popupRef.current) {
               popupRef.current.remove();
             }
+
+            // Set the selected marker
+            setSelectedMarkerId(markerId);
 
             // Call the callback without showing popup
             if (onLocationClick) {
@@ -239,11 +278,13 @@ const MapComponent: React.FC<MapComponentProps> = ({
           }
           const markerElement = document.createElement("div");
           markerElement.className = "custom-marker foodprint-marker"; // Class for food prints
+          const markerId = `foodprint-${fp.name}-${fp.x}-${fp.y}`;
+          markerElement.setAttribute("data-marker-id", markerId);
           markerElement.innerHTML = `
             <div class="marker-icon foodprint-icon">
               <img src="${fp.iconUrl || "/siopao-foodprint-marker.png"}" alt="${
             fp.name
-          }" style="width: 40px; height: auto; filter: drop-shadow(0px 3px 3px rgba(0, 0, 0, 0.4));" />
+          }" style="width: 40px; height: auto; filter: drop-shadow(0px 3px 3px rgba(0, 0, 0, 0.4)); transition: all 0.3s ease;" />
             </div>
           `;
 
@@ -258,6 +299,9 @@ const MapComponent: React.FC<MapComponentProps> = ({
             if (popupRef.current) {
               popupRef.current.remove();
             }
+
+            // Set the selected marker
+            setSelectedMarkerId(markerId);
 
             // Just call the callback without showing popup
             if (onFoodPrintClick) {
@@ -307,6 +351,33 @@ const MapComponent: React.FC<MapComponentProps> = ({
         } catch (e) {
           console.error("Error fitting to bounds:", e);
         }
+
+        // Prevent zooming beyond limits only
+        map.on("zoom", () => {
+          const zoom = map.getZoom();
+          if (zoom < 1) {
+            map.setZoom(1);
+          } else if (zoom > 15) {
+            map.setZoom(15);
+          }
+        });
+
+        // Prevent rotation - keep bearing at 0
+        map.on("rotate", () => {
+          if (map.getBearing() !== 0) {
+            map.setBearing(0);
+          }
+        });
+
+        // Prevent pitch changes - keep pitch at 0
+        map.on("pitch", () => {
+          if (map.getPitch() !== 0) {
+            map.setPitch(0);
+          }
+        });
+
+        // Update marker styles after adding all markers
+        setTimeout(() => {}, 100);
       };
 
       // Add controls
@@ -344,20 +415,18 @@ const MapComponent: React.FC<MapComponentProps> = ({
 
           customMapRef.current = customMapSourceId;
 
-          // Load the FoodPrints-Map.png as the only background
           const mapImage = new Image();
           mapImage.onload = () => {
             try {
-              // Add the image as the only background
               map.addImage("custom-map-image", mapImage);
               map.addSource(customMapSourceId, {
                 type: "image",
-                url: mapImageUrl, // Using FoodPrints-Map.png
+                url: mapImageUrl,
                 coordinates: [
-                  [swCoord[0], neCoord[1]], // Top left
-                  [neCoord[0], neCoord[1]], // Top right
-                  [neCoord[0], swCoord[1]], // Bottom right
-                  [swCoord[0], swCoord[1]], // Bottom left
+                  [swCoord[0], neCoord[1]],
+                  [neCoord[0], neCoord[1]],
+                  [neCoord[0], swCoord[1]],
+                  [swCoord[0], swCoord[1]],
                 ],
               });
               map.addLayer({
@@ -365,7 +434,7 @@ const MapComponent: React.FC<MapComponentProps> = ({
                 type: "raster",
                 source: customMapSourceId,
                 paint: {
-                  "raster-opacity": 1, // Full opacity
+                  "raster-opacity": 1,
                 },
               });
 
@@ -418,6 +487,11 @@ const MapComponent: React.FC<MapComponentProps> = ({
     customMapSourceId,
     districts,
   ]);
+
+  // Reset selection when locations or foodprints change
+  useEffect(() => {
+    setSelectedMarkerId(null);
+  }, [locations, foodPrintMarkers]);
 
   return (
     <div ref={mapContainerRef} className="map-container w-full h-full"></div>
