@@ -255,7 +255,11 @@ const FilterPanel: React.FC<FilterPanelProps> = ({
 
           {selectedDishes.length > 0 && (
             <button
-              onClick={() => setSelectedDishes([])}
+              onClick={() => {
+                setSelectedDishes([]);
+                onFilterApply([]);
+                onClose();
+              }}
               className="w-full mt-3 font-black py-4 rounded-xl shadow-lg transition-all duration-300 text-sm sm:text-base bg-gray-200 text-gray-700 hover:bg-gray-300 hover:text-gray-900 touch-manipulation"
             >
               Remove All Filters
