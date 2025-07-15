@@ -1,11 +1,11 @@
-'use client';
+"use client";
 
-import React, { useState, useEffect } from 'react';
-import DesktopMapLayout from '@/desktop/DesktopMapLayout';
-import MobileMapLayout from '@/mobile/MobileMapLayout';
-import { DishData } from '@/lib/DishData';
-import { LocationData } from '@/lib/LocationData';
-import { FoodPrintData } from '@/lib/FoodPrintData';
+import React, { useState, useEffect } from "react";
+import DesktopMapLayout from "@/desktop/DesktopMapLayout";
+import MobileMapLayout from "@/mobile/MobileMapLayout";
+import { DishData } from "@/lib/DishData";
+import { LocationData } from "@/lib/LocationData";
+import { FoodPrintData } from "@/lib/FoodPrintData";
 
 function MapLayout() {
   const [activeFilters, setActiveFilters] = useState<string[]>([]);
@@ -15,15 +15,22 @@ function MapLayout() {
       setActiveFilters([]);
     };
 
-    window.addEventListener('clearFilters', handleClearFilters);
+    window.addEventListener("clearFilters", handleClearFilters);
     return () => {
-      window.removeEventListener('clearFilters', handleClearFilters);
+      window.removeEventListener("clearFilters", handleClearFilters);
     };
   }, []);
 
-  const handleFilterChange = (filters: string[] | ((prev: string[]) => string[])) => {
+  const handleFilterChange = (
+    filters: string[] | ((prev: string[]) => string[])
+  ) => {
     setActiveFilters((prev) => {
-      const newFilters = typeof filters === 'function' ? filters(prev) : filters;
+      const newFilters =
+        typeof filters === "function" ? filters(prev) : filters;
+      // Force update if clearing all filters (to fix Vercel bug), otherwise only update if changed
+      if (newFilters.length === 0 && prev.length !== 0) {
+        return [];
+      }
       if (JSON.stringify(prev) !== JSON.stringify(newFilters)) {
         return newFilters;
       }

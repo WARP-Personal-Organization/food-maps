@@ -70,14 +70,14 @@ const FilterPanel: React.FC<FilterPanelProps> = ({
               </div>
               <div>
                 <h2 className="text-lg sm:text-xl font-black text-gray-900">
-                  Filter Dishes
+                  Filter Dishess
                 </h2>
                 <p className="text-xs sm:text-sm text-gray-600">
                   Find your favorites
                 </p>
               </div>
             </div>
-         <CloseButton
+            <CloseButton
               onClick={onClose}
               className="p-2 hover:bg-white/80 rounded-full transition-all duration-300 shadow-sm touch-manipulation"
             />
@@ -255,7 +255,11 @@ const FilterPanel: React.FC<FilterPanelProps> = ({
 
           {selectedDishes.length > 0 && (
             <button
-              onClick={() => setSelectedDishes([])}
+              onClick={() => {
+                setSelectedDishes([]);
+                onFilterApply([]);
+                onClose();
+              }}
               className="w-full mt-3 font-black py-4 rounded-xl shadow-lg transition-all duration-300 text-sm sm:text-base bg-gray-200 text-gray-700 hover:bg-gray-300 hover:text-gray-900 touch-manipulation"
             >
               Remove All Filters
