@@ -117,7 +117,15 @@ const DesktopMapLayout: React.FC<DesktopMapLayoutProps> = ({
         />
       </div>
 
-      {(!currentPanel || !["explore", "filter","dishDetails","locationDetail","about","foodPrintDetail"].includes(currentPanel)) && (
+      {(!currentPanel ||
+        ![
+          "explore",
+          "filter",
+          "dishDetails",
+          "locationDetail",
+          "about",
+          "foodPrintDetail",
+        ].includes(currentPanel)) && (
         <div
           className={`absolute z-30 w-full transition-transform duration-300 ease-in-out ${
             panelOpen
@@ -128,7 +136,7 @@ const DesktopMapLayout: React.FC<DesktopMapLayoutProps> = ({
           <div className="flex  items-center gap-4 px-4 py-3 overflow-x-auto pt-10">
             <div className="flex items-center gap-2 shrink-0">
               <HomeButton
-                 isDesktop={true}
+                isDesktop={true}
                 className="z-10"
                 onClick={() => {
                   if (panelOpen && currentPanel === "dishDetails") {
@@ -201,6 +209,9 @@ const DesktopMapLayout: React.FC<DesktopMapLayoutProps> = ({
               useCustomMap
               isDesktop={true}
               districts={districts}
+              onAboutClick={() => {
+                panelRef.current?.openAbout();
+              }}
             />
           </div>
         </ClientOnly>

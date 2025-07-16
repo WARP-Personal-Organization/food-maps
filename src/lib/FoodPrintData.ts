@@ -15,8 +15,8 @@ export type DishType = (typeof DishType)[number];
 const foodPrintMarkersData: FoodPrint[] = [
   {
     name: "Siopao",
-    x: 800,
-    y: 350,
+    x: 850, // Far right, upper
+    y: 200,
     description:
       "A beloved siopao spot in Iloilo known for its large size and flavorful fillings.",
     iconUrl: "/images/foodprint-markers/siopao-foodprint-marker.png",
@@ -31,8 +31,8 @@ const foodPrintMarkersData: FoodPrint[] = [
   },
   {
     name: "Batchoy",
-    x: 480,
-    y: 420,
+    x: 300, // Far left, lower
+    y: 500,
     description:
       "A flavorful and hearty bowl of batchoy near the public market.",
     iconUrl: "/images/foodprint-markers/batchoy-foodprint-marker.png",
@@ -47,8 +47,8 @@ const foodPrintMarkersData: FoodPrint[] = [
   },
   {
     name: "Kansi",
-    x: 620,
-    y: 280,
+    x: 800, // Far right, lower
+    y: 800,
     description:
       "A local favorite kansi spot serving rich bone marrow beef soup.",
     iconUrl: "/images/foodprint-markers/cansi-foodprint-marker.png",
@@ -63,8 +63,8 @@ const foodPrintMarkersData: FoodPrint[] = [
   },
   {
     name: "Chicken Inasal",
-    x: 380,
-    y: 320,
+    x: 300, // Far left, upper
+    y: 200,
     description:
       "Authentic grilled chicken inasal experience in Bacolod's food district.",
     iconUrl: "/images/foodprint-markers/inasal-foodprint-marker.png",
@@ -79,8 +79,8 @@ const foodPrintMarkersData: FoodPrint[] = [
   },
   {
     name: "KBL",
-    x: 510,
-    y: 240,
+    x: 500, // Center
+    y: 500,
     description:
       "A comforting bowl of traditional kadios, baboy, and langka soup.",
     iconUrl: "/images/foodprint-markers/kbl-foodprint-marker.png",
@@ -95,8 +95,8 @@ const foodPrintMarkersData: FoodPrint[] = [
   },
   {
     name: "Pancit Molo",
-    x: 490,
-    y: 470,
+    x: 800, // Right center
+    y: 500,
     description: "Traditional Ilonggo wonton soup served since the 1950s.",
     iconUrl: "/images/foodprint-markers/pancit-molo-foodprint-marker.png",
     dishType: "PancitMolo",
@@ -110,8 +110,8 @@ const foodPrintMarkersData: FoodPrint[] = [
   },
   {
     name: "Seafood",
-    x: 500,
-    y: 490,
+    x: 500, // Bottom center
+    y: 700,
     description: "Fresh and flavorful seafood dishes from Iloilo.",
     dishType: "Seafood",
     iconUrl: "/images/foodprint-markers/seafood-foodprint-marker.png",
