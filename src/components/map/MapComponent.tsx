@@ -15,6 +15,7 @@ interface MapComponentProps {
   defaultZoom?: number;
   onLocationClick?: (location: Location) => void;
   onFoodPrintClick?: (foodPrint: FoodPrint) => void;
+  onAboutClick?: () => void;
   mapboxToken?: string;
   mapStyle?: string;
   useCustomMap?: boolean;
@@ -52,6 +53,7 @@ const MapComponent: React.FC<MapComponentProps> = ({
   defaultZoom = 12,
   onLocationClick,
   onFoodPrintClick,
+  onAboutClick,
   mapboxToken = process.env.NEXT_PUBLIC_MAPBOX_TOKEN ||
     process.env.NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN ||
     "",
@@ -327,7 +329,7 @@ const MapComponent: React.FC<MapComponentProps> = ({
           // Use clearly smaller text on mobile, larger on desktop
           const fontSizeClass = isDesktop ? "text-3xl" : "text-base";
           labelElement.innerHTML = `
-            <span class="text-white font-extrabold ${fontSizeClass} select-none pointer-events-none drop-shadow-lg opacity-80">
+            <span class="text-white font-extrabold ${fontSizeClass} select-none pointer-events-none drop-shadow-lg">
               ${district.name}
             </span>
           `;
@@ -340,6 +342,34 @@ const MapComponent: React.FC<MapComponentProps> = ({
             .addTo(map);
           markersRef.current.push(marker);
         });
+
+        const aboutX = 500;
+        const aboutY = 350;
+        const [aboutLng, aboutLat] = xyToLngLat(aboutX, aboutY, mapBounds);
+        const aboutMarkerElement = document.createElement("div");
+        aboutMarkerElement.className = "custom-marker about-marker";
+        aboutMarkerElement.tabIndex = 0;
+        aboutMarkerElement.setAttribute("role", "button");
+        aboutMarkerElement.setAttribute("aria-label", "About FoodPrints");
+        aboutMarkerElement.innerHTML = `
+          <div class="marker-icon custom-icon-marker">
+            <img src="/images/about-icon.png" alt="About FoodPrints" style="width: 40px; height: 40px; filter: drop-shadow(0px 3px 3px rgba(0,0,0,0.4)); transition: all 0.3s ease; background: transparent;" />
+          </div>
+        `;
+        aboutMarkerElement.addEventListener("click", (e) => {
+          e.stopPropagation();
+          if (onAboutClick) onAboutClick();
+        });
+        aboutMarkerElement.addEventListener("keydown", (e) => {
+          if (e.key === "Enter" || e.key === " ") {
+            e.preventDefault();
+            if (onAboutClick) onAboutClick();
+          }
+        });
+        const aboutMarker = new mapboxgl.Marker(aboutMarkerElement)
+          .setLngLat([aboutLng, aboutLat])
+          .addTo(map);
+        markersRef.current.push(aboutMarker);
 
         // Ensure the map fits all points with padding
         console.log("Fitting to bounds with", allPoints.length, "points");
@@ -484,6 +514,7 @@ const MapComponent: React.FC<MapComponentProps> = ({
     mapBounds,
     onLocationClick,
     onFoodPrintClick,
+    onAboutClick,
     customMapSourceId,
     districts,
   ]);

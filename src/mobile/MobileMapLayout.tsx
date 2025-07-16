@@ -159,6 +159,9 @@ const MobileMapLayout: React.FC<MobileMapLayoutProps> = ({
               onFoodPrintClick={handleFoodprintClick}
               useCustomMap
               districts={districts}
+              onAboutClick={() => {
+                panelRef.current?.openAbout();
+              }}
             />
           </div>
         </ClientOnly>
