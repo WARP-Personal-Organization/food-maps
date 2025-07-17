@@ -113,32 +113,30 @@ const MobileMapLayout: React.FC<MobileMapLayoutProps> = ({
         selectedDishes={activeFilters}
         onFilterApply={updateFilters}
       />
-      <div className="relative w-full">
+      <div className="fixed top-6 left-4 z-30 flex flex-col gap-4">
         <HomeButton
-          className="absolute left-[5%] z-10"
           onClick={() => {
             setCurrentPanel("home"); // open the panel
           }}
         />
-        <HomePanel
-          isVisible={currentPanel === "home"}
-          dishes={dishData}
-          openMenu={() => panelRef.current?.openMenu()}
-          onClose={() => setCurrentPanel(null)}
-          onFilterApply={(filters) => {
-            updateFilters(filters);
-            setCurrentPanel(null);
-          }}
-        />
-        <FilterButton
-          className="absolute left-[18%] z-20"
-          onClick={() => panelRef.current?.openFilter()}
-        />
+        <FilterButton onClick={() => panelRef.current?.openFilter()} />
       </div>
-
-      {/* Menu Button */}
-      <MenuButton onClick={() => panelRef.current?.openMenu()} />
-
+      {/* Menu Button remains top right */}
+      <MenuButton
+        className="fixed top-6 right-4 z-30"
+        onClick={() => panelRef.current?.openMenu()}
+      />
+      {/* HomePanel overlay */}
+      <HomePanel
+        isVisible={currentPanel === "home"}
+        dishes={dishData}
+        openMenu={() => panelRef.current?.openMenu()}
+        onClose={() => setCurrentPanel(null)}
+        onFilterApply={(filters) => {
+          updateFilters(filters);
+          setCurrentPanel(null);
+        }}
+      />
       {/* Map or Empty State */}
       {hasDishes ? (
         <ClientOnly>
@@ -168,7 +166,6 @@ const MobileMapLayout: React.FC<MobileMapLayoutProps> = ({
       ) : (
         <EmptyState />
       )}
-
       {/* Active Filters + Back Button UI */}
       {activeFilters.length > 0 && (
         <div className="absolute bottom-0 left-0 w-full max-h-[35vh] z-10 flex flex-col justify-start gap-4 px-4 pt-6 pb-4 bg-gradient-to-t from-[#202020] to-transparent overflow-hidden">
