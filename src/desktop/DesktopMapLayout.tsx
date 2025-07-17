@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useRef, useMemo } from "react";
+import React, { useRef, useMemo, useState } from "react";
 import PanelManager, { PanelManagerRef } from "./components/PanelManager";
 import { Location, FoodPrint, Dish } from "@/types/types";
 import {
@@ -33,6 +33,7 @@ const DesktopMapLayout: React.FC<DesktopMapLayoutProps> = ({
   onFilterChange,
 }) => {
   const panelRef = useRef<PanelManagerRef | null>(null);
+  const [currentPanel, setCurrentPanel] = useState<string | null>(null);
 
   const handleFilterChange = (
     filters: string[] | ((prev: string[]) => string[])
@@ -102,18 +103,20 @@ const DesktopMapLayout: React.FC<DesktopMapLayoutProps> = ({
           selectedDishes={activeFilters}
           onFilterApply={handleFilterChange}
           onClose={() => {}}
-          onPanelChange={() => {}}
+          onPanelChange={setCurrentPanel}
         />
       </div>
       {/* FAB container for Filter only (Home removed) */}
-      <div className="fixed top-8 left-8 z-30 flex flex-col gap-4">
-        <FilterButton
-          isDesktop={true}
-          onClick={() => {
-            panelRef.current?.openFilter();
-          }}
-        />
-      </div>
+      {currentPanel === null && (
+        <div className="fixed top-8 left-8 z-30 flex flex-col gap-4">
+          <FilterButton
+            isDesktop={true}
+            onClick={() => {
+              panelRef.current?.openFilter();
+            }}
+          />
+        </div>
+      )}
       {/* MenuButton remains top right */}
       <MenuButton
         className="fixed top-8 right-8 z-30"

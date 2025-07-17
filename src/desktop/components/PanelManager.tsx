@@ -159,7 +159,7 @@ const PanelManager: React.ForwardRefRenderFunction<
         activeFilters={selectedDishes}
         onClose={handleClosePanel}
       />
-{/* 
+      {/* 
       <HomePanel
         isVisible={currentPanel === "home"}
         dishes={dishData}
@@ -175,25 +175,28 @@ const PanelManager: React.ForwardRefRenderFunction<
         }}
       /> */}
 
-      <FilterPanel
-        isVisible={currentPanel === "filter"}
-        dishData={dishData}
-        initialSelectedDishes={selectedDishes}
-        onClose={handleClosePanel}
-        onFilterApply={(filters) => {
-          if (onFilterApply) {
-            onFilterApply(filters);
-            setTimeout(() => {
-              if (filters.length > 0) {
-                setCurrentPanel("explore");
-                onPanelChange?.("explore");
-              } else {
-                handleClosePanel();
+      {currentPanel !== "locationSummary" &&
+        currentPanel !== "locationDetail" && (
+          <FilterPanel
+            isVisible={currentPanel === "filter"}
+            dishData={dishData}
+            initialSelectedDishes={selectedDishes}
+            onClose={handleClosePanel}
+            onFilterApply={(filters) => {
+              if (onFilterApply) {
+                onFilterApply(filters);
+                setTimeout(() => {
+                  if (filters.length > 0) {
+                    setCurrentPanel("explore");
+                    onPanelChange?.("explore");
+                  } else {
+                    handleClosePanel();
+                  }
+                }, 0);
               }
-            }, 0);
-          }
-        }}
-      />
+            }}
+          />
+        )}
 
       <AboutPanel
         isVisible={currentPanel === "about"}
@@ -215,12 +218,15 @@ const PanelManager: React.ForwardRefRenderFunction<
         onClose={handleClosePanel}
       />
 
-      <ExplorePanel
-        activeFilters={selectedDishes}
-        onFilterChange={onFilterApply}
-        isVisible={currentPanel === "explore"}
-        onClose={handleClosePanel}
-      />
+      {currentPanel !== "locationSummary" &&
+        currentPanel !== "locationDetail" && (
+          <ExplorePanel
+            activeFilters={selectedDishes}
+            onFilterChange={onFilterApply}
+            isVisible={currentPanel === "explore"}
+            onClose={handleClosePanel}
+          />
+        )}
     </>
   );
 };
