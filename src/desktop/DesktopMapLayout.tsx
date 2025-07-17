@@ -1,20 +1,18 @@
 "use client";
 
-import React, { useRef, useMemo, useState } from "react";
+import React, { useRef, useMemo } from "react";
 import PanelManager, { PanelManagerRef } from "./components/PanelManager";
-import { Location, FoodPrint, Dish, PanelType } from "@/types/types";
+import { Location, FoodPrint, Dish } from "@/types/types";
 import {
   ClientOnly,
   MapComponent,
   EmptyState,
 } from "../components/map/MapUtilComponents";
 
-import { IoClose } from "react-icons/io5";
 import MenuButton from "@/components/buttons/MenuButton";
 import FilterButton from "@/components/buttons/FilterButton";
 // import HomeButton from "@/components/buttons/HomeButton";
 import { FoodPrintData } from "@/lib/FoodPrintData";
-import { denormalizeKey } from "@/lib/utils";
 
 interface DesktopMapLayoutProps {
   dishData: Dish[];
@@ -26,7 +24,6 @@ interface DesktopMapLayoutProps {
   onFilterChange: (filters: string[] | ((prev: string[]) => string[])) => void;
 }
 import { districts } from "@/lib/DistrictCoordinatesData";
-import HomeButton from "@/components/buttons/HomeButton";
 
 const DesktopMapLayout: React.FC<DesktopMapLayoutProps> = ({
   dishData,
@@ -36,8 +33,6 @@ const DesktopMapLayout: React.FC<DesktopMapLayoutProps> = ({
   onFilterChange,
 }) => {
   const panelRef = useRef<PanelManagerRef | null>(null);
-  const [panelOpen, setPanelOpen] = useState(false);
-  const [currentPanel, setCurrentPanel] = useState<PanelType | null>(null);
 
   const handleFilterChange = (
     filters: string[] | ((prev: string[]) => string[])
@@ -92,16 +87,10 @@ const DesktopMapLayout: React.FC<DesktopMapLayoutProps> = ({
 
   const handleLocationClick = (location: Location) => {
     panelRef.current?.openLocationDetail(location);
-    setPanelOpen(true);
   };
 
   const handleFoodprintClick = (foodprint: FoodPrint) => {
     panelRef.current?.openFoodPrintDetail(foodprint);
-    setPanelOpen(true);
-  };
-
-  const handleRemoveFilter = (filterToRemove: string) => {
-    handleFilterChange((prev) => prev.filter((f) => f !== filterToRemove));
   };
 
   return (
@@ -112,83 +101,25 @@ const DesktopMapLayout: React.FC<DesktopMapLayoutProps> = ({
           dishData={dishData}
           selectedDishes={activeFilters}
           onFilterApply={handleFilterChange}
-          onClose={() => setPanelOpen(false)}
-          onPanelChange={setCurrentPanel}
+          onClose={() => {}}
+          onPanelChange={() => {}}
         />
       </div>
-
-      {(!currentPanel ||
-        ![
-          "explore",
-          "filter",
-          "dishDetails",
-          "locationDetail",
-          "about",
-          "foodPrintDetail",
-        ].includes(currentPanel)) && (
-        <div
-          className={`absolute z-30 w-full transition-transform duration-300 ease-in-out ${
-            panelOpen
-              ? "translate-x-[300px] md:translate-x-[320px] lg:translate-x-[350px] xl:translate-x-[400px]"
-              : "translate-x-0"
-          }`}
-        >
-          <div className="flex  items-center gap-4 px-4 py-3 overflow-x-auto pt-10">
-            <div className="flex items-center gap-2 shrink-0">
-              <HomeButton
-                isDesktop={true}
-                className="z-10"
-                onClick={() => {
-                  if (panelOpen && currentPanel === "dishDetails") {
-                    panelRef.current?.closeAllPanels();
-                    setPanelOpen(false);
-                    setCurrentPanel(null);
-                  } else {
-                    panelRef.current?.openDishDetails();
-                    setPanelOpen(true);
-                    setCurrentPanel("dishDetails");
-                  }
-                }}
-              />
-              <FilterButton
-                isDesktop={true}
-                onClick={() => {
-                  panelRef.current?.openFilter();
-                  setPanelOpen(true);
-                }}
-              />
-            </div>
-
-            <div className="flex items-center gap-2 flex-wrap text-white">
-              <span className="text-xs font-bold whitespace-nowrap">
-                Filters ({activeFilters.length})
-              </span>
-
-              {activeFilters.map((filter) => (
-                <div
-                  key={filter}
-                  className="bg-yellow-300 border border-blue-400 rounded-full flex items-center text-sm text-gray-900 font-medium px-3 py-1 shadow-sm"
-                >
-                  <span className="pr-1">{denormalizeKey(filter)}</span>
-                  <button
-                    onClick={() => handleRemoveFilter(filter)}
-                    className="w-5 h-5 flex items-center justify-center text-gray-800"
-                    aria-label={`Remove ${filter} filter`}
-                  >
-                    <IoClose />
-                  </button>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-      )}
-
+      {/* FAB container for Filter only (Home removed) */}
+      <div className="fixed top-8 left-8 z-30 flex flex-col gap-4">
+        <FilterButton
+          isDesktop={true}
+          onClick={() => {
+            panelRef.current?.openFilter();
+          }}
+        />
+      </div>
+      {/* MenuButton remains top right */}
       <MenuButton
-        className="z-30"
+        className="fixed top-8 right-8 z-30"
         onClick={() => panelRef.current?.openMenu()}
       />
-
+      {/* Map and rest of UI */}
       {hasDishes ? (
         <ClientOnly>
           <div className="h-full w-full bg-[#3b3b3f]">
