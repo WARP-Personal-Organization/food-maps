@@ -337,7 +337,7 @@ const LocationDetailPanel: React.FC<LocationDetailPanelProps> = ({
                     </div>
 
                     {/* Enhanced Tabs */}
-                    <div className="mt-6">
+                    <div className="mt-2">
                       <div className="flex bg-gray-100 rounded-2xl p-1">
                         {["photos", "menu"].map((tab) => (
                           <motion.button
@@ -365,7 +365,7 @@ const LocationDetailPanel: React.FC<LocationDetailPanelProps> = ({
                       initial={{ opacity: 0, y: 20 }}
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ duration: 0.4 }}
-                      className="grid grid-cols-2 gap-3 mt-4"
+                      className="grid grid-cols-2 gap-3 mt-2"
                     >
                       {photosToShow && photosToShow.length > 0 ? (
                         photosToShow.slice(0, 6).map((photo, index) => (

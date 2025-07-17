@@ -328,7 +328,7 @@ const LocationSummaryPanel: React.FC<LocationSummaryPanelProps> = ({
                 </h1>
 
                 {/* Enhanced info cards */}
-                <div className="space-y-4">
+                <div className="space-y-2">
                   {[
                     {
                       icon: <MapPin className="h-5 w-5 text-white" />,
@@ -382,7 +382,7 @@ const LocationSummaryPanel: React.FC<LocationSummaryPanelProps> = ({
                 </div>
 
                 {/* Enhanced Tabs */}
-                <div className="mt-6">
+                <div className="mt-2">
                   <div className="flex bg-gray-100 rounded-2xl p-1">
                     {["photos", "menu"].map((tab) => (
                       <motion.button
@@ -408,7 +408,7 @@ const LocationSummaryPanel: React.FC<LocationSummaryPanelProps> = ({
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.4 }}
-                  className="mt-4"
+                  className="mt-2"
                 >
                   {photosToShow && photosToShow.length > 0 ? (
                     <div className="flex gap-4 overflow-x-auto scrollbar-hide snap-x snap-mandatory px-1">
