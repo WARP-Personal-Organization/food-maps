@@ -70,7 +70,7 @@ const FilterPanel: React.FC<FilterPanelProps> = ({
               </div>
               <div>
                 <h2 className="text-lg sm:text-xl font-black text-gray-900">
-                  Filter Dishess
+                  Filter Dishes
                 </h2>
                 <p className="text-xs sm:text-sm text-gray-600">
                   Find your favorites
