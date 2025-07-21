@@ -11,6 +11,7 @@ import { MapPin, Tag } from "lucide-react";
 
 interface LocationDetailPanelProps {
   location: Location | null;
+  locationKey: string;
   isVisible: boolean;
   onClose: () => void;
   onViewDetails: () => void;
@@ -147,14 +148,38 @@ const EnlargedImageModal: React.FC<EnlargedImageModalProps> = ({
   );
 };
 
+const fallbackImageMap: Record<string, string> = {
+  Siopao: "/images/fallback-images/siopao.png",
+  Batchoy: "/images/fallback-images/batchoy.png",
+  Cansi: "/images/fallback-images/cansi.png",
+  "Chicken Inasal": "/images/fallback-images/inasal.png",
+  KBL: "/images/fallback-images/kbl.png",
+  "Pancit Molo": "/images/fallback-images/pancit_molo.png",
+  Seafood: "/images/fallback-images/seafood.png",
+};
+
 const LocationDetailPanel: React.FC<LocationDetailPanelProps> = ({
   location,
+  locationKey,
   isVisible,
   onClose,
 }) => {
+  const [imgSrc, setImgSrc] = useState("");
   const [activeTab, setActiveTab] = useState("photos");
   const [enlargedImage, setEnlargedImage] = useState<string | null>(null);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
+
+  React.useEffect(() => {
+    if (location) {
+      setImgSrc(
+        location.photos[0] && location.photos[0].trim() !== ""
+          ? location.photos[0]
+          : fallbackImageMap[locationKey] ||
+              "/images/fallback-images/siopao.png"
+      );
+    }
+  }, [location, locationKey]);
+
   if (!location) return null;
 
   // Default data if not provided
@@ -162,7 +187,11 @@ const LocationDetailPanel: React.FC<LocationDetailPanelProps> = ({
   const openHours = location.openHours || "10:00 AM - 7:00 PM";
   const priceRange = location.priceRange || "₱100-200";
   const photosToShow =
-    activeTab === "menu" ? location.menuPhotos : location.photos;
+    activeTab === "menu" &&
+    location.menuPhotos &&
+    location.menuPhotos.length > 0
+      ? location.menuPhotos
+      : location.photos;
 
   // Navigation handlers
   const handleImageClick = (photo: string, index: number) => {
@@ -190,6 +219,12 @@ const LocationDetailPanel: React.FC<LocationDetailPanelProps> = ({
     setEnlargedImage(null);
     setCurrentImageIndex(0);
   };
+
+  const validSrc =
+    imgSrc && imgSrc.trim() !== ""
+      ? imgSrc
+      : fallbackImageMap[locationKey] || "/images/fallback-images/siopao.png";
+
   return (
     <>
       {/* Enlarged Image Modal rendered at the top level using portal */}
@@ -257,13 +292,23 @@ const LocationDetailPanel: React.FC<LocationDetailPanelProps> = ({
                     className="relative w-full flex-shrink-0"
                     style={{ height: "45vh" }}
                   >
-                    <Image
-                      src={location.photos?.[0]}
-                      alt={`${location.name} Image`}
-                      layout="fill"
-                      objectFit="cover"
-                      className="z-10 transition-transform duration-700 hover:scale-105"
-                    />
+                    {validSrc && (
+                      <Image
+                        src={validSrc}
+                        alt={`${location.name} Image`}
+                        layout="fill"
+                        objectFit="cover"
+                        className="z-10 transition-transform duration-700 hover:scale-105"
+                        onError={() => {
+                          if (validSrc !== fallbackImageMap[locationKey]) {
+                            setImgSrc(
+                              fallbackImageMap[locationKey] ||
+                                "/images/fallback-images/siopao.png"
+                            );
+                          }
+                        }}
+                      />
+                    )}
                     {/* Subtle gradient overlay */}
                     <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent z-20" />
                   </div>
@@ -385,16 +430,28 @@ const LocationDetailPanel: React.FC<LocationDetailPanelProps> = ({
                                 index === 0 ? "aspect-[2/1]" : "aspect-square"
                               }`}
                             >
-                              <Image
-                                src={photo}
-                                alt={`${location.name} ${activeTab} ${
-                                  index + 1
-                                }`}
-                                layout="fill"
-                                objectFit="cover"
-                                className="cursor-pointer hover:opacity-90 transition-opacity duration-300"
-                                onClick={() => handleImageClick(photo, index)}
-                              />
+                              {photo && photo.trim() !== "" ? (
+                                <Image
+                                  src={photo}
+                                  alt={`${location.name} ${activeTab} ${
+                                    index + 1
+                                  }`}
+                                  layout="fill"
+                                  objectFit="cover"
+                                  className="cursor-pointer hover:opacity-90 transition-opacity duration-300"
+                                  onClick={() => handleImageClick(photo, index)}
+                                />
+                              ) : (
+                                <Image
+                                  src={
+                                    fallbackImageMap[locationKey] ||
+                                    "/images/fallback-images/siopao.png"
+                                  }
+                                  alt="Fallback"
+                                  layout="fill"
+                                  objectFit="cover"
+                                />
+                              )}
                             </div>
                           </motion.div>
                         ))

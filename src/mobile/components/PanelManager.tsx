@@ -26,7 +26,7 @@ export interface PanelManagerRef {
   openMenu: () => void;
   openFilter: () => void;
   openAbout: () => void;
-  openLocationSummary: (location: Location) => void;
+  openLocationSummary: (location: Location, locationKey: string) => void;
   openLocationDetail: (location: Location) => void;
   openFoodPrintSummary: (selectedFoodPrint: FoodPrint) => void;
   openFoodPrintDetail: (selectedFoodPrint: FoodPrint) => void;
@@ -36,12 +36,23 @@ export interface PanelManagerRef {
 
 const PanelManager: React.ForwardRefRenderFunction<
   PanelManagerRef,
-  PanelManagerProps
-> = ({ dishData = [], selectedDishes = [], onFilterApply }, ref) => {
+  PanelManagerProps & { selectedLocationKey?: string }
+> = (
+  {
+    dishData = [],
+    selectedDishes = [],
+    onFilterApply,
+    selectedLocationKey: propLocationKey,
+  },
+  ref
+) => {
   const [currentPanel, setCurrentPanel] = useState<PanelType>(null);
   const [isMenuVisible, setIsMenuVisible] = useState(false);
   const [selectedLocation, setSelectedLocation] = useState<Location | null>(
     null
+  );
+  const [selectedLocationKey, setSelectedLocationKey] = useState<string>(
+    propLocationKey || "Siopao"
   );
   const [selectedFoodPrint, setSelectedFoodPrint] = useState<FoodPrint | null>(
     null
@@ -52,8 +63,9 @@ const PanelManager: React.ForwardRefRenderFunction<
     openMenu: () => setIsMenuVisible(true),
     openFilter: () => setCurrentPanel("filter"),
     openAbout: () => setCurrentPanel("about"),
-    openLocationSummary: (location: Location) => {
+    openLocationSummary: (location: Location, locationKey: string) => {
       setSelectedLocation(location);
+      setSelectedLocationKey(locationKey);
       setCurrentPanel("locationSummary");
     },
     openLocationDetail: (location: Location) => {
@@ -143,6 +155,7 @@ const PanelManager: React.ForwardRefRenderFunction<
 
       <LocationSummaryPanel
         location={selectedLocation}
+        locationKey={selectedLocationKey}
         isVisible={currentPanel === "locationSummary"}
         onClose={() => {
           setSelectedLocation(null);

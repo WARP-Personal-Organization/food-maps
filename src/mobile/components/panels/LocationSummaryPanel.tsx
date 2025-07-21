@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import Image from "next/image";
 import { Location } from "@/types/types";
 import { MapPin, Tag } from "lucide-react";
@@ -10,19 +10,47 @@ import { motion, AnimatePresence } from "framer-motion";
 
 interface LocationSummaryPanelProps {
   location: Location | null;
+  locationKey: string;
   isVisible: boolean;
   onClose: () => void;
   onViewDetails: () => void;
 }
 
+const fallbackImageMap: Record<string, string> = {
+  Siopao: "/images/fallback-images/siopao.png",
+  Batchoy: "/images/fallback-images/batchoy.png",
+  Cansi: "/images/fallback-images/cansi.png",
+  "Chicken Inasal": "/images/fallback-images/inasal.png",
+  KBL: "/images/fallback-images/kbl.png",
+  "Pancit Molo": "/images/fallback-images/pancit_molo.png",
+  Seafood: "/images/fallback-images/seafood.png",
+};
+
 const LocationSummaryPanel: React.FC<LocationSummaryPanelProps> = ({
   location,
+  locationKey,
   onClose,
   isVisible,
 }) => {
+  console.log("LocationSummaryPanel locationKey:", locationKey);
   const [activeTab, setActiveTab] = useState<"photos" | "menu">("photos");
   const [enlargedImage, setEnlargedImage] = useState<string | null>(null);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const [imgSrc, setImgSrc] = useState("");
+
+  useEffect(() => {
+    if (location) {
+      setImgSrc(
+        location.photos &&
+          location.photos.length > 0 &&
+          location.photos[0] &&
+          location.photos[0].trim() !== ""
+          ? location.photos[0]
+          : fallbackImageMap[locationKey] ||
+              "/images/fallback-images/siopao.png"
+      );
+    }
+  }, [location, locationKey]);
 
   // Drag-to-close state and handlers (from FoodPrintSummaryPanel)
   const panelRef = useRef<HTMLDivElement>(null);
@@ -41,7 +69,11 @@ const LocationSummaryPanel: React.FC<LocationSummaryPanelProps> = ({
   const priceRange = location.priceRange;
 
   const photosToShow =
-    activeTab === "menu" ? location.menuPhotos : location.photos;
+    activeTab === "menu" &&
+    location.menuPhotos &&
+    location.menuPhotos.length > 0
+      ? location.menuPhotos
+      : location.photos;
 
   // Navigation handlers
   const handleImageClick = (photo: string, index: number) => {
@@ -304,14 +336,24 @@ const LocationSummaryPanel: React.FC<LocationSummaryPanelProps> = ({
                 className="relative w-full flex-shrink-0"
                 style={{ height: "45vh" }}
               >
-                <Image
-                  src={location.photos?.[0]}
-                  alt={`${location.name} Image`}
-                  layout="fill"
-                  objectFit="cover"
-                  fill
-                  className="z-10 transition-transform duration-700 hover:scale-105"
-                />
+                {imgSrc && (
+                  <Image
+                    src={imgSrc}
+                    alt={`${location.name} Image`}
+                    layout="fill"
+                    objectFit="cover"
+                    fill
+                    className="z-10 transition-transform duration-700 hover:scale-105"
+                    onError={() => {
+                      if (imgSrc !== fallbackImageMap[locationKey]) {
+                        setImgSrc(
+                          fallbackImageMap[locationKey] ||
+                            "/images/fallback-images/siopao.png"
+                        );
+                      }
+                    }}
+                  />
+                )}
                 {/* Subtle gradient overlay */}
                 <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent z-20" />
               </div>
@@ -422,14 +464,30 @@ const LocationSummaryPanel: React.FC<LocationSummaryPanelProps> = ({
                           whileHover={{ scale: 1.03 }}
                           whileTap={{ scale: 0.97 }}
                         >
-                          <Image
-                            src={photo}
-                            alt={`${location.name} ${activeTab} ${index + 1}`}
-                            layout="fill"
-                            objectFit="cover"
-                            className="cursor-pointer hover:opacity-90 transition-opacity duration-300"
-                            onClick={() => handleImageClick(photo, index)}
-                          />
+                          <div className="relative w-full h-full">
+                            {photo && photo.trim() !== "" ? (
+                              <Image
+                                src={photo}
+                                alt={`${location.name} ${activeTab} ${
+                                  index + 1
+                                }`}
+                                layout="fill"
+                                objectFit="cover"
+                                className="cursor-pointer hover:opacity-90 transition-opacity duration-300"
+                                onClick={() => handleImageClick(photo, index)}
+                              />
+                            ) : (
+                              <Image
+                                src={
+                                  fallbackImageMap[locationKey] ||
+                                  "/images/fallback-images/siopao.png"
+                                }
+                                alt="Fallback"
+                                layout="fill"
+                                objectFit="cover"
+                              />
+                            )}
+                          </div>
                         </motion.div>
                       ))}
                     </div>

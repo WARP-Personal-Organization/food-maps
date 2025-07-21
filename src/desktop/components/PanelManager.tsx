@@ -32,7 +32,7 @@ export interface PanelManagerRef {
   openFilter: () => void;
   openAbout: () => void;
   openLocationSummary: (location: Location) => void;
-  openLocationDetail: (location: Location) => void;
+  openLocationDetail: (location: Location, locationKey: string) => void;
   openFoodPrintSummary: (selectedFoodPrint: FoodPrint) => void;
   openFoodPrintDetail: (selectedFoodPrint: FoodPrint) => void;
   openExplore: () => void;
@@ -44,15 +44,25 @@ export interface PanelManagerRef {
 
 const PanelManager: React.ForwardRefRenderFunction<
   PanelManagerRef,
-  PanelManagerProps
+  PanelManagerProps & { selectedLocationKey?: string }
 > = (
-  { dishData = [], selectedDishes = [], onFilterApply, onClose, onPanelChange },
+  {
+    dishData = [],
+    selectedDishes = [],
+    onFilterApply,
+    onClose,
+    onPanelChange,
+    selectedLocationKey: propLocationKey,
+  },
   ref
 ) => {
   const [currentPanel, setCurrentPanel] = useState<PanelType>(null);
   const [isMenuVisible, setIsMenuVisible] = useState(false);
   const [selectedLocation, setSelectedLocation] = useState<Location | null>(
     null
+  );
+  const [selectedLocationKey, setSelectedLocationKey] = useState<string>(
+    propLocationKey || "Siopao"
   );
   const [selectedFoodPrint, setSelectedFoodPrint] = useState<FoodPrint | null>(
     null
@@ -82,9 +92,10 @@ const PanelManager: React.ForwardRefRenderFunction<
       setCurrentPanel("locationSummary");
       onPanelChange?.("locationSummary");
     },
-    openLocationDetail: (location: Location) => {
+    openLocationDetail: (location: Location, locationKey: string) => {
       handleClosePanel();
       setSelectedLocation(location);
+      setSelectedLocationKey(locationKey);
       setCurrentPanel("locationDetail");
       onPanelChange?.("locationDetail");
     },
@@ -205,6 +216,7 @@ const PanelManager: React.ForwardRefRenderFunction<
 
       <LocationDetailPanel
         location={selectedLocation}
+        locationKey={selectedLocationKey}
         isVisible={currentPanel === "locationDetail"}
         onClose={handleClosePanel}
         onViewDetails={() => {
