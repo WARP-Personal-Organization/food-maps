@@ -34,6 +34,8 @@ const DesktopMapLayout: React.FC<DesktopMapLayoutProps> = ({
 }) => {
   const panelRef = useRef<PanelManagerRef | null>(null);
   const [currentPanel, setCurrentPanel] = useState<string | null>(null);
+  const [selectedLocationKey, setSelectedLocationKey] =
+    useState<string>("Siopao");
 
   const handleFilterChange = (
     filters: string[] | ((prev: string[]) => string[])
@@ -87,7 +89,13 @@ const DesktopMapLayout: React.FC<DesktopMapLayoutProps> = ({
   }, [locationsMap, activeFilters]);
 
   const handleLocationClick = (location: Location) => {
-    panelRef.current?.openLocationDetail(location);
+    // Find the category for this location
+    const category =
+      Object.keys(locationsMap).find((cat) =>
+        locationsMap[cat].some((loc) => loc.name === location.name)
+      ) || "Siopao";
+    setSelectedLocationKey(category);
+    panelRef.current?.openLocationDetail(location, category);
   };
 
   const handleFoodprintClick = (foodprint: FoodPrint) => {
@@ -104,6 +112,7 @@ const DesktopMapLayout: React.FC<DesktopMapLayoutProps> = ({
           onFilterApply={handleFilterChange}
           onClose={() => {}}
           onPanelChange={setCurrentPanel}
+          selectedLocationKey={selectedLocationKey}
         />
       </div>
       {/* FAB container for Filter only (Home removed) */}

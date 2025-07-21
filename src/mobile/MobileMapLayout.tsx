@@ -34,6 +34,8 @@ const MobileMapLayout: React.FC<MobileMapLayoutProps> = ({
   onFilterChange,
 }) => {
   const panelRef = useRef<PanelManagerRef | null>(null);
+  const [selectedLocationKey, setSelectedLocationKey] =
+    useState<string>("Siopao");
 
   // Filter dishes based on active filters
   const filteredDishes =
@@ -93,9 +95,12 @@ const MobileMapLayout: React.FC<MobileMapLayoutProps> = ({
   }, [locationsMap, activeFilters]);
   // Location click handler
   const handleLocationClick = (location: Location) => {
-    if (window.innerWidth <= 899) {
-      panelRef.current?.openLocationSummary(location);
-    }
+    const category =
+      Object.keys(locationsMap).find((cat) =>
+        locationsMap[cat].some((loc) => loc.name === location.name)
+      ) || "Siopao";
+    setSelectedLocationKey(category);
+    panelRef.current?.openLocationSummary(location, category);
   };
 
   // Foodprint click handler
@@ -112,6 +117,7 @@ const MobileMapLayout: React.FC<MobileMapLayoutProps> = ({
         dishData={dishData}
         selectedDishes={activeFilters}
         onFilterApply={updateFilters}
+        selectedLocationKey={selectedLocationKey}
       />
       <div className="fixed top-6 left-4 z-30 flex flex-col gap-4">
         <HomeButton

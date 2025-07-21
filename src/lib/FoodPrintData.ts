@@ -20,8 +20,8 @@ const foodPrintMarkersData: FoodPrint[] = [
     description:
       "A beloved siopao spot in Iloilo known for its large size and flavorful fillings.",
     iconUrl: "/images/foodprint-markers/siopao-foodprint-marker.png",
-    dishType: "Siopao",
-    heroImage: "/images/robertos/r3.jpg",
+    dishType: "siopao",
+    heroImage: "/images/fallback-images/siopao.png",
     location: "Rizal Street, La Paz Public Market, La Paz, Iloilo City",
     extendedDescription: [
       "A must-visit spot for both locals and tourists, Roberto's has built a strong reputation over the decades for serving siopao that's packed with a rich combination of ingredients — from savory pork and chicken to Chinese sausage and hard-boiled egg.",
@@ -36,8 +36,8 @@ const foodPrintMarkersData: FoodPrint[] = [
     description:
       "A flavorful and hearty bowl of batchoy near the public market.",
     iconUrl: "/images/foodprint-markers/batchoy-foodprint-marker.png",
-    dishType: "Batchoy",
-    heroImage: "/images/batchoy/hero.jpg",
+    dishType: "batchoy",
+    heroImage: "/images/fallback-images/batchoy.png",
     location: "La Paz Public Market, Iloilo City",
     extendedDescription: [
       "La Paz Batchoy is an iconic noodle soup that originated from the La Paz district of Iloilo City. This hearty dish features a rich, flavorful broth made with pork organs, beef, and sometimes chicken.",
@@ -52,8 +52,8 @@ const foodPrintMarkersData: FoodPrint[] = [
     description:
       "A local favorite kansi spot serving rich bone marrow beef soup.",
     iconUrl: "/images/foodprint-markers/cansi-foodprint-marker.png",
-    dishType: "Cansi",
-    heroImage: "/images/kansi/decos.jpg",
+    dishType: "cansi",
+    heroImage: "/images/fallback-images/cansi.png",
     location: "Molo District, Iloilo City",
     extendedDescription: [
       "Kansi is Iloilo's perfect hybrid between sinigang and bulalo - a sour soup with fall-off-the-bone beef shanks and rich bone marrow.",
@@ -68,8 +68,8 @@ const foodPrintMarkersData: FoodPrint[] = [
     description:
       "Authentic grilled chicken inasal experience in Bacolod's food district.",
     iconUrl: "/images/foodprint-markers/inasal-foodprint-marker.png",
-    dishType: "ChickenInasal",
-    heroImage: "/images/inasal/manokan.jpg",
+    dishType: "chicken_inasal",
+    heroImage: "/images/fallback-images/inasal.png",
     location: "Manokan Country, Bacolod City",
     extendedDescription: [
       "Chicken Inasal is Bacolod's iconic grilled chicken, marinated in a mixture of calamansi, pepper, coconut vinegar and annatto oil, giving it a distinctive flavor and color.",
@@ -84,8 +84,8 @@ const foodPrintMarkersData: FoodPrint[] = [
     description:
       "A comforting bowl of traditional kadios, baboy, and langka soup.",
     iconUrl: "/images/foodprint-markers/kbl-foodprint-marker.png",
-    dishType: "KBL",
-    heroImage: "/images/kbl/classic.jpg",
+    dishType: "kbl",
+    heroImage: "/images/fallback-images/kbl.png",
     location: "Central Market, Iloilo City",
     extendedDescription: [
       "KBL stands for Kadios (pigeon peas), Baboy (pork), and Langka (jackfruit), a unique combination that creates a sour-savory soup loved throughout the Western Visayas region.",
@@ -99,8 +99,8 @@ const foodPrintMarkersData: FoodPrint[] = [
     y: 500,
     description: "Traditional Ilonggo wonton soup served since the 1950s.",
     iconUrl: "/images/foodprint-markers/pancit-molo-foodprint-marker.png",
-    dishType: "PancitMolo",
-    heroImage: "/images/pancit-molo/original.jpg",
+    dishType: "pancit_molo",
+    heroImage: "/images/fallback-images/pancit_molo.png",
     location: "Molo District, Iloilo City",
     extendedDescription: [
       'Pancit Molo is a traditional Filipino soup originating from the district of Molo in Iloilo City. Unlike other "pancit" dishes, Pancit Molo is a soup with dumplings rather than noodles.',
@@ -113,9 +113,9 @@ const foodPrintMarkersData: FoodPrint[] = [
     x: 500, // Bottom center
     y: 700,
     description: "Fresh and flavorful seafood dishes from Iloilo.",
-    dishType: "Seafood",
+    dishType: "seafood",
     iconUrl: "/images/foodprint-markers/seafood-foodprint-marker.png",
-    heroImage: "/images/seafood/original.jpg",
+    heroImage: "/images/fallback-images/seafood.png",
     location: "Molo District, Iloilo City",
     extendedDescription: [
       'Pancit Molo is a traditional Filipino soup originating from the district of Molo in Iloilo City. Unlike other "pancit" dishes, Pancit Molo is a soup with dumplings rather than noodles.',
