@@ -145,12 +145,6 @@ const PanelManager: React.ForwardRefRenderFunction<
   };
   return (
     <>
-      <PanelOverlay
-        isVisible={isMenuVisible}
-        onClose={() => setIsMenuVisible(false)}
-        withBlur={isMenuVisible || currentPanel === "filter"}
-      />
-
       <MenuPanel
         isVisible={isMenuVisible}
         onClose={() => setIsMenuVisible(false)}
@@ -163,6 +157,23 @@ const PanelManager: React.ForwardRefRenderFunction<
           setIsMenuVisible(false);
         }}
       />
+
+      {isMenuVisible && (
+        <PanelOverlay
+          isVisible={isMenuVisible}
+          onClose={() => setIsMenuVisible(false)}
+          withBlur={isMenuVisible}
+        />
+      )}
+
+      {/* Only show overlay for filter when filter is open */}
+      {currentPanel === "filter" && (
+        <PanelOverlay
+          isVisible={true}
+          onClose={handleClosePanel}
+          withBlur={true}
+        />
+      )}
 
       <DishDetailsPanel
         isVisible={currentPanel === "dishDetails"}
@@ -218,7 +229,10 @@ const PanelManager: React.ForwardRefRenderFunction<
         location={selectedLocation}
         locationKey={selectedLocationKey}
         isVisible={currentPanel === "locationDetail"}
-        onClose={handleClosePanel}
+        onClose={() => {
+          setSelectedLocation(null);
+          setCurrentPanel("filter");
+        }}
         onViewDetails={() => {
           setCurrentPanel("locationDetail");
         }}

@@ -95,20 +95,25 @@ const PanelManager: React.ForwardRefRenderFunction<
     setCurrentPanel("home");
   }, []);
 
-  const isModalVisible =
-    isMenuVisible ||
-    (currentPanel !== null && ["menu", "filter"].includes(currentPanel));
-
   return (
     <>
       {isMenuVisible && (
         <PanelOverlay
-          isVisible={isModalVisible}
+          isVisible={isMenuVisible}
           onClose={() => {
             setCurrentPanel(null);
             setIsMenuVisible(false);
           }}
-          withBlur={isMenuVisible || currentPanel === "filter"}
+          withBlur={isMenuVisible}
+        />
+      )}
+
+      {/* Only show overlay for filter when filter is open */}
+      {currentPanel === "filter" && (
+        <PanelOverlay
+          isVisible={true}
+          onClose={() => setCurrentPanel(null)}
+          withBlur={true}
         />
       )}
 
@@ -159,7 +164,7 @@ const PanelManager: React.ForwardRefRenderFunction<
         isVisible={currentPanel === "locationSummary"}
         onClose={() => {
           setSelectedLocation(null);
-          setCurrentPanel(null);
+          setCurrentPanel("filter");
         }}
         onViewDetails={() => {
           setCurrentPanel("locationDetail");
