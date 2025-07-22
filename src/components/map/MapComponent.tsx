@@ -100,12 +100,12 @@ const MapComponent: React.FC<MapComponentProps> = ({
               // Selected marker: larger and normal color
               imgElement.style.filter =
                 "drop-shadow(0px 4px 6px rgba(0, 0, 0, 0.6))";
-              imgElement.style.transform = "scale(1.3)";
+              imgElement.style.transform = "scale(1.7)";
               imgElement.style.transition = "all 0.3s ease";
             } else if (selectedMarkerId) {
               // Other markers when one is selected: grey and smaller
               imgElement.style.filter =
-                "grayscale(100%) brightness(0.6) drop-shadow(0px 2px 3px rgba(0, 0, 0, 0.3))";
+                "grayscale(100%) brightness(0.8) drop-shadow(0px 2px 3px rgba(25, 28, 190, 0.15))";
               imgElement.style.transform = "scale(0.8)";
               imgElement.style.transition = "all 0.3s ease";
             } else {
