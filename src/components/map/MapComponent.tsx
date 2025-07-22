@@ -327,11 +327,16 @@ const MapComponent: React.FC<MapComponentProps> = ({
           const labelElement = document.createElement("div");
           labelElement.className = "custom-marker area-label-marker";
           // Use clearly smaller text on mobile, larger on desktop
-          const fontSizeClass = isDesktop ? "text-3xl" : "text-base";
+          const fontSize = isDesktop ? "text-3xl" : "text-base";
           labelElement.innerHTML = `
-            <span class="text-white font-extrabold ${fontSizeClass} select-none pointer-events-none drop-shadow-lg">
-              ${district.name}
-            </span>
+             <span class="text-white font-extrabold ${fontSize} select-none pointer-events-none opacity-90"
+      style="text-shadow:
+        -1px -1px 0 #000,
+         1px -1px 0 #000,
+        -1px  1px 0 #000,
+         1px  1px 0 #000;">
+      ${district.name}
+    </span>
           `;
           const [lng, lat] = xyToLngLat(district.x, district.y, mapBounds);
           const marker = new mapboxgl.Marker({
