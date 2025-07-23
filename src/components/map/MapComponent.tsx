@@ -214,7 +214,34 @@ const MapComponent: React.FC<MapComponentProps> = ({
           [ne.lng + lngBuffer, ne.lat + latBuffer]
         );
 
-        // Add location markers
+        // --- Add area label markers FIRST so they are below icons ---
+        districts.forEach((district) => {
+          if (
+            typeof district.x !== "number" ||
+            typeof district.y !== "number" ||
+            isNaN(district.x) ||
+            isNaN(district.y)
+          ) {
+            return;
+          }
+          const labelElement = document.createElement("div");
+          labelElement.className = "custom-marker area-label-marker";
+          // Use clearly smaller text on mobile, larger on desktop
+          const fontSize = isDesktop ? "text-3xl" : "text-base";
+          labelElement.innerHTML = `
+               <span class="font-[500] ${fontSize} text-white text-center opacity-80 select-none" style="font-family: 'Open Sans', sans-serif;">${district.name}</span>
+            `;
+          const [lng, lat] = xyToLngLat(district.x, district.y, mapBounds);
+          const marker = new mapboxgl.Marker({
+            element: labelElement,
+            anchor: "bottom",
+          })
+            .setLngLat([lng, lat])
+            .addTo(map);
+          markersRef.current.push(marker);
+        });
+
+        // --- Add location markers ---
         locations.forEach((location) => {
           if (
             typeof location.x !== "number" ||
@@ -314,40 +341,7 @@ const MapComponent: React.FC<MapComponentProps> = ({
           markersRef.current.push(marker);
         });
 
-        // Add area label markers
-        districts.forEach((district) => {
-          if (
-            typeof district.x !== "number" ||
-            typeof district.y !== "number" ||
-            isNaN(district.x) ||
-            isNaN(district.y)
-          ) {
-            return;
-          }
-          const labelElement = document.createElement("div");
-          labelElement.className = "custom-marker area-label-marker";
-          // Use clearly smaller text on mobile, larger on desktop
-          const fontSize = isDesktop ? "text-3xl" : "text-base";
-          labelElement.innerHTML = `
-             <span class="text-white font-extrabold ${fontSize} select-none pointer-events-none opacity-90"
-      style="text-shadow:
-        -1px -1px 0 #000,
-         1px -1px 0 #000,
-        -1px  1px 0 #000,
-         1px  1px 0 #000;">
-      ${district.name}
-    </span>
-          `;
-          const [lng, lat] = xyToLngLat(district.x, district.y, mapBounds);
-          const marker = new mapboxgl.Marker({
-            element: labelElement,
-            anchor: "bottom",
-          })
-            .setLngLat([lng, lat])
-            .addTo(map);
-          markersRef.current.push(marker);
-        });
-
+        // Add about marker
         const aboutX = 500;
         const aboutY = 350;
         const [aboutLng, aboutLat] = xyToLngLat(aboutX, aboutY, mapBounds);
